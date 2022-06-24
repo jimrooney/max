@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
+    <title>Balance</title>
+    <link rel="stylesheet" type="text/css" href="css.css" media="all">
+    <link rel="manifest" href="manifest.json">
+    <script>
+      if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(function() {
+                console.log('Service Worker Registered');
+          });
+      }
+    </script>
+    <script>
+      function init(){
+        const node = document.createElement("li");
+        const textnode = document.createTextNode("More");
+        node.appendChild(textnode);
+        document.getElementById("Container").appendChild(node);
+      }
+      function sendMail(){
+
+      }
+    </script>
+  </head>
+  <body onload="init()">
+    <h1 class="vertical-container">Balance</h1>
+    <button onclick="init()">Begin</button>
+    <div id="Container">
+      <a href="mailto:Balance@jimrooney.com">Contact</a>
+    </div>
+  </body>
+</html>

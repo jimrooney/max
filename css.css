@@ -1,0 +1,16 @@
+body {
+  background-color: #6dccfc;
+  color: black;
+}
+.vertical-container {
+  height: 30px;
+  display: -webkit-flex;
+  display:         flex;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+h1.vertical-container {
+  font-size: 200%;
+}
