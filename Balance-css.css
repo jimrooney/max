@@ -14,3 +14,16 @@ body {
 h1.vertical-container {
   font-size: 200%;
 }
+  /* Individual Passenger Sprites */
+  .Pax,
+  .Crew {
+    float: left;
+    width: 45px;
+    height: 65px;
+    border: 2px solid #333;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgb(184, 184, 184);
+    text-align: center;
+  }

@@ -8,31 +8,18 @@
     <title>Balance</title>
     <link rel="stylesheet" type="text/css" href="Balance-css.css" media="all">
     <link rel="manifest" href="manifest.json">
-    <script>
-      if('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-          .then(function() {
-                console.log('Service Worker Registered');
-          });
-      }
-    </script>
-    <script>
-      function init(){
-        const node = document.createElement("li");
-        const textnode = document.createTextNode("More");
-        node.appendChild(textnode);
-        document.getElementById("Container").appendChild(node);
-      }
-      function sendMail(){
-
-      }
-    </script>
+    <script src="script.js"></script>
+    <script src="Station.js"></script>
+    <script src="Seat.js"></script>
+    <script src="Airplane.js"></script>
+    <script src="C206.js"></script>
   </head>
   <body onload="init()">
-    <h1 class="vertical-container">Balance to the force</h1>
-    <button onclick="init()">Begin</button>
+    <h1 class="vertical-container">Bringing Balance</h1>
+    <button onclick="$('Container').empty()">Button</button><br>
+    <button onclick="root.log('SomeText', 'Container')">Test</button>
     <div id="Container">
-      <a href="mailto:Balance@jimrooney.com">Contact</a>
+      <a href="mailto:Balance@jimrooney.com">Contact</a><P></P>
     </div>
   </body>
 </html>
