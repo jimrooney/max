@@ -1,9 +1,9 @@
 var cacheName = 'Balances';
 var filesToCache = [
-// '/',
-//   'index.html',
-//   'Balance-css.css',
-//   'script.js'
+'/',
+  'index.html',
+  'Balance-css.css',
+  'script.js'
 ];
 self.addEventListener('install', function(e) {
   console.log('[ServiceWorker] Install');

@@ -3,27 +3,26 @@ body {
   color: black;
 }
 .vertical-container {
-  height: 30px;
   display: -webkit-flex;
-  display:         flex;
+  display: flex;
   -webkit-align-items: center;
-          align-items: center;
+  align-items: center;
   -webkit-justify-content: center;
-          justify-content: center;
+  justify-content: center;
 }
 h1.vertical-container {
-  font-size: 200%;
+  font-size: 150%;
 }
-  /* Individual Passenger Sprites */
-  .Pax,
-  .Crew {
-    float: left;
-    width: 45px;
-    height: 65px;
-    border: 2px solid #333;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background: rgb(184, 184, 184);
-    text-align: center;
-  }
+/* Individual Passenger Sprites */
+.Pax,
+.Crew {
+  float: left;
+  width: 45px;
+  height: 65px;
+  border: 2px solid #333;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgb(184, 184, 184);
+  text-align: center;
+}

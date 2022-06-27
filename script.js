@@ -1,3 +1,10 @@
+// Register the serviceworker
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").then(function () {
+    console.log("Service Worker Registered")
+  })
+}
+
 // jQuery style DOM selector... cuz it's easier
 function $(x) {
   return document.getElementById(x)
@@ -23,17 +30,62 @@ var root = {
     $(elementID).innerHTML = ""
   },
   log: (text, elementID) => {
-    console.log(text)
     if (!!elementID) {
-      $(elementID).innerHTML = text
+      $(elementID).innerHTML = root.JSONTable(text)
     }
+  },
+  JSONTable(json) {
+    const regex = /},/gi
+    return json.replace(regex, "}<BR>")
   },
 }
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").then(function () {
-    console.log("Service Worker Registered")
+class Car {
+  constructor(make, model, year) {
+    this.make = make
+    this.model = model
+    this.year = year
+  }
+}
+class Volvo extends Car {
+  constructor(...args) {
+    super(...args)
+    this.make = args[0]
+    this.model = args.model
+    this.year = args.year
+  }
+}
+
+function test() {
+  root.log("Test", "Container")
+
+  //alert("Hello! I am an alert box!")
+
+  //root.plane.getWB()
+
+  //root.plane = new C206({ reg: "test" })
+  // console.log("Plane: ", root.plane)
+  // const seats = root.plane.getSeats()
+
+  //  const car1 = new Volvo("Eagle", "Talon TSi", 1993)
+
+  const container = document.getElementById("Container")
+  const node = document.createElement("div")
+
+  const WB = root.plane.getWeightAndBalance()
+
+  const P = JSON.stringify(WB)
+  root.log(P, "Container")
+
+  //const seats = [1,2,3,4]
+  const seats = root.plane.getSeats()
+
+  seats.forEach((seat) => {
+    const s = new Seat(seat)
+    node.appendChild(s.getNode())
   })
+
+  container.appendChild(node)
 }
 function init() {
   root.plane = new C206({ reg: "test" })
@@ -44,11 +96,11 @@ function init() {
 
   const container = $("Container")
   const node = document.createElement("div")
-  node.addEventListener("click",()=>{
+  node.addEventListener("click", () => {
     console.log("Plane: ", root.plane)
   })
 
-  seats.forEach(seat=>{
+  seats.forEach((seat) => {
     const s = new Seat(seat)
     node.appendChild(s.getNode())
   })
