@@ -1,6 +1,8 @@
 body {
   background-color: #6dccfc;
   color: black;
+  max-width: max-content;
+  margin: auto;
 }
 .vertical-container {
   display: -webkit-flex;
@@ -12,6 +14,9 @@ body {
 }
 h1.vertical-container {
   font-size: 150%;
+}
+.Container {
+  width: 100px;
 }
 /* Individual Passenger Sprites */
 .Pax,

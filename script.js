@@ -17,11 +17,15 @@ HTMLElement.prototype.empty = function () {
   }
 }
 var root = {
+  airplanes: new Airplanes(),
   test: function (elementID) {
     this.log(elementID, "HI")
   },
   log: function (elementID, text) {
-    this.element(elementID).innerHTML = text
+    //!elementID? elementID = "Log" : null
+    elementID = "Log"
+    $(elementID).innerHTML = root.JSONTable(text)
+    //$(elementID).innerHTML = text
   },
   element: (elementID) => {
     return $(elementID)
@@ -29,66 +33,37 @@ var root = {
   empty: (elementID) => {
     $(elementID).innerHTML = ""
   },
-  log: (text, elementID) => {
-    if (!!elementID) {
-      $(elementID).innerHTML = root.JSONTable(text)
-    }
-  },
   JSONTable(json) {
-    const regex = /},/gi
-    return json.replace(regex, "}<BR>")
+    // const regex = /},/gi
+    // return json.replace(regex, "}<BR>")
   },
 }
-
-class Car {
-  constructor(make, model, year) {
-    this.make = make
-    this.model = model
-    this.year = year
-  }
-}
-class Volvo extends Car {
-  constructor(...args) {
-    super(...args)
-    this.make = args[0]
-    this.model = args.model
-    this.year = args.year
-  }
-}
-
-function test() {
-  root.log("Test", "Container")
-
-  //alert("Hello! I am an alert box!")
-
-  //root.plane.getWB()
-
-  //root.plane = new C206({ reg: "test" })
-  // console.log("Plane: ", root.plane)
-  // const seats = root.plane.getSeats()
-
-  //  const car1 = new Volvo("Eagle", "Talon TSi", 1993)
-
+function update(){
   const container = document.getElementById("Container")
   const node = document.createElement("div")
 
   const WB = root.plane.getWeightAndBalance()
 
-  const P = JSON.stringify(WB)
-  root.log(P, "Container")
-
-  //const seats = [1,2,3,4]
+  // -- Seats --
   const seats = root.plane.getSeats()
-
   seats.forEach((seat) => {
     const s = new Seat(seat)
     node.appendChild(s.getNode())
   })
-
   container.appendChild(node)
 }
+function test() {
+  root.log("Test", "Container")
+  root.plane = root.airplanes.getPlane()
+  console.log("P: ", root.plane)
+  update()
+}
 function init() {
-  root.plane = new C206({ reg: "test" })
+  root.plane = new C208({ reg: "test" })
+  console.log("Instance: ", root.plane.constructor.name)
+
+  const getMethods = Object.keys(document)
+  console.log("Names: ", getMethods)
   console.log("Plane: ", root.plane)
   const seats = root.plane.getSeats()
 

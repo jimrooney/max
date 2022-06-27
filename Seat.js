@@ -9,12 +9,12 @@ class Seat {
     //newDiv.addEventListener("click",this.click()) --- doesn't work... needs to be wrapped ()=>
     newDiv.addEventListener("click", () => this.click())
 
-    const newContent = document.createTextNode("I am a seat")
+    const newContent = document.createTextNode("Seat")
     newDiv.appendChild(newContent)
     return newDiv
   }
   click() {
-    console.log("Seat")
+    root.log("Seat")
     console.log(this)
   }
 }
