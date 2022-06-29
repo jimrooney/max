@@ -25,6 +25,7 @@ function test() {
   root.update()
 }
 function init() {
+  return
   root.plane = new C208({ reg: "test" })
   console.log("Instance: ", root.plane.constructor.name)
 

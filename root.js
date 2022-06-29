@@ -3,10 +3,10 @@ var root = {
     test: function (elementID) {
       this.log(elementID, "HI")
     },
-    log: function (elementID, text) {
+    log: function (text) {
       //!elementID? elementID = "Log" : null
       elementID = "Log"
-      $(elementID).innerHTML = root.JSONTable(text)
+      $(elementID).innerHTML = text
       //$(elementID).innerHTML = text
     },
     element: (elementID) => {
@@ -20,6 +20,7 @@ var root = {
       // return json.replace(regex, "}<BR>")
     },
     setPlane(plane){
+        this.airplanes.loadPlanes()
         this.empty('Container')
         this.plane = this.airplanes.getPlane(plane)
         this.update()
@@ -28,6 +29,8 @@ var root = {
         const container = document.getElementById("Container")
         const node = document.createElement("div")
         const WB = this.plane.getWeightAndBalance()
+        console.log("WB: ",WB)
+        root.log(WB)
         // -- Seats --
         const seats = this.plane.getSeats()
         seats.forEach((seat) => {

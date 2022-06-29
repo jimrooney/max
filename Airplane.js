@@ -141,7 +141,7 @@ class Airplane {
 
     let isBalanced = this.isBalanced(totalWeight, CG)
 
-    return isBalanced // Test Function just prints whatever's returned ***
+    return [totalWeight, CG] // Test Function just prints whatever's returned ***
   }
   isBalanced(totalWeight, CG) {
     const bounds = this.limits.CG.bounds // [{[],[]}] of bounds *** Ugly ***

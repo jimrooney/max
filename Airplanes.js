@@ -4,6 +4,8 @@ class Airplanes {
     // *** Need logic here to not only get the type of plane, but the specific WB data for that rego.
     // for now, we'll just hardcode the rego to type
 
+    //this.loadPlanes()
+
     let type
     switch (reg) {
       case "PPR":
@@ -30,6 +32,16 @@ class Airplanes {
         plane = new C206(reg)
         break
     }
+
+    console.log("plane: " , plane)
+    const _plane = data.airplanes.find(p=> p.reg == reg)
+
+    plane =     Object.assign(plane, _plane)
+    console.log("Plane: ", plane)
     return plane
+  }
+  loadPlanes() {
+
+        console.log("Json: ", data.airplanes)
   }
 }
