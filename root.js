@@ -36,7 +36,6 @@ var root = {
 
     // Fuel
     $("Fuel").innerHTML = "" // Clear fuel selector
-    console.log("This: ", this)
     $("Fuel").appendChild(this.plane.fuelSelector)
     const F = this.plane.stations.filter((station) => station.type.includes("fuel"))
     const FQ = F.reduce((acc, station) => station.liters, 0)

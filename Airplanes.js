@@ -28,6 +28,9 @@ class Airplanes {
       case "C208":
         plane = new C208(reg)
         break
+      case "GA8":
+        plane = new GA8(reg)
+        break
       default:
         plane = new C206(reg)
         break
@@ -60,9 +63,9 @@ class Airplanes {
 
     label.appendChild(select)
     const _this = this
-    select.onchange = function(){
+    select.onchange = function () {
       plane.changeFuel(this.value)
-    };
+    }
     return label
   }
   loadPlanes() {
