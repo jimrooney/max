@@ -129,28 +129,32 @@ class Airplane {
       (total, station) => total + parseFloat(station.weight),
       0
     )
+    console.log("Stations: ", stations)
     // Total Weight
     const totalWeight = stations.reduce(
       (total, station) => total + parseFloat(station.weight),
       0
     )
+    console.log("TotalWeight: ", totalWeight)
     // Total Moment
     const totalMoment = stations.reduce(
       (total, station) => total + parseFloat(station.moment),
       0
     )
     // CG
-    const CG = totalMoment / totalWeight
-
+    result.CG = totalMoment / totalWeight
     // Rounding
-    const roundCG = Math.round((CG + Number.EPSILON) * 1000) / 1000
+    const roundCG = Math.round((result.CG + Number.EPSILON) * 1000) / 1000
     const roundAUW = Math.round((totalWeight + Number.EPSILON) * 100) / 100
 
-    result.isBalanced = this.isBalanced(totalWeight, CG)
+    result.isBalanced = this.isBalanced(totalWeight, result.CG)
     result.wam = stations.map((a) => [a.weight, a.arm, a.moment]) // Just WAM
 
+    //
+    // Results Table
+    //
     result.table = document.createElement("table")
-    const tableData = result.wam
+    let tableData = result.wam
       .map(function (value) {
         return `<tr>
                     <td>${value[0]}</td>
@@ -159,7 +163,13 @@ class Airplane {
                 </tr>`
       })
       .join("")
+      tableData += `<tr><td>${totalWeight}</td>
+                    <td>CG: ${result.CG} </td>
+                    <td>${totalMoment}</td></tr>
+                    <tr><td>Is Balanced:</td><td></td><td>${result.isBalanced}</td></tr>
+                    `
     result.table.innerHTML = tableData
+
     return result
   }
   isBalanced(totalWeight, CG) {

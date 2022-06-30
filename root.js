@@ -45,6 +45,7 @@ var root = {
     // Show WB Table
     //
     const WB = this.plane.getWeightAndBalance()
+    console.log("WB: ", WB)
     $("Out").innerHTML = ""
     $("Out").appendChild(WB.table)
   },
