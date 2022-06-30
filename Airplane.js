@@ -61,87 +61,106 @@ class Airplane {
     // return weight
   }
 
-  getWeightAndBalance(){
+  getWeightAndBalance() {
+    const result = {}
     const stations = this.stations //Array.from(this.stations) // dont think this is neccessary ***
     let fuelStation = stations.find((station) => station.type.includes("fuel"))
 
-    fuelStation.liters = 150 // load in fuel *** (hardcoding in a value for now)
+    fuelStation.liters = 0 // load in fuel *** (hardcoding in a value for now)
     stations.forEach((station) => {
       station.moment = station.weight * station.arm
     })
-
-    const pilotSeat = stations.find((station) => station.id === 1)
-    pilotSeat.weight = 55
-
-
-
-
-
-
-
-// ---------------------------
+    const planeStation = stations.find((station) =>
+      station.type.includes("Airplane")
+    )
+    if (!planeStation) {
+      // Airplane Station
+      stations.push({
+        id: 0,
+        type: ["Airplane"],
+        weight: this.weight,
+        arm: this.arm,
+        moment: this.moment,
+      })
+    }
+    // ---------------------------
     // Sum all Weights and Moments
     // ---------------------------
-    let pob = stations.filter(
+    //
+    // Occupied seats (POB)
+    //
+    const pob = stations.filter(
       (station) => station.type.includes("seat") && !!station.weight
-    ) // only occupied seats
+    )
+    // Cargo
     const cargo = stations.filter(
       (station) => station.type.includes("cargo") && station.weight > 0
     )
-
+    // Fuel
     const ZFW = stations.filter((station) => !station.type.includes("fuel")) // Everything but fuel
     const fuel = stations.filter((station) => station.type.includes("fuel"))
-
-    // update fuel station
+    // sum fuel
     const fuelQuantity = fuel.reduce((acc, station) => station.liters, 0)
     fuel[0].weight = fuelQuantity * this.fuel.factor // only one fuel station ***
-
+    // Total Crew
     const CREW = pob.filter((station) => {
       if (!!station.pax) {
         station.pax.find((pax) => !!pax && pax.label == "Role") // only return pax with Roles (crew)
       }
     })
-    //
-    // Find the PIC (Flies Left Seat, so find works, but could also search by matching seat number) ****
-    //
-    const PIC = CREW.find((station) =>
-      station.pax.find((pax) => pax.label == "Role" && pax.value == "PIC")
-    )
+
+    const PIC = stations.find((station) => station.id === 1) // Pilot Seat
     const PAX = pob.filter((x) => !CREW.includes(x)) // Filter out Crew
 
+    // Sum all occupied seats
     const POB_Weight = pob.reduce(
       (total, station) => total + parseFloat(station.weight),
       0
     )
+    // Sum Crew
     const CREW_Weight = CREW.reduce(
       (total, station) => total + parseFloat(station.weight),
       0
     )
-
+    // Only Pax weight
     const PAX_Weight = POB_Weight - CREW_Weight
+    // Zero Fuel Weight
     const ZFW_Weight = ZFW.reduce(
       (total, station) => total + parseFloat(station.weight),
       0
     )
-
+    // Total Weight
     const totalWeight = stations.reduce(
       (total, station) => total + parseFloat(station.weight),
       0
     )
+    // Total Moment
     const totalMoment = stations.reduce(
       (total, station) => total + parseFloat(station.moment),
       0
     )
-
-    //
+    // CG
     const CG = totalMoment / totalWeight
+
+    // Rounding
     const roundCG = Math.round((CG + Number.EPSILON) * 1000) / 1000
     const roundAUW = Math.round((totalWeight + Number.EPSILON) * 100) / 100
 
+    result.isBalanced = this.isBalanced(totalWeight, CG)
+    result.wam = stations.map((a) => [a.weight, a.arm, a.moment]) // Just WAM
 
-    let isBalanced = this.isBalanced(totalWeight, CG)
-
-    return [totalWeight, CG] // Test Function just prints whatever's returned ***
+    result.table = document.createElement("table")
+    const tableData = result.wam
+      .map(function (value) {
+        return `<tr>
+                    <td>${value[0]}</td>
+                    <td>${value[1]}</td>
+                    <td>${value[2]}</td>
+                </tr>`
+      })
+      .join("")
+    result.table.innerHTML = tableData
+    return result
   }
   isBalanced(totalWeight, CG) {
     const bounds = this.limits.CG.bounds // [{[],[]}] of bounds *** Ugly ***
@@ -172,7 +191,7 @@ class Airplane {
     })
     return balanced
   }
-  
+
   getForwardCGLimit(weight, bounds) {
     if (!bounds) {
       return
