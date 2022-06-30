@@ -29,9 +29,18 @@ var root = {
     // Color Bar
     document.getElementById("Log").style.background = this.plane.regcolor
 
+   // Clear airplane container 
     const container = document.getElementById("Container")
     container.innerHTML =""
     const node = document.createElement("div")
+
+    // Fuel
+    $("Fuel").innerHTML = "" // Clear fuel selector
+    console.log("This: ", this)
+    $("Fuel").appendChild(this.plane.fuelSelector)
+    const F = this.plane.stations.filter((station) => station.type.includes("fuel"))
+    const FQ = F.reduce((acc, station) => station.liters, 0)
+    $('fuel').value = FQ || 0
     //
     // -- Seats --
     //

@@ -60,13 +60,19 @@ class Airplane {
     // const weight = liters * this.fuel.factor || 0
     // return weight
   }
-
+  // *** could also just use plane.fuel = (setter/getter)
+  changeFuel(quantity){
+    const fuel = this.stations.find((station) => station.type.includes("fuel"))
+    fuel.liters = parseInt(quantity)
+    root.update()
+  }
   getWeightAndBalance() {
     const result = {}
     const stations = this.stations //Array.from(this.stations) // dont think this is neccessary ***
     let fuelStation = stations.find((station) => station.type.includes("fuel"))
 
-    fuelStation.liters = 0 // load in fuel *** (hardcoding in a value for now)
+
+    fuelStation.liters = fuelStation.liters || 0 // load in fuel *** (hardcoding in a value for now)
     stations.forEach((station) => {
       station.moment = station.weight * station.arm
     })

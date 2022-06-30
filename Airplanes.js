@@ -32,16 +32,40 @@ class Airplanes {
         plane = new C206(reg)
         break
     }
+    const _plane = data.airplanes.find((p) => p.reg == reg)
 
-    console.log("plane: " , plane)
-    const _plane = data.airplanes.find(p=> p.reg == reg)
-
-    plane =     Object.assign(plane, _plane)
-    console.log("Plane: ", plane)
+    plane = Object.assign(plane, _plane) // merge plane data
+    plane.fuelSelector = this.getFuelSelector(plane)
     return plane
   }
-  loadPlanes() {
+  getFuelSelector(plane) {
+    //const values = ["dog", "cat", "parrot", "rabbit"]
+    const N = 60
+    const values = [...Array(N).keys()]
 
-        console.log("Json: ", data.airplanes)
+    const select = document.createElement("select")
+    select.name = "fuel"
+    select.id = "fuel"
+
+    for (const val of values) {
+      const option = document.createElement("option")
+      option.value = val * 10
+      option.text = val * 10
+      select.appendChild(option)
+    }
+
+    const label = document.createElement("label")
+    label.innerHTML = "Fuel Litres: "
+    label.htmlFor = "fuel"
+
+    label.appendChild(select)
+    const _this = this
+    select.onchange = function(){
+      plane.changeFuel(this.value)
+    };
+    return label
+  }
+  loadPlanes() {
+    console.log("Json: ", data.airplanes)
   }
 }
