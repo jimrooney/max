@@ -105,6 +105,13 @@ var root = {
     // Show WB Table
     //
     const WB = this.plane.getWeightAndBalance()
+    if (!WB.isBalanced){
+      $("Out").classList.add("NotInLimits")
+      $("Out").innerHTML = "Not In Limits"
+    } else {
+      $("Out").classList.remove("NotInLimits")
+      $("Out").innerHTML = ""
+    }
     $("WAM").innerHTML = ""
     $("WAM").appendChild(WB.table)
   },
