@@ -57,3 +57,6 @@ h1.vertical-container {
 .WAM{
   background: rgb(251, 251, 83);
 }
+.flex-container {
+  display: flex;
+}
