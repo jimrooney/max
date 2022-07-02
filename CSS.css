@@ -54,3 +54,6 @@ h1.vertical-container {
 .AdultInfant::after{
   content: "Adult+Inft";
 }
+.WAM{
+  background: rgb(251, 251, 83);
+}

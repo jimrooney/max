@@ -7,8 +7,10 @@
     <meta name="apple-mobile-web-app-status-bar" content="#aa7700" />
     <title>Balance</title>
     <link rel="stylesheet" type="text/css" href="CSS.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="Sliders.css" media="all" />
     <link rel="manifest" href="manifest.json" />
 
+    <script src="DOM.js"></script>
     <script src="Airplanes.js"></script>
     <script src="root.js"></script>
     <script src="script.js"></script>
@@ -27,7 +29,7 @@
     </div>
     <div class="Controls">
       <button onclick="$('Container').empty()">empty container</button><br />
-      <button onclick="root.log('SomeText', 'Container')">Root.log</button>
+      <button onclick="root.test()">Root.test</button>
       <button class="UI" onclick="root.setPlane('MMZ')">MMZ</button>
       <button class="UI" onclick="root.setPlane('PPR')">PPR</button>
       <button class="UI" onclick="root.setPlane('JTK')">JTK</button>
@@ -38,5 +40,12 @@
     <div id="Log"></div>
     <div id="Container" class="Container"></div>
     <div id="Out"></div>
+    WAM: 
+    <label class="switch">
+      <input id="WAM-Checkbox" type="checkbox" name="WAM" value="toggle">
+      <span class="slider"></span>
+    </label>
+    <div id="WAM" class="WAM"></div>
   </body>
+  <script src="Sliders.js"></script>
 </html>

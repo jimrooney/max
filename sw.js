@@ -1,9 +1,19 @@
 var cacheName = 'Balances';
 var filesToCache = [
-// '/',
-//   'index.html',
-//   'Balance-css.css',
-//   'script.js'
+'/',
+  'index.html',
+  'CSS.css',
+  'script.js',
+  // 'Airplane.js',
+  // 'Airplanes.js',
+  // 'C206.js',
+  // 'C208.js',
+  // 'data.js',
+  // 'GA8.js',
+  // 'root.js',
+  // 'script.js',
+  // 'Seat.js',
+  // 'Station.js'
 ];
 self.addEventListener('install', function(e) {
   console.log('[ServiceWorker] Install');

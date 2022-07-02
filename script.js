@@ -5,25 +5,6 @@ if ("serviceWorker" in navigator) {
   })
 }
 
-// jQuery style DOM selector... cuz it's easier
-function $(x) {
-  return document.getElementById(x)
-}
-
-// Prototype .clear() onto all DOM elements
-HTMLElement.prototype.empty = function () {
-  while (this.firstChild) {
-    this.removeChild(this.firstChild)
-  }
-}
-
-
-function test() {
-  root.log("Test", "Container")
-  root.plane = root.airplanes.getPlane()
-  console.log("P: ", root.plane)
-  root.update()
-}
 function init() {
   return
   root.plane = new C208({ reg: "test" })
