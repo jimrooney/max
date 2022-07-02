@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script>
+      // Register the serviceworker
+      if (navigator.serviceWorker.controller) {
+        console.log("Active service worker found")
+      } else {
+        navigator.serviceWorker
+          .register("sw.js", { scope: "./" })
+          .then(function (reg) {
+            console.log("Service worker  registered")
+          })
+      }
+    </script>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,7 +37,7 @@
   <body onload="init()">
     <div class="Header">
       <h1 class="vertical-container">Balance</h1>
-      <span class="vertical-container">V0.00.5</span>
+      <span class="vertical-container">V0.00.6</span>
     </div>
     <div class="flex-container">
       <div class="Controls">
@@ -44,8 +56,6 @@
     <div class="flex-container">
       <div id="Fuel"></div>
       <div id="Container" class="Container"></div>
-
-
 
       <div id="WAM" class="WAM" style="display: none"></div>
       <p>
@@ -76,11 +86,6 @@
           <a href="mailto:Balance@jimrooney.com">Email</a>
         </div>
       </div>
-
-
-
-
-
     </div>
   </body>
   <script src="Sliders.js"></script>
