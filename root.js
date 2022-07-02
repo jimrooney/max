@@ -104,13 +104,17 @@ var root = {
     //
     // Show WB Table
     //
+    $("Out").classList.remove("NotInLimits")
+    $("Out").classList.remove("InLimits")
+    //
     const WB = this.plane.getWeightAndBalance()
+    console.log("WB :", WB)
     if (!WB.isBalanced){
       $("Out").classList.add("NotInLimits")
-      $("Out").innerHTML = "Not In Limits"
+      $("Out").innerHTML = `Not In Limits... Weight: ${WB.round.weight} CG: ${WB.round.CG}`
     } else {
-      $("Out").classList.remove("NotInLimits")
-      $("Out").innerHTML = ""
+      $("Out").classList.add("InLimits")
+      $("Out").innerHTML = `Weight: ${WB.round.weight} CG: ${WB.round.CG}`
     }
     $("WAM").innerHTML = ""
     $("WAM").appendChild(WB.table)

@@ -61,7 +61,7 @@ class Airplane {
     // return weight
   }
   // *** could also just use plane.fuel = (setter/getter)
-  changeFuel(quantity){
+  changeFuel(quantity) {
     const fuel = this.stations.find((station) => station.type.includes("fuel"))
     fuel.liters = parseInt(quantity)
     root.update()
@@ -70,7 +70,6 @@ class Airplane {
     const result = {}
     const stations = this.stations //Array.from(this.stations) // dont think this is neccessary ***
     let fuelStation = stations.find((station) => station.type.includes("fuel"))
-
 
     fuelStation.liters = fuelStation.liters || 0 // load in fuel *** (hardcoding in a value for now)
     stations.forEach((station) => {
@@ -135,13 +134,11 @@ class Airplane {
       (total, station) => total + parseFloat(station.weight),
       0
     )
-    console.log("Stations: ", stations)
     // Total Weight
     const totalWeight = stations.reduce(
       (total, station) => total + parseFloat(station.weight),
       0
     )
-    console.log("TotalWeight: ", totalWeight)
     // Total Moment
     const totalMoment = stations.reduce(
       (total, station) => total + parseFloat(station.moment),
@@ -153,7 +150,14 @@ class Airplane {
     const roundCG = Math.round((result.CG + Number.EPSILON) * 1000) / 1000
     const roundAUW = Math.round((totalWeight + Number.EPSILON) * 100) / 100
 
-    result.isBalanced = this.isBalanced(totalWeight, result.CG)
+    result.round = { CG: roundCG, weight: roundAUW }
+
+    result.balance = this.isBalanced(totalWeight, result.CG)
+
+      console.log("Balance: ", result)
+
+
+    result.isBalanced = result.balance.balanced
     result.wam = stations.map((a) => [a.weight, a.arm, a.moment]) // Just WAM
 
     //
@@ -169,7 +173,7 @@ class Airplane {
                 </tr>`
       })
       .join("")
-      tableData += `<tr><td>${totalWeight}</td>
+    tableData += `<tr><td>${totalWeight}</td>
                     <td>CG: ${result.CG} </td>
                     <td>${totalMoment}</td></tr>
                     <tr><td>Is Balanced:</td><td></td><td>${result.isBalanced}</td></tr>
@@ -183,29 +187,37 @@ class Airplane {
     //
     // Check extreme bounds
     //
+    const result = {
+      balanced:true
+    }
     let balanced = true
     if (CG > this.limits.CG.aft || CG < this.limits.CG.forward) {
-      return false
+      result.balanced = false
+      return result
     }
     //
     // Check Weight
     //
     if (totalWeight > this.limits.weight.MAUW) {
-      return false
+      result.balanced = false
+      return result
     }
     //
     // Check forward bounds
     //
+    result.limit = []
     bounds.forEach((bound) => {
       const limit = this.getForwardCGLimit(totalWeight, bound)
+      result.limit.push(limit)
       const wLower = bound.fwd1[1] // Lower Bound weight
       const wUpper = bound.fwd2[1] // Upper Bound weight
 
       if (totalWeight <= wUpper && totalWeight >= wLower) {
-        balanced = CG > limit
+        result.balanced = CG > limit
       }
     })
-    return balanced
+    result.bounds = bounds
+    return result
   }
 
   getForwardCGLimit(weight, bounds) {

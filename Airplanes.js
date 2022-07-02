@@ -49,7 +49,8 @@ class Airplanes {
     const select = document.createElement("select")
     select.name = "fuel"
     select.id = "fuel"
-
+    select.classList.add("UI")
+    
     for (const val of values) {
       const option = document.createElement("option")
       option.value = val * 10

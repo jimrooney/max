@@ -1,0 +1,8 @@
+I use {name} to denote objects (in notes, not in code)
+Lowercase for declared objects and Uppercase for instantiated (Class) objects.
+
+The main worker here is an object called root (at the root of the namespace)
+Most things are functions and variables within {root}
+
+There is also a $() object that deals with document.querySelectors (for ease of typing/reading)
+
