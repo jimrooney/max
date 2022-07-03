@@ -71,7 +71,7 @@ class Airplane {
     const stations = this.stations //Array.from(this.stations) // dont think this is neccessary ***
     let fuelStation = stations.find((station) => station.type.includes("fuel"))
 
-    fuelStation.liters = fuelStation.liters || 0 // load in fuel *** (hardcoding in a value for now)
+    fuelStation.liters = fuelStation.liters || 0 // load in fuel
     stations.forEach((station) => {
       station.moment = station.weight * station.arm
     })
@@ -184,50 +184,74 @@ class Airplane {
   }
   isBalanced(totalWeight, CG) {
     const bounds = this.limits.CG.bounds // [{[],[]}] of bounds *** Ugly ***
-    //
-    // Check extreme bounds
-    //
+
     const result = {
       balanced:true
     }
     let balanced = true
+    // --------------------
+    // Check extreme bounds
+    // --------------------
+    // Outside of Max FWD or Max AFT (skip the rest as it doesn't matter)
     if (CG > this.limits.CG.aft || CG < this.limits.CG.forward) {
       result.balanced = false
       return result
     }
-    //
+    // ------------
     // Check Weight
-    //
+    // ------------
     if (totalWeight > this.limits.weight.MAUW) {
       result.balanced = false
       return result
     }
-    //
+    // --------------------
     // Check forward bounds
-    //
-    result.limit = []
+    // --------------------
+    result.limit = {}
+    console.log("Bounds: ", bounds)
+
+
+    /* 
+    fwd1 is the forward limit for any weight below it's weight.
+    We can probably even skip all this if the weight is below fwd1's weight and the CG is more forward
+    */
     bounds.forEach((bound) => {
-      const limit = this.getForwardCGLimit(totalWeight, bound)
-      result.limit.push(limit)
+      const limit = this.getForwardCGLimit(totalWeight, bound) // Get fwd bound at this weight for each bound
+      // Will return absolute limit if weight is below fwd1
+
+      console.log("Limit: ", limit)
+      result.limit.forward = limit // *** not right... this is the fwd limit at weight
+
       const wLower = bound.fwd1[1] // Lower Bound weight
       const wUpper = bound.fwd2[1] // Upper Bound weight
 
       if (totalWeight <= wUpper && totalWeight >= wLower) {
         result.balanced = CG > limit
       }
+
     })
-    result.bounds = bounds
+    result.bounds = bounds  /// used to just return balanced or not... sending the bounds is wrong... just send fwd limit (at that weight)
     return result
   }
 
+  /*
+    fwd2
+      _____
+     /     |
+    /      |
+   /       |
+  /________|
+fwd1
+
+  */
   getForwardCGLimit(weight, bounds) {
     if (!bounds) {
       return
     }
-    const fwd1 = bounds.fwd1[0] // 1219
-    const fwd2 = bounds.fwd2[0] // 1422
-    const weight1 = bounds.fwd1[1] // 1089
-    const weight2 = bounds.fwd2[1] // 1814
+    const fwd1 = bounds.fwd1[0] // 1219 mm
+    const fwd2 = bounds.fwd2[0] // 1422 mm
+    const weight1 = bounds.fwd1[1] // 1089 kg
+    const weight2 = bounds.fwd2[1] // 1814 kg
 
     const a = fwd2 - fwd1
     const o = weight2 - weight1
