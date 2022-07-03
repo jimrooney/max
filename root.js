@@ -70,7 +70,7 @@ var root = {
   },
   setPlane(plane) {
     this.airplanes.loadPlanes()
-    this.empty("Container")
+    this.empty("Airplane")
     this.plane = this.airplanes.getPlane(plane)
     this.update()
   },
@@ -79,7 +79,7 @@ var root = {
     document.getElementById("Log").style.background = this.plane.regcolor
 
     // Clear airplane container
-    const container = document.getElementById("Container")
+    const container = document.getElementById("Airplane")
     container.innerHTML = ""
     const node = document.createElement("div")
 
