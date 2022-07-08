@@ -2,7 +2,7 @@
     "airplanes":[
        {
           "reg":"MMZ",
-          "regcolor":"#568bd6",
+          "regcolor":"rgb(44, 44, 255)",
           "type":"C208",
           "weight":2426.932368,
           "arm":4.845558,

@@ -1,21 +1,20 @@
 var root = {
-  showWam : true,
+  showWam: true,
   airplanes: new Airplanes(),
   //
   // Load external data
   //
-  load:()=>{
-    const url = 'http://localhost:5500/settings.json'
+  load: (url = "http://localhost:5500/settings.json") => {
     fetch(url)
-    .then(res => res.json())
-    .catch(err => console.log("Error: ", err))
-    .then(out =>
-      console.log('Checkout this JSON! ', this.data = out))
-    .catch(err => console.log("error: ", err));
+      .then((res) => res.json())
+      .catch((err) => console.log("Error: ", err))
+//      .then((out) => console.log("Checkout this JSON! ", (this.data = out)))
+      .then((out) => root.log("Checkout this JSON! ", (this.data = out)))
+      .catch((err) => console.log("error: ", err))
   },
   test: function () {
-    console.log( "SW V: ", SW_Version)
-    return 
+    console.log("SW V: ", SW_Version)
+    return
     // if (window.indexedDB || self.IndexedDB){
     //   $("Log").innerHTML = `Supported ${window.indexedDB} ${self.IndexedDB}`
     //   return
@@ -37,13 +36,11 @@ var root = {
 
     $("Log").innerHTML = "Done"
 
-        //check for support
-        // if (!("indexedDB" in window)) {
-        //   console.log("This browser doesn't support IndexedDB")
-        //   return
-        // }
-
-
+    //check for support
+    // if (!("indexedDB" in window)) {
+    //   console.log("This browser doesn't support IndexedDB")
+    //   return
+    // }
 
     if ("indexedDB" in window) {
       $("Log").innerHTML = "IndexedDB is supported"
@@ -51,31 +48,22 @@ var root = {
       $("Log").innerHTML = "IndexedDB is not supported"
       return
     }
-    let openRequest = indexedDB.open("store", 1);
+    let openRequest = indexedDB.open("store", 1)
 
-    openRequest.onupgradeneeded = function() {
+    openRequest.onupgradeneeded = function () {
       // triggers if the client had no database
       // ...perform initialization...
-    };
-    
-    openRequest.onerror = function() {
-      console.error("Error", openRequest.error);
-    };
-    
-    openRequest.onsuccess = function() {
-      let db = openRequest.result;
+    }
+
+    openRequest.onerror = function () {
+      console.error("Error", openRequest.error)
+    }
+
+    openRequest.onsuccess = function () {
+      let db = openRequest.result
       // continue working with database using db object
-    };
+    }
   },
-
-
-
-
-
-
-
-
-
 
   IOSCheck() {
     const isIos = () => {
@@ -151,9 +139,11 @@ var root = {
     //
     const WB = this.plane.getWeightAndBalance()
     console.log("WB :", WB)
-    if (!WB.isBalanced){
+    if (!WB.isBalanced) {
       $("Out").classList.add("NotInLimits")
-      $("Out").innerHTML = `Not In Limits... Weight: ${WB.round.weight} CG: ${WB.round.CG}`
+      $(
+        "Out"
+      ).innerHTML = `Not In Limits... Weight: ${WB.round.weight} CG: ${WB.round.CG}`
     } else {
       $("Out").classList.add("InLimits")
       $("Out").innerHTML = `Weight: ${WB.round.weight} CG: ${WB.round.CG}`

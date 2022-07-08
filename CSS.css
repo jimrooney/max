@@ -37,7 +37,7 @@ h1.vertical-container {
   word-wrap: break-word;
 }
 .Adult{
-  background: rgb(44, 44, 255);
+  background: rgb(59, 59, 170);
 }
 .Adult::after{
   content: "Adult";
