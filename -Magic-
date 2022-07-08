@@ -1,2 +1,65 @@
   //alert("Hello! I am an alert box!")
   root.log(P, "Airplane")
+
+Google Client ID 
+  791399740847-75s0ujm0gof01mo20dlqgacis5papfh0.apps.googleusercontent.com
+Google Client Secret 
+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
+
+
+
+
+
+
+
+
+
+
+
+
+
+  test spreadsheet (copy of CompanyData->Airplanes)
+  https://docs.google.com/spreadsheets/u/0/d/1rnfrwfz-ONw1p_if6GDt2EdzicndSEPJEqXeQmmF2Sw/gviz/tq?tqx=out:html&tq=select*
+  return as JSON
+  https://docs.google.com/spreadsheets/u/0/d/1rnfrwfz-ONw1p_if6GDt2EdzicndSEPJEqXeQmmF2Sw/gviz/tq?tqx=out:json&tq=select*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  https://sheets.googleapis.com/v4/spreadsheets/{spreadsheetId}/values/{sheetName}!{cellRange}?key={yourAPIKey}
+
+  GYA Api key
+  AIzaSyCocBQI-tF2haGoCCPsqb_R-YkwKnL0MCk
+
+  CompanyData
+  1OOaO6yrHKXUsN0JHdPo9mDpuuBMVBnvZUxe3OTQPo-s
+
+  Aiplanes
+  https://docs.google.com/spreadsheets/d/1OOaO6yrHKXUsN0JHdPo9mDpuuBMVBnvZUxe3OTQPo-s/edit#gid=1046036202
+
+  https://sheets.googleapis.com/v4/spreadsheets/1OOaO6yrHKXUsN0JHdPo9mDpuuBMVBnvZUxe3OTQPo-s/values/Airplanes!A:A?key=AIzaSyCocBQI-tF2haGoCCPsqb_R-YkwKnL0MCk
+
+const sheetId = '1dzx8QSiBQFcUOQTPa_uI64OCGQqESWtrq6EwqOVngZw';
+const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?`;
+const sheetName = 'user-data';
+const query = encodeURIComponent('Select *')
+const url = `${base}&sheet=${sheetName}&tq=${query}`
+
+
+https://docs.google.com/spreadsheets/d/1OOaO6yrHKXUsN0JHdPo9mDpuuBMVBnvZUxe3OTQPo-s/gviz/tq?&sheet='Airplanes'&tq='Select&20*'
