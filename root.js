@@ -1,7 +1,21 @@
 var root = {
   showWam : true,
   airplanes: new Airplanes(),
+  //
+  // Load external data
+  //
+  load:()=>{
+    const url = 'http://localhost:5500/settings.json'
+    fetch(url)
+    .then(res => res.json())
+    .catch(err => console.log("Error: ", err))
+    .then(out =>
+      console.log('Checkout this JSON! ', this.data = out))
+    .catch(err => console.log("error: ", err));
+  },
   test: function () {
+    console.log( "SW V: ", SW_Version)
+    return 
     // if (window.indexedDB || self.IndexedDB){
     //   $("Log").innerHTML = `Supported ${window.indexedDB} ${self.IndexedDB}`
     //   return
@@ -12,12 +26,7 @@ var root = {
     //   return
     // }
 
-    //check for support
-    if (!("indexedDB" in window)) {
-      console.log("This browser doesn't support IndexedDB")
-      return
-    }
-
+    //console.log("Class: ", $(".flex-container"))
     const idb = window.indexedDB
     var dbPromise = idb.open("test-db2", 1, function (upgradeDb) {
       console.log("making a new object store")
@@ -27,14 +36,47 @@ var root = {
     })
 
     $("Log").innerHTML = "Done"
-    return
 
-    if (window.IndexedDB) {
+        //check for support
+        // if (!("indexedDB" in window)) {
+        //   console.log("This browser doesn't support IndexedDB")
+        //   return
+        // }
+
+
+
+    if ("indexedDB" in window) {
       $("Log").innerHTML = "IndexedDB is supported"
     } else {
       $("Log").innerHTML = "IndexedDB is not supported"
+      return
     }
+    let openRequest = indexedDB.open("store", 1);
+
+    openRequest.onupgradeneeded = function() {
+      // triggers if the client had no database
+      // ...perform initialization...
+    };
+    
+    openRequest.onerror = function() {
+      console.error("Error", openRequest.error);
+    };
+    
+    openRequest.onsuccess = function() {
+      let db = openRequest.result;
+      // continue working with database using db object
+    };
   },
+
+
+
+
+
+
+
+
+
+
   IOSCheck() {
     const isIos = () => {
       const userAgent = window.navigator.userAgent.toLowerCase()
@@ -79,7 +121,7 @@ var root = {
     document.getElementById("Log").style.background = this.plane.regcolor
 
     // Clear airplane container
-    const container = document.getElementById("Airplane")
+    const container = $("Airplane")
     container.innerHTML = ""
     const node = document.createElement("div")
 

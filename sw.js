@@ -1,10 +1,10 @@
-var SW_Version = 2;
+var SW_Version = 4;
 var cacheName = 'NewBalance';
 var filesToCache = [
 '/',
   'index.html',
   'CSS.css',
-  'script.js',
+  // 'script.js',
   'Airplane.js',
   'Airplanes.js',
   'C206.js',

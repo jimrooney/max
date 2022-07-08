@@ -1,29 +1,24 @@
 // Prototype .clear() onto all DOM elements
+// Removes all children of a node
 HTMLElement.prototype.empty = function () {
   while (this.firstChild) {
     this.removeChild(this.firstChild)
   }
 }
-
-HTMLElement.prototype.show = function () {
-  toggleDiv(this)
-}
-HTMLElement.prototype.hide = function () {
-  toggleDiv(this)
-}
 // jQuery style DOM selector... cuz it's easier
 function $(x) {
-  const _this = document.getElementById(x)
-
-  //
-  _this.getName = function () {
-    console.log("HI")
+  let ret
+  const type = x.slice(0,1)
+  switch (type){
+    case ".":
+    ret = document.getElementsByClassName(x.slice(1,x.length))
+    break
+    default :
+    ret = document.getElementById(x)
+    break
   }
-  //   _this.show = function () {}
-  //   _this.hide = function () {}
-  return document.getElementById(x)
+  return ret
 }
-
 function toggleDiv(ID) {
   let x = ID
   if (typeof ID == "string") {
