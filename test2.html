@@ -1,91 +1,92 @@
 <style>
-    body {
-  font: normal 16px/1.5 "Helvetica Neue", sans-serif;
-}
+  body {
+    font: normal 16px/1.5 "Helvetica Neue", sans-serif;
+  }
 
-body, a {
-  color: #fff;
-}
+  body,
+  a {
+    color: #fff;
+  }
 
-header {
-  background: #333;
-}
+  header {
+    background: #333;
+  }
 
-.nav {
-  display: flex;
-  align-items: center;
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-  background: red;
-  justify-content: center;
-}
+  .nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: red;
+    justify-content: center;
+  }
 
-h1, li, a {
-  display: inline-block;
-}
+  h1,
+  li,
+  a {
+    display: inline-block;
+  }
 
-ul {
-  margin: 0;
-  padding: 0;
-}
+  ul {
+    margin: 0;
+    padding: 0;
+  }
 
-li {
-  list-style-type: none;
-}
+  li {
+    list-style-type: none;
+  }
 
-li a {
-  text-decoration: none;
-  padding: 10px 5px;
-}
+  li a {
+    text-decoration: none;
+    padding: 10px 5px;
+  }
 
-li:not(:last-child) a {
-  margin-right: 15px; 
-}
+  li:not(:last-child) a {
+    margin-right: 15px;
+  }
 
-.menu {
-  margin-left: 60px;
-  margin-right: auto;
-  
-/**
+  .menu {
+    margin-left: 60px;
+    margin-right: auto;
+
+    /**
   * Second method: 
   * - Remove: `margin-right: auto;`
   * - Add: `flex-grow: 1;`
   */
-}
+  }
 </style>
 <header>
-    
-    <div class="nav">Flex
-    <div style="height:50; background: #344; z-index:1;position: absolute;">
+  <div class="nav">
+    Flex
+    <!-- <div style="height:50; background: #344; z-index:1;position: absolute;">
         <a href="https://fastidious-capybara-7185c5.netlify.app/">Balance on Netlify</a>
-    </div>
-        
-        <div style="align-self: center">3</div>
-    
-    </div>
-    <nav>
-        
-      <h1 class="logo">LOGO</h1>
-      
-      <ul class="menu">
-        <li><a href="">About</a></li>
-        <li><label for="cars">Choose a car:</label>
-  
-  <select name="cars" id="cars">
-    <option value="volvo">Volvo</option>
-    <option value="saab">Saab</option>
-    <option value="mercedes">Mercedes</option>
-    <option value="audi">Audi</option>
-  </select></li>
-  
-        <li><a href="">Contact</a></li>
-      </ul>
-  
-      <ul class="social">
-        <li><a href="">Facebook</a></li>
-        <li><a href="">Twitter</a></li>
-      </ul>
-    </nav>
-  
-  </header>        
+    </div> -->
+
+    <div style="align-self: center">3</div>
+  </div>
+  <nav>
+    <h1 class="logo">LOGO</h1>
+
+    <ul class="menu">
+      <li><a href="">About</a></li>
+      <li>
+        <label for="cars">Choose a car:</label>
+        <select name="cars" id="cars">
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="mercedes">Mercedes</option>
+          <option value="audi">Audi</option>
+        </select>
+      </li>
+
+      <li><a href="">Contact</a></li>
+    </ul>
+
+    <ul class="social">
+      <li><a href="">Facebook</a></li>
+      <li><a href="">Twitter</a></li>
+    </ul>
+  </nav>
+</header>

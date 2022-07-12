@@ -35,23 +35,18 @@
     <script src="C208.js"></script>
     <script src="GA8.js"></script>
   </head>
-  <body onload="init()">
+  <body onload="init()" class="Wide Center">
     <div class="Header">
-      <h1 class="vertical-container">Balance</h1>
-      <span class="vertical-container">V0.00.8</span>
-    </div>
-    <div class="flex-container">
-      <div id="Airplanes"></div>
-    </div>
-
-    <div class="flex-container">
-      <div id="Log"></div>
-      <div id="Out"></div>
+      Balance V0.00.9
+      <div class="flex-container Center">
+        <div id="Airplanes"></div><div id="Fuel"></div>
+        <div id="Log"></div>
+        <div id="Out"></div>
+      </div>
     </div>
     <p></p>
     <div class="flex-container">
       <div id="Airplane" class="Airplane"></div>
-      <div id="Fuel"></div>
       <p>
         WAM:
         <label class="switch">
@@ -75,8 +70,11 @@
           </label>
         </p>
         <div id="Buttons" style="display: none">
-          
-          <button onclick="root.load('http://192.168.0.232:5500/settings.json')">Load Remote Settings</button><br />
+          <button
+            onclick="root.load('http://192.168.0.232:5500/settings.json')"
+          >
+            Load Remote Settings</button
+          ><br />
 
           <input type="text" id="name" placeholder="Name" /><br />
           <input type="email" id="email" placeholder="Email" /><br />

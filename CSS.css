@@ -1,25 +1,43 @@
 body {
-  background-color: #6dccfc;
+  background: #333;
+  background-color: #333;
   color: black;
-  max-width: max-content;
-  margin: auto;
 }
-.vertical-container {
-  display: -webkit-flex;
-  display: flex;
+body {
+  margin: 0 auto !important;
+  padding: 0px !important;
+  width: 100%;
+}
+.Header {
+  margin: 0px !important;
+  padding: 5px !important;
+  width: 100%;
+  background: rgb(0, 0, 0);
+  color: rgb(99, 99, 99);
+}
+.Wide {
+  margin: 0 auto !important;
+  padding: 0px !important;
+  width: 100%;
+}
+.Center {
   -webkit-align-items: center;
   align-items: center;
   -webkit-justify-content: center;
   justify-content: center;
 }
+
+.vertical-container {
+  display: -webkit-flex;
+  display: flex;
+}
 h1.vertical-container {
   font-size: 150%;
 }
 .UI {
-  font-size: 200%
+  font-size: 200%;
 }
 .Airplane {
-  width: 200px;
   margin: auto;
 }
 /* Individual Passenger Sprites */
@@ -36,34 +54,48 @@ h1.vertical-container {
   text-align: center;
   word-wrap: break-word;
 }
-.Adult{
+.Adult {
   background: rgb(59, 59, 170);
 }
-.Adult::after{
+.Adult::after {
   content: "Adult";
 }
-.Child{
+.Child {
   background: rgb(83, 251, 97);
 }
-.Child::after{
+.Child::after {
   content: "Child";
 }
-.AdultInfant{
+.AdultInfant {
   background: rgb(138, 117, 255);
 }
-.AdultInfant::after{
+.AdultInfant::after {
   content: "Adult+Inft";
 }
-.WAM{
+.WAM {
   background: rgb(251, 251, 83);
 }
-.NotInLimits{
+.NotInLimits {
   background: rgb(255, 0, 0);
 }
-.InLimits{
+.InLimits {
   background: rgb(43, 255, 0);
 }
 .flex-container {
   display: flex;
   flex-direction: column;
+}
+.flex-child {
+  flex: 1;
+}
+/* For Column Layouts */
+* {
+  box-sizing: border-box;
+}
+.row {
+  display: flex;
+}
+.column {
+  flex: 50%;
+  padding: 10px;
 }

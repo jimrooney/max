@@ -17,14 +17,14 @@ var root = {
       })
       .catch((err) => console.log("error: ", err))
   },
-  showButtons(){
+  showButtons() {
     console.log("show buttons")
     $("Airplanes").empty()
-    root.data.airplanes.forEach(plane => {
+    root.data.airplanes.forEach((plane) => {
       const button = document.createElement("button")
       button.onclick = () => root.setPlane(plane.reg)
       button.classList.add(plane.reg)
-      button.classList.add('UI')
+      button.classList.add("UI")
       button.innerHTML = plane.reg
       $("Airplanes").appendChild(button)
     })
@@ -127,11 +127,6 @@ var root = {
     // Color Bar
     document.getElementById("Log").style.background = this.plane.regcolor
 
-    // Clear airplane container
-    const container = $("Airplane")
-    container.innerHTML = ""
-    const node = document.createElement("div")
-
     // Fuel
     $("Fuel").innerHTML = "" // Clear fuel selector
     $("Fuel").appendChild(this.plane.fuelSelector)
@@ -140,13 +135,24 @@ var root = {
     )
     const FQ = F.reduce((acc, station) => station.liters, 0)
     $("fuel").value = FQ || 0
+
+    // Clear airplane container
+    const container = $("Airplane")
+    container.innerHTML = ""
+    const node = document.createElement("div")
     //
     // -- Seats --
     //
     const seats = this.plane.getSeats() // [{Station},{Station}]
-    seats.forEach((seat) => {
+    let _row
+    seats.forEach((seat, index) => {
+      if (index % 2 === 0) {
+        _row = document.createElement("div") // new row
+        _row.classList.add("row") 
+      }
       const s = new Seat(seat)
-      node.appendChild(s.getNode())
+      _row.appendChild(s.getNode())
+      node.appendChild(_row)
     })
     container.appendChild(node)
 
