@@ -20,7 +20,7 @@ document.addEventListener(
     }
 
     openRequest.onsuccess = function (e) {
-      console.log("running onsuccess")
+      console.log("indexedDB.open running onsuccess")
 
       db = e.target.result
 

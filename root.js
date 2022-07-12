@@ -1,6 +1,7 @@
 var root = {
   showWam: true,
   airplanes: new Airplanes(),
+  data: data, // deefault plane data
   //
   // Load external data
   //
@@ -8,9 +9,25 @@ var root = {
     fetch(url)
       .then((res) => res.json())
       .catch((err) => console.log("Error: ", err))
-//      .then((out) => console.log("Checkout this JSON! ", (this.data = out)))
-      .then((out) => root.log("Checkout this JSON! ", (this.data = out)))
+      .then((out) => {
+        root.log("JSON Loaded! ")
+        this.data = out
+        root.data = this.data
+        root.showButtons()
+      })
       .catch((err) => console.log("error: ", err))
+  },
+  showButtons(){
+    console.log("show buttons")
+    $("Airplanes").empty()
+    root.data.airplanes.forEach(plane => {
+      const button = document.createElement("button")
+      button.onclick = () => root.setPlane(plane.reg)
+      button.classList.add(plane.reg)
+      button.classList.add('UI')
+      button.innerHTML = plane.reg
+      $("Airplanes").appendChild(button)
+    })
   },
   test: function () {
     console.log("SW V: ", SW_Version)
@@ -99,12 +116,14 @@ var root = {
     // return json.replace(regex, "}<BR>")
   },
   setPlane(plane) {
+    console.log("SetPlane")
     this.airplanes.loadPlanes()
     this.empty("Airplane")
     this.plane = this.airplanes.getPlane(plane)
     this.update()
   },
   update() {
+    console.log("root.update()")
     // Color Bar
     document.getElementById("Log").style.background = this.plane.regcolor
 

@@ -69,7 +69,10 @@ class Airplanes {
     }
     return label
   }
+  getButton(reg){
+    
+  }
   loadPlanes() {
-    console.log("Json: ", data.airplanes)
+    console.log("loadPlanes Json: ", data.airplanes)
   }
 }

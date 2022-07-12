@@ -1,4 +1,6 @@
-function init() {}
+function init() {
+    root.showButtons()
+}
 function sendMail() {}
 // var getJSON = function(url, callback) {
 //     var xhr = new XMLHttpRequest();
