@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+<div class="w3-container">
+
+<h2>Progress Bar</h2>
+<p>The w3-container class can be used for a progress bar.</p>
+<p>The CSS width property can be used to set the height and width.</p>
+
+<div class="w3-border">
+  <div id="myBar" class="w3-grey" style="height:24px;width:30%"></div>
+</div>
+<div id="marker" style="position: absolute;">|</div>
+<button onClick="myFunc()"></button>
+</div>
+</body>
+<script>
+const myFunc=function(){
+const bar = document.getElementById("myBar")
+const marker = document.getElementById("marker")
+const rect = bar.getBoundingClientRect();
+console.log(rect.top, rect.right, rect.bottom, rect.left);
+marker.style.left = `${rect.right}px`;
+
+
+}
+</script>
+</html>

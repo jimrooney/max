@@ -154,8 +154,7 @@ class Airplane {
 
     result.balance = this.isBalanced(totalWeight, result.CG)
 
-      console.log("Balance: ", result)
-
+    console.log("Balance: ", result)
 
     result.isBalanced = result.balance.balanced
     result.wam = stations.map((a) => [a.weight, a.arm, a.moment]) // Just WAM
@@ -186,22 +185,34 @@ class Airplane {
     const bounds = this.limits.CG.bounds // [{[],[]}] of bounds *** Ugly ***
 
     const result = {
-      balanced:true
+      balanced: true,
     }
     let balanced = true
     // --------------------
     // Check extreme bounds
     // --------------------
-    // Outside of Max FWD or Max AFT (skip the rest as it doesn't matter)
+    //
+    // Check Balance
+    //
     if (CG > this.limits.CG.aft || CG < this.limits.CG.forward) {
       result.balanced = false
-      return result
+      result.exceeded = {
+        CG: CG,
+      }
     }
     // ------------
     // Check Weight
     // ------------
     if (totalWeight > this.limits.weight.MAUW) {
       result.balanced = false
+      result.exceeded = {
+        weight: totalWeight,
+      }
+    }
+    //
+    // Return and skip the rest if we're already out of bounds
+    //
+    if (!!result.exceeded){
       return result
     }
     // --------------------
@@ -209,8 +220,6 @@ class Airplane {
     // --------------------
     result.limit = {}
     console.log("Bounds: ", bounds)
-
-
     /* 
     fwd1 is the forward limit for any weight below it's weight.
     We can probably even skip all this if the weight is below fwd1's weight and the CG is more forward
@@ -219,18 +228,30 @@ class Airplane {
       const limit = this.getForwardCGLimit(totalWeight, bound) // Get fwd bound at this weight for each bound
       // Will return absolute limit if weight is below fwd1
 
-      console.log("Limit: ", limit)
-      result.limit.forward = limit // *** not right... this is the fwd limit at weight
-
+      // If no limit yet, use this one. (first run through)
+      if (!result.limit.forward){
+        result.limit.forward = limit
+      }
+      // If the limit at weight is larger (tighter) than the previous limit, use it.
+      if (limit < result.limit.forward) {
+        result.limit.forward = limit
+      }
       const wLower = bound.fwd1[1] // Lower Bound weight
       const wUpper = bound.fwd2[1] // Upper Bound weight
-
+      //
+      // If we're within this bound for this weight, evaluate if we're inside the limits
       if (totalWeight <= wUpper && totalWeight >= wLower) {
         result.balanced = CG > limit
+        // Report if out of balance
+        if (!result.balanced){
+          result.exceeded = {
+            CG: CG,
+            fwdLimit: limit,
+          }
+        }
       }
-
     })
-    result.bounds = bounds  /// used to just return balanced or not... sending the bounds is wrong... just send fwd limit (at that weight)
+    result.bounds = bounds /// used to just return balanced or not... sending the bounds is wrong... just send fwd limit (at that weight)
     return result
   }
 
