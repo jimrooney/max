@@ -5,6 +5,12 @@ var root = {
   //
   // Load external data
   //
+  loadSettings(url = "http://localhost:5500/settings.json"){
+    // [ Error handling and sanitization here ] ***
+    url = $("SettingsURL").value || url
+    console.log("LoadSettings: ", url)
+    this.load(url)
+  },
   load: (url = "http://localhost:5500/settings.json") => {
     fetch(url)
       .then((res) => res.json())

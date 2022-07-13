@@ -1,5 +1,14 @@
 function init() {
-    root.showButtons()
+  // Settings Input Field
+  const input = $("SettingsURL")
+  input.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault()
+      //$("myBtn").click();
+      root.loadSettings()
+    }
+  })
+  root.showButtons()
 }
 function sendMail() {}
 // var getJSON = function(url, callback) {
@@ -17,7 +26,6 @@ function sendMail() {}
 //     xhr.send();
 // };
 
-
 // async function fetchDataAsync(url) {
 //     const response = await fetch(url, {
 //         method: 'HEAD',
@@ -28,7 +36,6 @@ function sendMail() {}
 // }
 
 // fetchDataAsync(url)
-
 
 // getJSON(url,
 // function(err, data) {
