@@ -37,21 +37,28 @@
   </head>
   <body onload="init()" class="Wide Center">
     <div class="Header">
-      Balance V0.00.9
+      Balance V0.00.10
       <div class="flex-container Center">
         <div id="Airplanes"></div>
-        <div id="Fuel"></div>
-        <div id="Log"></div>
-        <div id="Out"></div>
       </div>
     </div>
-    <div class="menu">
+    
+    <div id="screen" class="Wide Center">
+      <div id="WAM" class="WAM Wide Center" style="display: none"></div>
+      <div id="Fuel" class="Fuel"></div>
+      <div id="Log"></div>
+      <div id="Out"></div>
+      <div class="flex-container">
+        <div id="Airplane" class="Airplane"></div>
+      </div>
+    </div>
+    <div class="menu Header">
       WAM:
       <label class="switch">
         <input id="WAM-Checkbox" type="checkbox" name="WAM" value="toggle" />
         <span class="slider round"></span>
       </label>
-      <div id="WAM" class="WAM" style="display: none"></div>
+      <!-- Debug Buttons -->
       <div>
         Buttons:
         <label class="switch">
@@ -66,24 +73,20 @@
         <div id="Buttons" style="display: none">
           <button onclick="root.loadSettings()">Load Remote Settings</button
           ><br />
-  
           <input
             type="text"
             id="SettingsURL"
             placeholder="http://localhost:5500/settings.json"
           /><br />
           <button id="addButton">Add Data</button>
-  
-          <button onclick="$('Airplane').empty()">empty Airplane</button><br />
+
+          <button onclick="$('Airplane').empty()">empty Airplane</button
+          ><br />
           <button onclick="root.test()">Root.test</button>
           <a href="mailto:Balance@jimrooney.com">Email</a>
         </div>
       </div>
-    </div>
-   
-
-    <div class="flex-container">
-      <div id="Airplane" class="Airplane"></div>
+      <!-- Debug Buttons -->
     </div>
   </body>
   <script src="Sliders.js"></script>

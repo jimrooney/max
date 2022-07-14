@@ -163,7 +163,7 @@ var root = {
     container.appendChild(node)
 
     //
-    // Show WB Table
+    // Show WB Result
     //
     $("Out").classList.remove("NotInLimits")
     $("Out").classList.remove("InLimits")
@@ -177,8 +177,11 @@ var root = {
       ).innerHTML = `Not In Limits... Weight: ${WB.round.weight} CG: ${WB.round.CG}`
     } else {
       $("Out").classList.add("InLimits")
-      $("Out").innerHTML = `Weight: ${WB.round.weight} CG: ${WB.round.CG}`
+      $("Out").innerHTML = `<center>Weight: ${WB.round.weight} CG: ${WB.round.CG}</center>`
     }
+    //
+    // Populate WAM screen
+    //
     $("WAM").innerHTML = ""
     $("WAM").appendChild(WB.table)
   },
