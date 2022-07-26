@@ -1,4 +1,4 @@
-var SW_Version = 6;
+var SW_Version = 7;
 var cacheName = 'NewBalance';
 var filesToCache = [
 '/',
