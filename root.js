@@ -31,6 +31,7 @@ var root = {
       button.onclick = () => root.setPlane(plane.reg)
       button.classList.add(plane.reg)
       button.classList.add("UI")
+      button.classList.add("AirplaneButton")
       button.innerHTML = plane.reg
       $("Airplanes").appendChild(button)
     })
@@ -121,17 +122,35 @@ var root = {
     // const regex = /},/gi
     // return json.replace(regex, "}<BR>")
   },
-  setPlane(plane) {
+  setPlane(plane) { // called by Button Click
     console.log("SetPlane")
     this.airplanes.loadPlanes()
     this.empty("Airplane")
     this.plane = this.airplanes.getPlane(plane)
     this.update()
+    // putting after update for testing...
+    console.log("PLANE: ", this.plane.reg)
+    this.clearPlanes()
+    let buttons = Array.from(document.getElementsByClassName(this.plane.reg))
+    buttons.forEach(button=>{button.classList.add("Selected")
+    button.style.background = this.plane.regcolor 
+  })
+  },
+  clearPlanes(){
+    $(".AirplaneButton").forEach(button=>{
+      button.classList.remove("Selected")
+      button.style.background = ""
+    })
   },
   update() {
     console.log("root.update()")
     // Color Bar
     document.getElementById("Log").style.background = this.plane.regcolor
+
+
+    // -- Change this -- ***
+    // move this into setPlane() so that it doesn't auto-clear the fuel when you call an update.
+    //
 
     // Fuel
     $("Fuel").innerHTML = "" // Clear fuel selector
