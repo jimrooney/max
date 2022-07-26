@@ -114,3 +114,6 @@ h1.vertical-container {
 .Fuel {
   color: grey;
 }
+.Selected{
+  border:rgb(43, 255, 0)
+}

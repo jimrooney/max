@@ -6,3 +6,6 @@ If the weight is below fwd1's weight, then return the absolute fwd limit.
 
 No idea why this file is .js
 */
+
+Move most of {root}.update() into {root}.setPlane()
+Set the fuel selector to "standard fuel" in {root}.setPlane()

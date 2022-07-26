@@ -11,7 +11,7 @@ function $(x) {
   const type = x.slice(0,1)
   switch (type){
     case ".":
-    ret = document.getElementsByClassName(x.slice(1,x.length))
+    ret = Array.from(document.getElementsByClassName(x.slice(1,x.length)))
     break
     default :
     ret = document.getElementById(x)
