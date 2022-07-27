@@ -8,7 +8,7 @@
           "arm":4.845558,
           "moment":11759.7401835923,
           "burnrate":200,
-          "standardfuel":510
+          "standardFuel":510
        },
        {
           "reg":"PPR",
@@ -18,7 +18,7 @@
           "arm":4.876040652,
           "moment":12018.72192,
           "burnrate":200,
-          "standardfuel":510
+          "standardFuel":510
        },
        {
           "reg":"LOR",
@@ -28,7 +28,7 @@
           "arm":1.35961,
           "moment":1454.651,
           "burnrate":60,
-          "standardfuel":150
+          "standardFuel":150
        },
        {
           "reg":"JTK",
@@ -38,7 +38,7 @@
           "arm":1.035812,
           "moment":1121.1117323177,
           "burnrate":76,
-          "standardfuel":180
+          "standardFuel":180
        }
     ]
  }

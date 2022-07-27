@@ -5,7 +5,7 @@ var root = {
   //
   // Load external data
   //
-  loadSettings(url = "http://localhost:5500/settings.json"){
+  loadSettings(url = "http://localhost:5500/settings.json") {
     // [ Error handling and sanitization here ] ***
     url = $("SettingsURL").value || url
     console.log("LoadSettings: ", url)
@@ -88,7 +88,10 @@ var root = {
       // continue working with database using db object
     }
   },
-
+  alert(msg) {
+    console.log("Alert: ", msg)
+    alert(msg)
+  },
   IOSCheck() {
     const isIos = () => {
       const userAgent = window.navigator.userAgent.toLowerCase()
@@ -106,6 +109,25 @@ var root = {
       $("Log").innerHTML = "iOS True, Installed"
     }
   },
+  click: {
+    timer: 0,
+    prevent: false,
+    delay: 300,
+    single: (funct) => {
+      const that = root.click
+      setTimeout(() => {
+        if (!that.prevent) {
+          funct()
+        }
+        that.prevent = false
+      }, that.delay)
+    },
+    double: (funct) => {
+      const that = root.click
+      that.prevent = true
+      funct()
+    },
+  },
   log: function (text) {
     //!elementID? elementID = "Log" : null
     elementID = "Log"
@@ -122,7 +144,8 @@ var root = {
     // const regex = /},/gi
     // return json.replace(regex, "}<BR>")
   },
-  setPlane(plane) { // called by Button Click
+  setPlane(plane) {
+    // called by Button Click
     console.log("SetPlane")
     this.airplanes.loadPlanes()
     this.empty("Airplane")
@@ -132,26 +155,12 @@ var root = {
     console.log("PLANE: ", this.plane.reg)
     this.clearPlanes()
     let buttons = Array.from(document.getElementsByClassName(this.plane.reg))
-    buttons.forEach(button=>{button.classList.add("Selected")
-    button.style.background = this.plane.regcolor 
-  })
-  },
-  clearPlanes(){
-    $(".AirplaneButton").forEach(button=>{
-      button.classList.remove("Selected")
-      button.style.background = ""
+    buttons.forEach((button) => {
+      button.classList.add("Selected")
+      button.style.background = this.plane.regcolor
     })
-  },
-  update() {
-    console.log("root.update()")
     // Color Bar
     document.getElementById("Log").style.background = this.plane.regcolor
-
-
-    // -- Change this -- ***
-    // move this into setPlane() so that it doesn't auto-clear the fuel when you call an update.
-    //
-
     // Fuel
     $("Fuel").innerHTML = "" // Clear fuel selector
     $("Fuel").appendChild(this.plane.fuelSelector)
@@ -159,7 +168,22 @@ var root = {
       station.type.includes("fuel")
     )
     const FQ = F.reduce((acc, station) => station.liters, 0)
-    $("fuel").value = FQ || 0
+    $("fuel").value = FQ || this.plane.standardFuel
+
+    console.log("Plane:: ", this.plane)
+  },
+  clearPlanes() {
+    $(".AirplaneButton").forEach((button) => {
+      button.classList.remove("Selected")
+      button.style.background = ""
+    })
+  },
+  update() {
+    console.log("root.update()")
+
+    // -- Change this -- ***
+    // move this into setPlane() so that it doesn't auto-clear the fuel when you call an update.
+    //
 
     // Clear airplane container
     const container = $("Airplane")
@@ -173,7 +197,7 @@ var root = {
     seats.forEach((seat, index) => {
       if (index % 2 === 0) {
         _row = document.createElement("div") // new row
-        _row.classList.add("row") 
+        _row.classList.add("row")
       }
       const s = new Seat(seat)
       _row.appendChild(s.getNode())
@@ -196,7 +220,9 @@ var root = {
       ).innerHTML = `Not In Limits... Weight: ${WB.round.weight} CG: ${WB.round.CG}`
     } else {
       $("Out").classList.add("InLimits")
-      $("Out").innerHTML = `<center>Weight: ${WB.round.weight} CG: ${WB.round.CG}</center>`
+      $(
+        "Out"
+      ).innerHTML = `<center>Weight: ${WB.round.weight} CG: ${WB.round.CG}</center>`
     }
     //
     // Populate WAM screen
