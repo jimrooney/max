@@ -11,7 +11,7 @@ document.addEventListener(
     let openRequest = indexedDB.open(name, 1)
 
     openRequest.onupgradeneeded = function (e) {
-      console.log("upgradeneeded")
+      console.log("upgrade-needed")
       const thisDB = e.target.result
 
       if (!thisDB.objectStoreNames.contains("people")) {

@@ -149,16 +149,11 @@ class Airplane {
     // Rounding
     const roundCG = Math.round((result.CG + Number.EPSILON) * 1000) / 1000
     const roundAUW = Math.round((totalWeight + Number.EPSILON) * 100) / 100
-
+    //
     result.round = { CG: roundCG, weight: roundAUW }
-
     result.balance = this.isBalanced(totalWeight, result.CG)
-
-    console.log("Balance: ", result)
-
     result.isBalanced = result.balance.balanced
     result.wam = stations.map((a) => [a.weight, a.arm, a.moment]) // Just WAM
-
     //
     // Results Table
     //
@@ -172,10 +167,14 @@ class Airplane {
                 </tr>`
       })
       .join("")
-    tableData += `<tr><td>${totalWeight}</td>
-                    <td>CG: ${result.CG} </td>
-                    <td>${totalMoment}</td></tr>
-                    <tr><td>Is Balanced:</td><td></td><td>${result.isBalanced}</td></tr>
+    tableData += `<tr><td>Max: ${this.limits.weight.MAUW} AUW: ${root.round(
+      totalWeight
+    )}</td>
+                    <td> </td>
+                    <td> </td></tr>
+                    <tr><td>Is Balanced:${
+                      result.isBalanced
+                    }</td><td></td><td>CG: ${result.round.CG}</td></tr>
                     `
     result.table.innerHTML = tableData
 
@@ -212,14 +211,13 @@ class Airplane {
     //
     // Return and skip the rest if we're already out of bounds
     //
-    if (!!result.exceeded){
+    if (!!result.exceeded) {
       return result
     }
     // --------------------
     // Check forward bounds
     // --------------------
     result.limit = {}
-    console.log("Bounds: ", bounds)
     /* 
     fwd1 is the forward limit for any weight below it's weight.
     We can probably even skip all this if the weight is below fwd1's weight and the CG is more forward
@@ -229,7 +227,7 @@ class Airplane {
       // Will return absolute limit if weight is below fwd1
 
       // If no limit yet, use this one. (first run through)
-      if (!result.limit.forward){
+      if (!result.limit.forward) {
         result.limit.forward = limit
       }
       // If the limit at weight is larger (tighter) than the previous limit, use it.
@@ -243,7 +241,7 @@ class Airplane {
       if (totalWeight <= wUpper && totalWeight >= wLower) {
         result.balanced = CG > limit
         // Report if out of balance
-        if (!result.balanced){
+        if (!result.balanced) {
           result.exceeded = {
             CG: CG,
             fwdLimit: limit,

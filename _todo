@@ -7,9 +7,9 @@ If the weight is below fwd1's weight, then return the absolute fwd limit.
 No idea why this file is .js
 */
 
-
-Standard Fuel
-
+Next Up...
+Sliders
+DoubleClick Airpalne Object to open pax edit mode
 
 Move most of {root}.update() into {root}.setPlane()
 Set the fuel selector to "standard fuel" in {root}.setPlane()

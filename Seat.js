@@ -9,7 +9,7 @@ class Seat {
     newDiv._script = this
     newDiv.className = "Pax"
     //newDiv.addEventListener("click",this.click()) --- doesn't work... needs to be wrapped ()=>
-    newDiv.addEventListener("dblclick", () => this.doubleClick())
+    //newDiv.addEventListener("dblclick", () => this.doubleClick())
     newDiv.addEventListener("click", () => this.click())
     this.showWeightClass()
     return newDiv

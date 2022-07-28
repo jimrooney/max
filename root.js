@@ -24,7 +24,6 @@ var root = {
       .catch((err) => console.log("error: ", err))
   },
   showButtons() {
-    console.log("show buttons")
     $("Airplanes").empty()
     root.data.airplanes.forEach((plane) => {
       const button = document.createElement("button")
@@ -152,7 +151,6 @@ var root = {
     this.plane = this.airplanes.getPlane(plane)
     this.update()
     // putting after update for testing...
-    console.log("PLANE: ", this.plane.reg)
     this.clearPlanes()
     let buttons = Array.from(document.getElementsByClassName(this.plane.reg))
     buttons.forEach((button) => {
@@ -169,8 +167,12 @@ var root = {
     )
     const FQ = F.reduce((acc, station) => station.liters, 0)
     $("fuel").value = FQ || this.plane.standardFuel
+    this.plane.changeFuel($("fuel").value)
 
     console.log("Plane:: ", this.plane)
+  },
+  round(num,factor = 100){
+    return Math.round((num + Number.EPSILON) * factor) / factor
   },
   clearPlanes() {
     $(".AirplaneButton").forEach((button) => {
@@ -179,8 +181,6 @@ var root = {
     })
   },
   update() {
-    console.log("root.update()")
-
     // -- Change this -- ***
     // move this into setPlane() so that it doesn't auto-clear the fuel when you call an update.
     //
