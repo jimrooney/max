@@ -1,31 +1,67 @@
 <!DOCTYPE html>
 <html>
-<title>W3.CSS</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<body>
-<div class="w3-container">
+  <title>Marker</title>
 
-<h2>Progress Bar</h2>
-<p>The w3-container class can be used for a progress bar.</p>
-<p>The CSS width property can be used to set the height and width.</p>
-
-<div class="w3-border">
-  <div id="myBar" class="w3-grey" style="height:24px;width:30%"></div>
-</div>
-<div id="marker" style="position: absolute;">|</div>
-<button onClick="myFunc()"></button>
-</div>
-</body>
-<script>
-const myFunc=function(){
-const bar = document.getElementById("myBar")
-const marker = document.getElementById("marker")
-const rect = bar.getBoundingClientRect();
-console.log(rect.top, rect.right, rect.bottom, rect.left);
-marker.style.left = `${rect.right}px`;
-
-
+  <style>
+    :root {
+  --markerHeight: 8px;
 }
-</script>
+    div.range {
+      height: 150px;
+      width: 20px;
+      background-color: rgb(76, 76, 58);
+      /* border: 1px solid black; */
+    }
+    .arrow-right {
+  width: 0; 
+  height: 0; 
+  border-top: var(--markerHeight) solid transparent;
+  border-bottom: var(--markerHeight) solid transparent;
+  border-left: var(--markerHeight) solid green;
+}
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <body>
+    
+      <div id="range" class="range"><div id="marker" class="arrow-right" style="position: absolute"></div></div>
+
+      <input type="text" id="position"></input>
+      <button onClick="myFunc()">Button</button>
+
+  </body>
+  <script>
+    const myFunc = function () {
+      const r = document.querySelector(':root')
+      const rs = getComputedStyle(r)
+      const markerHeight = parseInt(rs.getPropertyValue('--markerHeight'))
+
+      const bar = document.getElementById("range")
+      const marker = document.getElementById("marker")
+      const rect = bar.getBoundingClientRect()
+
+      console.log("Top: %o Right: %o Bottom: %o Left: %o",rect.top, rect.right, rect.bottom, rect.left)
+
+      //const mark = (rect.bottom - rect.top) / 2
+
+      const position = document.getElementById("position").value
+
+      const ratio = getRatio(position,[0,100])
+      const mark = getMark(ratio, [rect.top,rect.bottom])
+      const offset = mark - rect.top + markerHeight
+
+      marker.style.top = `${offset}px` 
+
+
+      console.log("MarkerHeight: ", markerHeight)
+      console.log("Offset: ", offset)
+      console.log("Ratio: ", ratio)
+      console.log("Mark: ", mark)
+      console.log("Top: ", rect.top)
+
+      //bar.innerHTML = `R: ${ratio} M: ${mark}  O: ${offset}`
+    }
+    const getRatio = (value, bounds) => (bounds[1] - bounds[0]) / value
+    const getMark = (ratio, bounds) => (bounds[1] - bounds[0]) / ratio
+
+  </script>
 </html>
