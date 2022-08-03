@@ -25,7 +25,7 @@ class Display {
         const mark = display.getRatio(ratio, [displayBar.top,displayBar.bottom]) // marker position
   
         // Result
-        const offset = mark - displayBar.top -  markerHeight // Correct for marker height
+        const offset = displayBar.top + mark - displayBar.top -  markerHeight // Correct for marker height
   
         console.log("Top: %o Right: %o Bottom: %o Left: %o",displayBar.top, displayBar.right, displayBar.bottom, displayBar.left)
         console.log("MarkerHeight: ", markerHeight)
