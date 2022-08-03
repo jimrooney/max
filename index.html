@@ -35,6 +35,9 @@
     <script src="C206.js"></script>
     <script src="C208.js"></script>
     <script src="GA8.js"></script>
+    <script>
+      const display = new Display()
+    </script>
   </head>
   <body onload="init()" class="Wide Center">
     <div class="Header">
@@ -50,6 +53,9 @@
       <div id="Log"></div>
       <div id="Out"></div>
       <div class="flex-container">
+        <div id="range" class="range" style="position: absolute; top:150px; left:30px">
+          <div id="marker" class="arrow-right" style="position: absolute;"></div>
+        </div>
         <div id="Airplane" class="Airplane"></div>
       </div>
     </div>
@@ -85,6 +91,8 @@
           ><br />
           <button onclick="root.test()">Root.test</button>
           <a href="mailto:Balance@jimrooney.com">Email</a>
+          <input type="text" id="position"></input>
+          <button onClick="display.updateMarker()">Button</button>
         </div>
       </div>
       <!-- Debug Buttons -->
