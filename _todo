@@ -8,7 +8,12 @@ No idea why this file is .js
 */
 
 Next Up...
-Sliders
+Sliders... make position marker relative to display bar (right now it moves relative to 0:0)
+
+
+
+
+
 DoubleClick Airpalne Object to open pax edit mode
 
 Move most of {root}.update() into {root}.setPlane()

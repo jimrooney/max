@@ -1,67 +1,24 @@
 <!DOCTYPE html>
 <html>
+  <script src="Display.js"></script>
+  <link rel="stylesheet" type="text/css" href="CSS.css" media="all" />
   <title>Marker</title>
 
-  <style>
-    :root {
-  --markerHeight: 8px;
-}
-    div.range {
-      height: 150px;
-      width: 20px;
-      background-color: rgb(76, 76, 58);
-      /* border: 1px solid black; */
-    }
-    .arrow-right {
-  width: 0; 
-  height: 0; 
-  border-top: var(--markerHeight) solid transparent;
-  border-bottom: var(--markerHeight) solid transparent;
-  border-left: var(--markerHeight) solid green;
-}
-  </style>
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <body>
     
-      <div id="range" class="range"><div id="marker" class="arrow-right" style="position: absolute"></div></div>
+      <div id="range" class="range" style="position: absolute; top:150px; left:30px"><div id="marker" class="arrow-right" style="position: absolute;"></div></div>
 
       <input type="text" id="position"></input>
       <button onClick="myFunc()">Button</button>
 
   </body>
   <script>
-    const myFunc = function () {
-      const r = document.querySelector(':root')
-      const rs = getComputedStyle(r)
-      const markerHeight = parseInt(rs.getPropertyValue('--markerHeight'))
-
-      const bar = document.getElementById("range")
-      const marker = document.getElementById("marker")
-      const rect = bar.getBoundingClientRect()
-
-      console.log("Top: %o Right: %o Bottom: %o Left: %o",rect.top, rect.right, rect.bottom, rect.left)
-
-      //const mark = (rect.bottom - rect.top) / 2
-
-      const position = document.getElementById("position").value
-
-      const ratio = getRatio(position,[0,100])
-      const mark = getMark(ratio, [rect.top,rect.bottom])
-      const offset = mark - rect.top + markerHeight
-
-      marker.style.top = `${offset}px` 
-
-
-      console.log("MarkerHeight: ", markerHeight)
-      console.log("Offset: ", offset)
-      console.log("Ratio: ", ratio)
-      console.log("Mark: ", mark)
-      console.log("Top: ", rect.top)
-
-      //bar.innerHTML = `R: ${ratio} M: ${mark}  O: ${offset}`
+    const display = new Display()
+    const myFunc = () => {
+          marker.style.top = `${display.getMarkerPosition()}px` 
     }
-    const getRatio = (value, bounds) => (bounds[1] - bounds[0]) / value
-    const getMark = (ratio, bounds) => (bounds[1] - bounds[0]) / ratio
 
   </script>
 </html>

@@ -1,6 +1,7 @@
 var root = {
   showWam: true,
   airplanes: new Airplanes(),
+  display: new Display(),
   data: data, // deefault plane data
   //
   // Load external data
