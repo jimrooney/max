@@ -1,8 +1,10 @@
 class Display {
   constructor() {}
-  getRatio = (value, bounds) => (bounds[1] - bounds[0]) / value // Returns the percentage value is of the range
 
-  updateMarker = (parameters) => {
+  getRatio(value, bounds){
+    return (bounds[1] - bounds[0]) / value // Returns the percentage value is of the range
+  } 
+  updateMarker(parameters){
     const defaults = {
       mrk: "balance-marker",
     }

@@ -229,7 +229,11 @@ var root = {
     //
     // Sliders
     //
-    const fwd = WB.balance.limit?.forward // these could be cleaned up... they're a bit scattered ***
+    // these could be cleaned up... they're a bit scattered ***
+    let fwd
+    if (!!WB.balance.limit){
+      fwd = WB.balance.limit.forward
+    }
     const aft = this.plane.limits.CG.aft
 
     console.log("FWD: ", fwd)
