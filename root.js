@@ -225,6 +225,26 @@ var root = {
         "Out"
       ).innerHTML = `<center>Weight: ${WB.round.weight} CG: ${WB.round.CG}</center>`
     }
+
+    //
+    // Sliders
+    //
+    const fwd = WB.balance.limit.forward // these could be cleaned up... they're a bit scattered ***
+    const aft = this.plane.limits.CG.aft
+
+    console.log("FWD: ", fwd)
+    console.log("AFT: ", aft)
+    console.log("CG: ", WB.CG)
+
+    const params = {
+      mrk: "balance-marker",
+      bar: "balance-range",
+      bounds: [fwd,aft],
+      np: "manual-position",
+      value: WB.CG - fwd,
+    }
+    this.display.updateMarker(params)
+
     //
     // Populate WAM screen
     //

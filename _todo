@@ -8,9 +8,8 @@ No idea why this file is .js
 */
 
 Next Up...
-Sliders... make position marker relative to display bar (right now it moves relative to 0:0)
-
-
+Sliders... Aft out of limits stops calculating so it throws errors... otherwise the sliders work :)
+need to add colours to out of bounds and limits to out of bounds display points (might not be neccesary to limit as you can only put so much in a seat so you can only throw it so far out of balance.)
 
 
 
