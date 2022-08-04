@@ -1,4 +1,4 @@
-var SW_Version = 9;
+var SW_Version = 10;
 var cacheName = 'NewBalance';
 var filesToCache = [
 '/',
@@ -10,6 +10,7 @@ var filesToCache = [
   'C206.js',
   'C208.js',
   'data.js',
+  'Display.js',
   'DOM.js',
   'GA8.js',
   'root.js',

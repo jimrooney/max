@@ -186,7 +186,6 @@ class Airplane {
     const result = {
       balanced: true,
     }
-    let balanced = true
     // --------------------
     // Check extreme bounds
     // --------------------
@@ -211,9 +210,9 @@ class Airplane {
     //
     // Return and skip the rest if we're already out of bounds
     //
-    if (!!result.exceeded) {
-      return result
-    }
+    // if (!!result.exceeded) {
+    //   return result
+    // }
     // --------------------
     // Check forward bounds
     // --------------------
@@ -238,8 +237,10 @@ class Airplane {
       const wUpper = bound.fwd2[1] // Upper Bound weight
       //
       // If we're within this bound for this weight, evaluate if we're inside the limits
-      if (totalWeight <= wUpper && totalWeight >= wLower) {
-        result.balanced = CG > limit
+      if (totalWeight <= wUpper && totalWeight >= wLower && !result.exceeded) {
+
+        console.log("result: ", result)
+        result.balanced = CG > limit // Check Forward Balance
         // Report if out of balance
         if (!result.balanced) {
           result.exceeded = {
