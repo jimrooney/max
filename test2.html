@@ -57,14 +57,21 @@
   */
   }
 </style>
+<script src="data.js"></script>
+<script src="Airplanes.js"></script>
+<script src="Display.js"></script>
+<script src="Calculator.js"></script>
+<script src="root.js"></script>
+
 <script>
-  const clickButton = function(){
+  const clickButton = function () {
     alert("button")
   }
+  const calc = new Calculator()
 </script>
 <header>
   <div class="nav">
-    Flex
+    <a href="/">Home</a> | Flex Navigation
     <!-- <div style="height:50; background: #344; z-index:1;position: absolute;">
         <a href="https://fastidious-capybara-7185c5.netlify.app/">Balance on Netlify</a>
     </div> -->
@@ -77,16 +84,18 @@
     <ul class="menu">
       <li><a href="">About</a></li>
       <li>
-        <label for="cars">Choose a car:</label>
-        <select name="cars" id="cars">
+        <label for="myList">Choose a car:</label>
+        <select name="myList" id="myList">
           <option value="volvo">Volvo</option>
           <option value="saab">Saab</option>
           <option value="mercedes">Mercedes</option>
           <option value="audi">Audi</option>
+          <option value="Hello" onClick="calc.hello()">Hello</option>
         </select>
       </li>
 
       <li><a href="" onClick="clickButton()">Contact</a></li>
+      <li><a href="" onClick="calc.hello()">Hello</a></li>
     </ul>
 
     <ul class="social">
@@ -95,3 +104,18 @@
     </ul>
   </nav>
 </header>
+
+<script type="text/javascript">
+  var dropdown = document.getElementById("myList")
+
+  // Add a change event listener to the <select> element
+  dropdown.addEventListener("change", function () {
+    var selectedValue = dropdown.value
+
+    // Check if the selected value is the one you want to trigger the function for
+    if (selectedValue === "Hello") {
+      // Call your function here
+      calc.hello(selectedValue)
+    }
+  })
+</script>
