@@ -1,4 +1,10 @@
-var data = {
+const data = {
+  test: [
+    //Weight	Speed	Wind	Ground Run	TODistance
+    { weight: 3350, speed: 50, wind: 0, groundRun: 490, TODistance: 870 },
+    { weight: 2800, speed: 46, wind: 0, groundRun: 330, TODistance: 655 },
+    { weight: 2300, speed: 42, wind: 0, groundRun: 210, TODistance: 500 },
+  ],
   airplanes: [
     {
       reg: "MMZ",

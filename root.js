@@ -1,8 +1,9 @@
-const root = {
+var root = {
   showWam: true,
   airplanes: new Airplanes(),
   display: new Display(),
-  data: data, // default plane data
+  data: data, // deefault plane data
+  performance: new Performance(),
   calc: new Calculator(),
   //
   // Load external data
