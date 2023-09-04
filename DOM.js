@@ -6,6 +6,9 @@ HTMLElement.prototype.empty = function () {
   }
 }
 // jQuery style DOM selector... cuz it's easier
+// Defaults to ID
+// But with a . syntax it will get the class
+// Not sure this will work well with multiple selectors.
 function $(x) {
   let ret
   const type = x.slice(0,1)

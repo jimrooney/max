@@ -57,6 +57,7 @@
   */
   }
 </style>
+<script src="DOM.js"></script>
 <script src="data.js"></script>
 <script src="Airplanes.js"></script>
 <script src="Display.js"></script>
@@ -100,22 +101,55 @@
     </ul>
 
     <ul class="social">
-      <li><input type="text" id="weight"></input></li>
-      <li><a href="" onClick="clickButton()">Calc</a></li>
+      
+      
+      <li><input type="text" id="weight" 
+        onkeydown = "if (event.keyCode == 13) $('byWeight').click()"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+        ></input></li>
+      <li><input type = "button"
+        id = "byWeight"
+        value = "By Weight"
+        onclick = "byWeight($('weight').value);"
+ /></li>
+
+
+      <li><a href="" class="MyButtons CalculateDistance">Calc</a></li>
     </ul>
   </nav>
 </header>
 
-<script type="text/javascript">
-  var dropdown = document.getElementById("myList")
 
+<script type="text/javascript">
+  function byWeight(weight) {
+    alert(root.performance.getTakeoffSpeed(root.data.test,weight))
+  }
+
+const calcButtons = document.querySelectorAll(".MyButtons.CalculateDistance")
+// Loop through all matching elements and add a click event listener to each
+calcButtons.forEach(function(calcButton) {
+  calcButton.addEventListener("click", function(event) {
+    // Prevent the default behavior of the anchor (e.g., navigating to a new page)
+    event.preventDefault()
+    alert(root.performance.get50ftDistance(root.data.test,43))
+  })
+})
+
+  const dropdown =  $("myList")
+  const weight = $('weight')
+
+
+
+
+  
   // Add a change event listener to the <select> element
   dropdown.addEventListener("change", function () {
-    var selectedValue = dropdown.value
+    let selectedValue = dropdown.value
 
     // Check if the selected value is the one you want to trigger the function for
     if (selectedValue === "Distance50") {
       alert(root.performance.get50ftDistance(root.data.test,43)) // data speed
+      console.log(weight.value)
     }
     if (selectedValue === "TO Speed") {
       alert(root.performance.getTakeoffSpeed(root.data.test,2400)) // data/weight
