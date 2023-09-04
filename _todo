@@ -7,7 +7,14 @@ If the weight is below fwd1's weight, then return the absolute fwd limit.
 No idea why this file is .js
 */
 
+Currently.
+Working in test.html so as not to mess with the working index.html
+
 Next Up...
+Calculating takeoff and landing values.
+Click and drag sliders for changing values. Display current selected value floating next to where you're dragging.
+
+
 Sliders... Aft out of limits stops calculating so it throws errors... otherwise the sliders work :)
 need to add colours to out of bounds and limits to out of bounds display points (might not be neccesary to limit as you can only put so much in a seat so you can only throw it so far out of balance.)
 
