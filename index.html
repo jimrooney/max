@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="canonical" href="https://jimrooney.github.io/Balance/" />
+    <link rel="manifest" href="/Balance/manifest.webmanifest">
     <script>
       // Register the serviceworker
       if (navigator.serviceWorker.controller) {
         console.log("Active service worker found")
       } else {
         navigator.serviceWorker
-          .register("sw.js", { scope: "./" })
+          .register("/Balance/sw.js", { scope: "/Balance/" })
           .then(function (reg) {
             console.log("Service worker  registered")
           })
