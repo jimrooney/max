@@ -1,5 +1,5 @@
 var SW_Version = 13;
-var cacheName = 'NewBalance';
+var cacheName = 'Balance';
 var filesToCache = [
 '/',
   'index.html',
