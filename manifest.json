@@ -4,11 +4,12 @@
 "display": "standalone",
 "background_color": "#6dccfc",
 "theme_color": "#07abfd",
-"start_url": "index.html",
+"start_url": "/Balance/index.html",
+"scope": "/Balance/",
 "gcm_sender_id": "103953800507",
 "icons": [
     {
-      "src": "/images/icon.svg",
+      "src": "/Balance/images/icon.svg",
       "type": "image/svg+xml",
       "sizes": "512x512",
       "purpose": "any"
