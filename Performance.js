@@ -24,6 +24,18 @@ class Performance {
       console.log(matchingObjects);
 
     */
+  getGroundRoll(data, speed) {
+    //
+    // Factor = (Distance-Fast - Distance-Slow) / (Speed-Fast - Speed-Slow)
+    // DistanceX = DistanceSlow+ (SpeedX- SpeedSlow) * Factor
+    //
+    const rows = root.calc.filterDataByProperty(data, speed, "speed") // Find the two rows that encompass the given speed
+    const factor =
+      (rows[0].groundRun - rows[1].groundRun) /
+      (rows[0].speed - rows[1].speed)
+    const distance = rows[1].groundRun + (speed - rows[1].speed) * factor
+    return distance
+  }
 
   get50ftDistance(data, speed) {
     //

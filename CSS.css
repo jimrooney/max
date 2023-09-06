@@ -13,12 +13,6 @@ div.range {
   border-bottom: var(--markerHeight) solid transparent;
   border-left: var(--markerHeight) solid green;
 }
-
-
-
-
-
-
 body {
   background: #333;
   background-color: #333;

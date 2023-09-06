@@ -1,62 +1,4 @@
-<style>
-  body {
-    font: normal 16px/1.5 "Helvetica Neue", sans-serif;
-  }
-
-  body,
-  a {
-    color: #fff;
-  }
-
-  header {
-    background: #333;
-  }
-
-  .nav {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    background: red;
-    justify-content: center;
-  }
-
-  h1,
-  li,
-  a {
-    display: inline-block;
-  }
-
-  ul {
-    margin: 0;
-    padding: 0;
-  }
-
-  li {
-    list-style-type: none;
-  }
-
-  li a {
-    text-decoration: none;
-    padding: 10px 5px;
-  }
-
-  li:not(:last-child) a {
-    margin-right: 15px;
-  }
-
-  .menu {
-    margin-left: 60px;
-    margin-right: auto;
-
-    /**
-  * Second method: 
-  * - Remove: `margin-right: auto;`
-  * - Add: `flex-grow: 1;`
-  */
-  }
-</style>
+<link rel="stylesheet" href="test.css" />
 <script src="DOM.js"></script>
 <script src="data.js"></script>
 <script src="Airplanes.js"></script>
@@ -101,59 +43,112 @@
     </ul>
 
     <ul class="social">
-      
-      
-      <li><input type="text" id="weight" 
-        onkeydown = "if (event.keyCode == 13) $('byWeight').click()"
-        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-        ></input></li>
-      <li><input type = "button"
-        id = "byWeight"
-        value = "By Weight"
-        onclick = "byWeight($('weight').value);"
- /></li>
-
+      <li>
+        <input
+          type="text"
+          id="weight"
+          onkeydown="if (event.keyCode == 13) $('byWeight').click()"
+          oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+        />
+      </li>
+      <li>
+        <input
+          type="button"
+          id="byWeight"
+          value="By Weight"
+          onclick="byWeight($('weight').value);"
+        />
+      </li>
 
       <li><a href="" class="MyButtons CalculateDistance">Calc</a></li>
     </ul>
   </nav>
 </header>
 
+<div id="follow-div">
+  <div class="boxarrow"></div>
+  <input type="text" value="Hello">
+</div>
 
 <script type="text/javascript">
+  const divToFollow = $("follow-div")
+
+  process_touchend = () => {
+    console.log("touchend")
+  }
+  
+  // dragArrow.forEach((arrow) => {
+    // arrow.addEventListener("touchend", process_touchend, false)
+    // Create touchend handler
+    // arrow.addEventListener(
+    //   "touchend",
+    //   (ev) => {
+    //     // Iterate through the touch points that ended
+    //     for (let i = 0; i < ev.changedTouches.length; i++) {
+    //       console.log("TouchEnd ", ev.changedTouches[i].target)
+    //       console.log("Mouse: ", ev.clientX, ev.clientY)
+    //     }
+    //   },
+    //   false
+    // )
+
+    // Create touchstart handler
+    // arrow.addEventListener(
+    //   "touchstart",
+    //   (ev) => {
+    //     // Iterate through the touch points that were activated
+    //     // for this element and process each event 'target'
+    //     for (let i = 0; i < ev.targetTouches.length; i++) {
+    //       console.log("TouchStart ", ev.targetTouches[i].target)
+    //     }
+    //   },
+    //   false
+    // )
+    // arrow.addEventListener("mousedown", (event) => {
+    //   console.log("Click Down ", event.clientX, event.clientY)
+    // })
+    // arrow.addEventListener("mouseup", (event) => {
+    //   console.log("Mouse Up", event.clientX, event.clientY)
+    // })
+  // })
+
   function byWeight(weight) {
-    alert(root.performance.getTakeoffSpeed(root.data.test,weight))
+    const speed = root.performance.getTakeoffSpeed(root.data.test, weight)
+    const groundRoll = root.performance.getGroundRoll(root.data.test, speed)
+    const distance = root.performance.get50ftDistance(root.data.test, speed)
+    alert(
+      `Takeoff Speed: ${Math.round(speed)} kts \nGroundRoll: ${Math.round(
+        groundRoll
+      )} \nTakeoff Distance (50ft): ${Math.round(distance)}`
+    )
   }
 
-const calcButtons = document.querySelectorAll(".MyButtons.CalculateDistance")
-// Loop through all matching elements and add a click event listener to each
-calcButtons.forEach(function(calcButton) {
-  calcButton.addEventListener("click", function(event) {
-    // Prevent the default behavior of the anchor (e.g., navigating to a new page)
-    event.preventDefault()
-    alert(root.performance.get50ftDistance(root.data.test,43))
+  const calcButtons = document.querySelectorAll(".MyButtons.CalculateDistance")
+  // Loop through all matching elements and add a click event listener to each
+  calcButtons.forEach(function (calcButton) {
+    calcButton.addEventListener("click", function (event) {
+      // Prevent the default behavior of the anchor (e.g., navigating to a new page)
+      event.preventDefault()
+      alert(root.performance.get50ftDistance(root.data.test, 43))
+    })
   })
-})
 
-  const dropdown =  $("myList")
-  const weight = $('weight')
+  const dropdown = $("myList")
+  const weight = $("weight")
 
-
-
-
-  
   // Add a change event listener to the <select> element
   dropdown.addEventListener("change", function () {
     let selectedValue = dropdown.value
 
     // Check if the selected value is the one you want to trigger the function for
     if (selectedValue === "Distance50") {
-      alert(root.performance.get50ftDistance(root.data.test,43)) // data speed
+      alert(root.performance.get50ftDistance(root.data.test, 43)) // data speed
       console.log(weight.value)
     }
     if (selectedValue === "TO Speed") {
-      alert(root.performance.getTakeoffSpeed(root.data.test,2400)) // data/weight
+      alert(root.performance.getTakeoffSpeed(root.data.test, 2400)) // data/weight
     }
-
   })
+  
 </script>
+<script src="UI.js"></script>

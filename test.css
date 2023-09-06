@@ -1,0 +1,76 @@
+#follow-div {
+    position: absolute;
+    width: 100px;
+    height: 82px;
+    background-color: lightgray;
+}
+
+.boxarrow {
+    position: absolute;
+    width: 100px;
+    height: 82px;
+    background: url(arrow.svg);
+    background-size: 100px 82px;
+}
+
+input[type="text"] {
+    position: absolute;
+    left: 100px; /* Adjust as needed to position the input */
+}
+  body {
+    font: normal 16px/1.5 "Helvetica Neue", sans-serif;
+  }
+
+  body,
+  a {
+    color: #fff;
+  }
+
+  header {
+    background: #333;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: red;
+    justify-content: center;
+  }
+
+  h1,
+  li,
+  a {
+    display: inline-block;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style-type: none;
+  }
+
+  li a {
+    text-decoration: none;
+    padding: 10px 5px;
+  }
+
+  li:not(:last-child) a {
+    margin-right: 15px;
+  }
+
+  .menu {
+    margin-left: 60px;
+    margin-right: auto;
+
+    /**
+  * Second method: 
+  * - Remove: `margin-right: auto;`
+  * - Add: `flex-grow: 1;`
+  */
+  }

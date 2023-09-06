@@ -1,41 +1,51 @@
-<style>
-  body {
-    font: normal 16px/1.5 "Helvetica Neue", sans-serif;
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #follow-div {
+            position: relative;
+            width: 100px;
+            height: 820px;
+            background-color: lightgray;
+        }
 
-  body,
-  a {
-    color: rgb(15, 10, 10);
-    background: rgb(97, 91, 91);
-  }
-  body {
-    margin: 0px !important;
-    padding: 0px !important;
-  }
-  header {
-    background: #333;
-  }
+        .boxarrow {
+            position: absolute;
+            width: 100px;
+            height: 82px;
+            background: url(arrow.svg);
+            background-size: 100px 82px;
+        }
 
-  .nav {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 10;
-    background: #333;
-    justify-content: center;
-  }
-</style>
-<header></header>
+        input[type="text"] {
+            position: absolute;
+            left: 100px; /* Adjust as needed to position the input */
+        }
+    </style>
+</head>
 <body>
-  <div class="nav">
-    Flex 
-    <label for="cars">Choose a car:</label>
-    <select name="cars" id="cars">
-      <option value="volvo">Volvo</option>
-      <option value="saab">Saab</option>
-      <option value="mercedes">Mercedes</option>
-      <option value="audi">Audi</option>
-    </select>
-  </div>
-  <div class="box">Second load of content.</div>
+    <div id="follow-div">
+        <div class="boxarrow"></div>
+        <input type="text" value="Hello">
+    </div>
+
+    <script>
+        const followDiv = document.getElementById('follow-div');
+        const inputField = followDiv.querySelector('input');
+
+        followDiv.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+
+            // Update the position of follow-div to match the cursor
+            followDiv.style.left = mouseX + 'px';
+            followDiv.style.top = mouseY + 'px';
+
+            // Adjust the position of the input element within follow-div
+            inputField.style.left = '100px'; // Adjust as needed
+        });
+    </script>
 </body>
+</html>
