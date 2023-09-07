@@ -5,6 +5,7 @@
 <script src="Display.js"></script>
 <script src="Calculator.js"></script>
 <script src="Performance.js"></script>
+<script src="UI.js"></script>
 <script src="root.js"></script>
 
 <script>
@@ -18,10 +19,6 @@
   <link rel="manifest" href="manifest.json" />
   <div class="nav">
     <a href="/">Home</a> | Flex Navigation
-    <!-- <div style="height:50; background: #344; z-index:1;position: absolute;">
-        <a href="https://fastidious-capybara-7185c5.netlify.app/">Balance on Netlify</a>
-    </div> -->
-
     <div style="align-self: center">3</div>
   </div>
   <nav>
@@ -73,11 +70,16 @@
 </div>
 
 <script type="text/javascript">
-  const divToFollow = $("follow-div")
+  root.ui.setDraggable($("follow-div"))
 
-  process_touchend = () => {
-    console.log("touchend")
-  }
+  $("follow-div").addEventListener("mousedown", function () {
+    console.log("mousedown: ", this)
+    root.ui.setActiveDiv($("follow-div"))
+  })
+
+  // process_touchend = () => {
+  //   console.log("touchend")
+  // }
   
   // dragArrow.forEach((arrow) => {
     // arrow.addEventListener("touchend", process_touchend, false)
@@ -153,4 +155,4 @@
   })
   
 </script>
-<script src="UI.js"></script>
+
