@@ -1,3 +1,4 @@
+/*
   //alert("Hello! I am an alert box!")
   root.log(P, "Airplane")
 
@@ -8,8 +9,8 @@ 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
 
 
 
-
-
+in sw.js ... these files will be cached.
+var filesToCache = [
 
 <!-- <div style="height:50; background: #344; z-index:1;position: absolute;">
 <a href="https://fastidious-capybara-7185c5.netlify.app/">Balance on Netlify</a>
