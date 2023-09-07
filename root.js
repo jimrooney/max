@@ -5,6 +5,7 @@ var root = {
   data: data, // deefault plane data
   performance: new Performance(),
   calc: new Calculator(),
+  ui: new UI(),
   //
   // Load external data
   //

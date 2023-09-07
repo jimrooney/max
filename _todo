@@ -10,6 +10,11 @@ No idea why this file is .js
 Currently.
 Working in test2.html so as not to mess with the working index.html
 
+{ui}
+working on dragdivs in {UI} ... thinking about setting up constraints... X / Y and constraining to a bounding div (parent?)
+
+Will want to move the dragdivs relative to the min/max of what setting they control.
+
 Next Up...
 Calculating takeoff and landing values.
 Click and drag sliders for changing values. Display current selected value floating next to where you're dragging.

@@ -1,74 +1,108 @@
-let isDragging = false // Flag to track if dragging is in progress
-let lastPosition = { x: 0, y: 0 } // Store the last position
+class UI {
+  constructor(data) {
+    this.data = { ...this.data, ...data }
+    this.dragDivs = {}
+    this.activeDiv = null
+    this.lastPosition = { x: 0, y: 0 }
 
-// Function to log the position when dragging stops
-function logPosition(x, y) {
-  console.log("Drag at:", x, y)
-}
-// Function to update the div's position
-function updateDivPosition(x, y) {
-  //divToFollow.style.left = x + "px"
-  const divHeight = divToFollow.clientHeight
-  divToFollow.style.top = y - divHeight / 2 + "px"
-  divToFollow.querySelector('input').value = divToFollow.style.top
-}
-
-// Function to handle the start of dragging
-function startDragging(x, y) {
-  isDragging = true
-  lastPosition = { x, y }
-  logPosition(x, y)
-}
-
-// Function to handle the end of dragging
-function stopDragging() {
-  if (isDragging) {
-    logPosition(lastPosition.x, lastPosition.y)
-    isDragging = false
+    this.init()
   }
-}
+  init() {
+    //
+    // Attach event listeners to the document to capture mouse events (drag and up)
+    //
 
-// Event listeners for mouse events
-document.addEventListener("mousedown", (e) => {
-  e.preventDefault() // Prevent text selection while dragging
-  startDragging(e.clientX, e.clientY)
-})
+    // -- Down --
+    // Mouse and Touch down events are fired by clicking on the div.
 
-document.addEventListener("mousemove", (e) => {
-  if (isDragging) {
-    lastPosition = { x: e.clientX, y: e.clientY }
-    updateDivPosition(e.clientX, e.clientY)
-  }
-})
+    // -- Mouse Move -- (drag)
+    document.addEventListener("mousemove", (e) => {
+      if (!!this.activeDiv) {
+        this.lastPosition = { x: e.clientX, y: e.clientY }
+        this.updateDivPosition(e.clientX, e.clientY)
+      }
+    })
+    // -- Touch Move -- (drag)
+    document.addEventListener(
+      "touchmove",
+      (e) => {
+        if (!!this.activeDiv) {
+          const touch = e.touches[0]
+          this.lastPosition = { x: touch.clientX, y: touch.clientY }
+          this.updateDivPosition(touch.clientX, touch.clientY)
+        }
+      },
+      { passive: false } // Specify passive: false to preventDefault
+    )
 
-document.addEventListener("mouseup", () => {
-  stopDragging()
-})
+    // -- Up --
+    document.addEventListener("mouseup", () => {
+      this.stopDragging()
+    })
+    document.addEventListener("touchend", () => {
+      this.stopDragging()
+    })
+  } // ----------------------- end init() -----------------------
 
-// Event listeners for touch events
-document.addEventListener(
-  "touchstart",
-  (e) => {
-    e.preventDefault() // Prevent default touch behavior
-    const touch = e.touches[0]
-    startDragging(touch.clientX, touch.clientY)
-    updateDivPosition(touch.clientX, touch.clientY)
-  },
-  { passive: false } // Specify passive: false to preventDefault
-)
-
-document.addEventListener(
-  "touchmove",
-  (e) => {
-    if (isDragging) {
-      const touch = e.touches[0]
-      lastPosition = { x: touch.clientX, y: touch.clientY }
-      updateDivPosition(touch.clientX, touch.clientY)
+  // === Set a div to draggable ===
+  // Adds an event listener that sets the div as the ActiveDiv when clicked on or touched.
+  setDraggable(dragDiv) {
+    if (!!dragDiv.id) {
+      // -- Down --
+      dragDiv.addEventListener("mousedown", (e) => {
+        e.preventDefault() // Prevent text selection while dragging
+        this.setActiveDiv(dragDiv)
+      })
+      dragDiv.addEventListener(
+        "touchstart",
+        (e) => {
+          e.preventDefault() // Prevent default touch behavior
+          this.setActiveDiv(dragDiv)
+        },
+        { passive: false } // Specify passive: false to preventDefault
+      )
     }
-  },
-  { passive: false } // Specify passive: false to preventDefault
-)
+  }
+  setActiveDiv(activeDiv) {
+    this.activeDiv = activeDiv
+  }
+  clearActiveDiv() {
+    this.activeDiv = null
+  }
+  // Function to update the div's position
+  updateDivPosition(x, y) {
+    //root.ui.activeDiv.style.left = x + "px" //for horizontal scrolling
+    if (!!this.activeDiv) {
+      const divHeight = root.ui.activeDiv.clientHeight
+      root.ui.activeDiv.style.top = y - divHeight / 2 + "px"
+      root.ui.activeDiv.querySelector("input").value =
+        root.ui.activeDiv.style.top
+    }
+  }
+  // == Start of dragging ==
+  startDragging(x, y) {
+    this.lastPosition = { x, y }
+  }
+  // == End of dragging ==
+  stopDragging() {
+    if (!!this.activeDiv) {
+      
+    }
+    this.activeDiv = null
+  }
+}
 
-document.addEventListener("touchend", () => {
-  stopDragging()
-})
+    // -- Down --
+    // document.addEventListener("mousedown", (e) => {
+    //   e.preventDefault() // Prevent text selection while dragging
+    //   this.startDragging(e.clientX, e.clientY)
+    // })
+    // document.addEventListener(
+    //   "touchstart",
+    //   (e) => {
+    //     e.preventDefault() // Prevent default touch behavior
+    //     const touch = e.touches[0]
+    //     this.startDragging(touch.clientX, touch.clientY)
+    //   },
+    //   { passive: false } // Specify passive: false to preventDefault
+    // )
