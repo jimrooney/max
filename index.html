@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="canonical" href="https://jimrooney.github.io/Balance/" />
+    <link rel="canonical" href="https://balance.jimrooney.com/" />
     <link rel="manifest" href="manifest.json" />
 
     <script>
@@ -10,7 +10,7 @@
         console.log("Active service worker found")
       } else {
         navigator.serviceWorker
-          .register("/Balance/sw.js", { scope: "/Balance/" })
+          .register("/sw.js", { scope: "/" })
           .then(function (reg) {
             console.log("Service worker  registered")
           })
@@ -42,7 +42,7 @@
   </head>
   <body onload="init()" class="Wide Center">
     <div class="Header">
-      Balance V1.02.3 github
+      Balance V1.02.4 balance
       <div class="flex-container Center">
         <div id="Airplanes"></div>
       </div>
