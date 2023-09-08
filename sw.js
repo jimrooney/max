@@ -13,6 +13,7 @@ var filesToCache = [
   'Display.js',
   'DOM.js',
   'GA8.js',
+  'UI.js',
   'root.js',
   'Seat.js',
   'Station.js',
