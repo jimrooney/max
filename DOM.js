@@ -5,6 +5,10 @@ HTMLElement.prototype.empty = function () {
     this.removeChild(this.firstChild)
   }
 }
+
+Array.prototype.each = Array.prototype.forEach // jQuery style method
+
+
 // jQuery style DOM selector... cuz it's easier
 // Defaults to ID
 // But with a . syntax it will get the class

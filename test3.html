@@ -1,51 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        #follow-div {
-            position: relative;
-            width: 100px;
-            height: 820px;
-            background-color: lightgray;
-        }
+<link rel="stylesheet" href="CSS.css" />
+<script src="JimQuery.js"></script>
+<script src="navbar.js"></script>
 
-        .boxarrow {
-            position: absolute;
-            width: 100px;
-            height: 82px;
-            background: url(arrow.svg);
-            background-size: 100px 82px;
-        }
-
-        input[type="text"] {
-            position: absolute;
-            left: 100px; /* Adjust as needed to position the input */
-        }
-    </style>
-</head>
-<body>
-    <div id="follow-div">
-        <div class="boxarrow"></div>
-        <input type="text" value="Hello">
-    </div>
-
-    <script>
-        const followDiv = document.getElementById('follow-div');
-        const inputField = followDiv.querySelector('input');
-
-        followDiv.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX;
-            const mouseY = e.clientY;
-
-            // Update the position of follow-div to match the cursor
-            followDiv.style.left = mouseX + 'px';
-            followDiv.style.top = mouseY + 'px';
-
-            // Adjust the position of the input element within follow-div
-            inputField.style.left = '100px'; // Adjust as needed
-        });
+<script>
+    $().ready(()=>{
+        console.log("Still Ready!")
+        console.log($(document))
+    }
+    )
     </script>
+
+<body>
+<div id="navbar"></div>
+<div id="Hi">Hi</div>
+<div id="That">That</div>
+<!-- <script>
+$().ready(()=>{
+    $("navbar").append("<h3 class='HI'>This is the text which has been inserted by JS</h3>")
+})
+</script> -->
+
 </body>
-</html>

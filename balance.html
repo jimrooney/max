@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <!-- PWA Stuff -->
+    <link rel="canonical" href="https://balance.jimrooney.com/" />
+    <link rel="manifest" href="manifest.json" />
+    <script>
+      // Register the serviceworker
+      if (navigator.serviceWorker.controller) {
+        console.log("Active service worker found")
+      } else {
+        navigator.serviceWorker
+          .register("/sw.js", { scope: "/" })
+          .then(function (reg) {
+            console.log("Service worker  registered")
+          })
+      }
+    </script>
+    <!-- /PWA Stuff -->
+
+    <!-- Navbar -->
+    <script src="JimQuery.js"></script>
+    <script src="navbar.js"></script>
+    <!-- /Navbar -->
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-status-bar" content="#aa7700" />
+    <title>Balance</title>
+    <link rel="stylesheet" type="text/css" href="CSS.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="Sliders.css" media="all" />
+  
+    <script src="data.js"></script>
+    <script src="database.js"></script>
+    <script src="DOM.js"></script>
+    <script src="Airplanes.js"></script>
+    <script src="Display.js"></script>
+    <script src="Calculator.js"></script>
+    <script src="Performance.js"></script>
+    <script src="UI.js"></script>
+    <script src="root.js"></script>
+    <script src="script.js"></script>
+    <script src="Station.js"></script>
+    <script src="Seat.js"></script>
+    <script src="Airplane.js"></script>
+    <script src="C206.js"></script>
+    <script src="C208.js"></script>
+    <script src="GA8.js"></script>
+  </head>
+  <body onload="init()" class="Wide Center">
+    <div class="Header">
+      Balance V1.02.4 balance
+      <div class="flex-container Center">
+        <div id="Airplanes"></div>
+      </div>
+    </div>
+    
+    <div id="screen" class="Wide Center">
+      <div id="WAM" class="WAM Wide Center" style="display: none"></div>
+      <div id="Fuel" class="Fuel"></div>
+      <div id="Log"></div>
+      <div id="Out"></div>
+      <div class="flex-container">
+        <div id="balance-range" class="range" style="position: absolute; top:150px; left:30px">
+          <div id="balance-marker" class="arrow-right" style="position: absolute;"></div>
+        </div>
+        <div id="Airplane" class="Airplane"></div>
+      </div>
+    </div>
+    <div class="menu Header">
+      WAM:
+      <label class="switch">
+        <input id="WAM-Checkbox" type="checkbox" name="WAM" value="toggle" />
+        <span class="slider round"></span>
+      </label>
+      <!-- Debug Buttons -->
+      <div>
+        Buttons:
+        <label class="switch">
+          <input
+            id="Buttons-Checkbox"
+            type="checkbox"
+            name="Buttons"
+            value="toggle"
+          />
+          <span class="slider round"></span>
+        </label>
+        <div id="Buttons" style="display: none">
+          <button onclick="root.loadSettings()">Load Remote Settings</button
+          ><br />
+          <input
+            type="text"
+            id="SettingsURL"
+            placeholder="http://localhost:5500/settings.json"
+          /><br />
+          <button id="addButton">Add Data</button>
+
+          <button onclick="$('Airplane').empty()">empty Airplane</button
+          ><br />
+          <button onclick="root.test()">Root.test</button>
+          <a href="mailto:Balance@jimrooney.com">Email</a>
+          <input type="text" id="manual-position"></input>
+          <button onClick="root.display.updateMarker()">UpdateMarker</button><br>
+          <a href="test2.html">Test2</a>
+        </div>
+      </div>
+      <!-- Debug Buttons -->
+    </div>
+  </body>
+  <script src="Sliders.js"></script>
+</html>

@@ -7,7 +7,7 @@ Google Client ID
 Google Client Secret 
 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
 
-
+// JimQuery https://www.youtube.com/watch?v=5MFnKG15ZfI
 
 in sw.js ... these files will be cached.
 var filesToCache = [

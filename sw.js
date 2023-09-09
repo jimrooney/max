@@ -1,24 +1,24 @@
-var SW_Version = 13;
-var cacheName = 'Balance';
+var SW_Version = 14;
+var cacheName = 'Balance2';
 var filesToCache = [
 '/',
-  'index.html',
-  'CSS.css',
-  'script.js',
-  'Airplane.js',
-  'Airplanes.js',
-  'C206.js',
-  'C208.js',
-  'data.js',
-  'Display.js',
-  'DOM.js',
-  'GA8.js',
-  'UI.js',
-  'root.js',
-  'Seat.js',
-  'Station.js',
-  'Sliders.css',
-  'Sliders.js'
+  // 'index.html',
+  // 'CSS.css',
+  // 'script.js',
+  // 'Airplane.js',
+  // 'Airplanes.js',
+  // 'C206.js',
+  // 'C208.js',
+  // 'data.js',
+  // 'Display.js',
+  // 'DOM.js',
+  // 'GA8.js',
+  // 'UI.js',
+  // 'root.js',
+  // 'Seat.js',
+  // 'Station.js',
+  // 'Sliders.css',
+  // 'Sliders.js'
 ];
 self.addEventListener('install', function(e) {
   console.log('[ServiceWorker] Install');

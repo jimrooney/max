@@ -1,0 +1,8 @@
+<script>
+  console.log("Clearing Cache... ", caches)
+  caches.keys().then(function (names) {
+    for (let name of names) caches.delete(name)
+  })
+  console.log("Done, Cache... ", caches)
+</script>
+<a href="/">Home</a>

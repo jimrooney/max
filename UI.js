@@ -46,22 +46,25 @@ class UI {
 
   // === Set a div to draggable ===
   // Adds an event listener that sets the div as the ActiveDiv when clicked on or touched.
-  setDraggable(dragDiv) {
-    if (!!dragDiv.id) {
-      // -- Down --
-      dragDiv.addEventListener("mousedown", (e) => {
-        e.preventDefault() // Prevent text selection while dragging
-        this.setActiveDiv(dragDiv)
-      })
-      dragDiv.addEventListener(
-        "touchstart",
-        (e) => {
-          e.preventDefault() // Prevent default touch behavior
+  setDraggable(elementCollection) {
+    elementCollection.each(dragDiv =>{
+      if (!!dragDiv.id) {
+        // -- Down --
+        dragDiv.addEventListener("mousedown", (e) => {
+          e.preventDefault() // Prevent text selection while dragging
           this.setActiveDiv(dragDiv)
-        },
-        { passive: false } // Specify passive: false to preventDefault
-      )
-    }
+        })
+        dragDiv.addEventListener(
+          "touchstart",
+          (e) => {
+            e.preventDefault() // Prevent default touch behavior
+            this.setActiveDiv(dragDiv)
+          },
+          { passive: false } // Specify passive: false to preventDefault
+        )
+      }
+    })
+    
   }
   setActiveDiv(activeDiv) {
     this.activeDiv = activeDiv
