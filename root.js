@@ -6,6 +6,30 @@ var root = {
   performance: new Performance(),
   calc: new Calculator(),
   ui: new UI(),
+  // Clear PWA Cache
+  clearCache() {
+    console.log("Clearing Cache... ", caches)
+    caches.keys().then(function (names) {
+      for (let name of names) caches.delete(name)
+    })
+    console.log("Done, Cache... ", caches)
+  },
+  flipDemo(element) {
+    this.demo = !this.demo
+    const demo = this.demo
+    console.log("Demo mode: ", demo)
+    if (demo) {
+      element.style.border = "1px solid green" // Add a border to the element
+      element.style.padding = "5px" // Add padding for better appearance
+      element.style.textDecoration = "none" // Remove the default underline
+    }
+    else {
+      element.style.border = "1px solid red" // Add a border to the element
+      element.style.padding = "5px" // Add padding for better appearance
+      element.style.textDecoration = "none" // Remove the default underline
+    }
+
+  },
   //
   // Load external data
   //
@@ -175,7 +199,7 @@ var root = {
 
     console.log("Plane:: ", this.plane)
   },
-  round(num,factor = 100){
+  round(num, factor = 100) {
     return Math.round((num + Number.EPSILON) * factor) / factor
   },
   clearPlanes() {
@@ -234,7 +258,7 @@ var root = {
     //
     // these could be cleaned up... they're a bit scattered ***
     let fwd
-    if (!!WB.balance.limit){
+    if (!!WB.balance.limit) {
       fwd = WB.balance.limit.forward
     }
     const aft = this.plane.limits.CG.aft
@@ -246,7 +270,7 @@ var root = {
     const params = {
       mrk: "balance-marker",
       bar: "balance-range",
-      bounds: [fwd,aft],
+      bounds: [fwd, aft],
       np: "manual-position",
       value: WB.CG - fwd,
     }

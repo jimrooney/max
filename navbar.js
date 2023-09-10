@@ -15,7 +15,8 @@
       <a href="performance.html">Performance</a>
       <a href="balance.html">Balance</a>
       <a href="test3.html">test3</a>
-      <a href="clearcache.html">Reset Cache</a>
+      <a href="#" onClick="root.clearCache()">Reset Cache</a>
+      <a href="#" onClick="root.flipDemo(this)">Flip Demo</a>
     </div>`
   )
 })
