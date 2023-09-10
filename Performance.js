@@ -21,17 +21,83 @@ class Performance {
     // },
     // {},
 
+    // ========== Takeoff Speed ==========
     const speed = this.getTakeoffSpeed(parameters.data, weight)
 
+    // ============= Windspeed =============
     let windspeed = parameters.wind?.replace(/[^0-9]/g, '') || 0
     const rows = root.calc.getBetweenRows(parameters.data[0].wind, windspeed)
+    // Collapse the data by the windspeed
+    const firstColumnIndex = rows[0]
+    const secondColumnIndex = rows[1]
+    const newData = parameters.data.map(row => {
+      const inputObject = row
+      console.log("inputObject: ", inputObject)
+      const outputObject = {
+        weight: inputObject.weight,
+        speed: inputObject.speed,
+        wind: inputObject.wind.slice(firstColumnIndex, secondColumnIndex + 1),
+        pressureAltitude: inputObject.pressureAltitude.map(row => ({
+          alt: row.alt,
+          temp: row.temp,
+          groundRun: row.groundRun.slice(firstColumnIndex, secondColumnIndex + 1),
+          TODistance: row.TODistance.slice(firstColumnIndex, secondColumnIndex + 1),
+        })),
+      }
+      return outputObject; // Return the outputObject for each row
+    })
+    console.log("newData: " , newData) // Now with 2 columns instead of 3
 
-    console.log("rows: " + rows)
+    let data = newData //root.data.test // *** using test data ***
 
-    // Next, calculate the wind factor
-    // then select the ground and takeoff data based on the wind indicies and calculate the factors.
+    // ********************************
+    // Next, calculate the wind factor and interpolate the data ...
+    // Collapsing the ground and takeoff data based on the wind factor leaving a flat row.
+    // ********************************
+//                  this needs to turn into that....
+                  // We can also rewrite the following functions to be this structure:
+    // {
+    //   weight: 3350,
+    //   speed: 50,
+    //   wind: [0, 10, 20],
+    //   pressureAltitude: [
+    //     { alt: 0, temp: 59, groundRun: [490, 345, 220], TODistance: [870, 660, 465] },
+    //     { alt: 2500, temp: 50, groundRun: [595, 415, 235], TODistance: [1015, 765, 550] },
+    //   ],
+    // },
+    // {},
+    // { weight: 3350, speed: 50, wind: 0, groundRun: 490, TODistance: 870 },
+    // { weight: 2800, speed: 46, wind: 0, groundRun: 330, TODistance: 655 },
+    // { weight: 2300, speed: 42, wind: 0, groundRun: 210, TODistance: 500 },
 
-    const data = root.data.test // *** using test data ***
+    //   data = [{}]
+
+
+
+
+
+    // const index = 0; // Choose the index you want to use for the arrays
+
+    // const inputObject = {
+    //   weight: 3350,
+    //   speed: 50,
+    //   wind: [0, 10, 20],
+    //   pressureAltitude: [
+    //     { alt: 0, temp: 59, groundRun: [490, 345, 220], TODistance: [870, 660, 465] },
+    //     { alt: 2500, temp: 50, groundRun: [595, 415, 235], TODistance: [1015, 765, 550] },
+    //   ],
+    // };
+    
+    // const outputObject = {
+    //   weight: inputObject.weight,
+    //   speed: inputObject.speed,
+    //   wind: inputObject.wind[index],
+    //   groundRun: inputObject.pressureAltitude[index].groundRun[index],
+    //   TODistance: inputObject.pressureAltitude[index].TODistance[index],
+    // };
+    
+    // console.log(outputObject);
+
 
 
 
