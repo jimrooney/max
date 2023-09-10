@@ -49,7 +49,9 @@ class Performance {
     console.log("newData: " , newData) // Now with 2 columns instead of 3
 
     let data = newData //root.data.test // *** using test data ***
-
+    if(root.demo){
+      data = root.data.test
+    }
     // ********************************
     // Next, calculate the wind factor and interpolate the data ...
     // Collapsing the ground and takeoff data based on the wind factor leaving a flat row.

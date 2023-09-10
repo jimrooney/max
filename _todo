@@ -8,9 +8,20 @@ No idea why this file is .js
 */
 
 Currently.
+Demo Mode exists. Set root.demo = true in the console.
+
 {performance}
     // Next, calculate the wind factor
     // then select the ground and takeoff data based on the wind indicies and calculate the factors.
+HERE:
+    // ********************************
+    // Next, calculate the wind factor and interpolate the data ...
+    // Collapsing the ground and takeoff data based on the wind factor leaving a flat row.
+    // ********************************
+
+Working on getting Balance to have the navbar.
+Running into .js problems though... mainly around $() I think.
+In balance.html 
 
 {ui}
 working on dragdivs in {UI} ... thinking about setting up constraints... X / Y and constraining to a bounding div (parent?)
