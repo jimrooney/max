@@ -8,7 +8,9 @@ No idea why this file is .js
 */
 
 Currently.
-Working in test2.html so as not to mess with the working index.html
+{performance}
+    // Next, calculate the wind factor
+    // then select the ground and takeoff data based on the wind indicies and calculate the factors.
 
 {ui}
 working on dragdivs in {UI} ... thinking about setting up constraints... X / Y and constraining to a bounding div (parent?)

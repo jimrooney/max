@@ -6,6 +6,52 @@ class Performance {
     console.log("hello")
     return "hello"
   }
+  byWeight(parameters) {
+    console.log("parameters: ", parameters)
+
+    let weight = parameters.weight || 0
+    // {
+    //   weight: 3350,
+    //   speed: 50,
+    //   wind: [0, 10, 20],
+    //   pressureAltitude: [
+    //     { alt: 0, temp: 59, groundRun: [490, 345, 220], TODistance: [870, 660, 465] },
+    //     { alt: 2500, temp: 50, groundRun: [595, 415, 235], TODistance: [1015, 765, 550] },
+    //   ],
+    // },
+    // {},
+
+    const speed = this.getTakeoffSpeed(parameters.data, weight)
+
+    let windspeed = parameters.wind?.replace(/[^0-9]/g, '') || 0
+    const rows = root.calc.getBetweenRows(parameters.data[0].wind, windspeed)
+
+    console.log("rows: " + rows)
+
+    // Next, calculate the wind factor
+    // then select the ground and takeoff data based on the wind indicies and calculate the factors.
+
+    const data = root.data.test // *** using test data ***
+
+
+
+
+
+    const groundRoll = this.getGroundRoll(data, speed)
+    const distance = this.get50ftDistance(data, speed)
+    alert(
+      `Takeoff Speed: ${Math.round(speed)} kts \nGroundRoll: ${Math.round(
+        groundRoll
+      )} \nTakeoff Distance (50ft): ${Math.round(distance)}`
+    )
+  }
+
+  getPerformance(data, type, weight = 0, wind = 0, temperature = 59,surface = "paved", condition = "dry") {
+
+    const speed = this.getTakeoffSpeed(data[type], weight)
+    const rows = root.calc.filterDataByProperty(data, speed, "speed") // Find the two rows that encompass the given speed
+
+  }
   //
   //
   //

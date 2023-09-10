@@ -1,3 +1,4 @@
 {
-    "livePreview.serverKeepAliveAfterEmbeddedPreviewClose": 1
+    "livePreview.serverKeepAliveAfterEmbeddedPreviewClose": 1,
+    "liveServer.settings.port": 5501
 }

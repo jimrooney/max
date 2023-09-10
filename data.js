@@ -5,6 +5,37 @@ const data = {
     { weight: 2800, speed: 46, wind: 0, groundRun: 330, TODistance: 655 },
     { weight: 2300, speed: 42, wind: 0, groundRun: 210, TODistance: 500 },
   ],
+  C185: {
+    takeoff: [
+      {
+        weight: 3350,
+        speed: 50,
+        wind: [0, 10, 20],
+        pressureAltitude: [
+          { alt: 0, temp: 59, groundRun: [490, 345, 220], TODistance: [870, 660, 465] },
+          { alt: 2500, temp: 50, groundRun: [595, 415, 235], TODistance: [1015, 765, 550] },
+        ],
+      },
+      {
+        weight: 2800,
+        speed: 46,
+        wind: [0, 10, 20],
+        pressureAltitude: [
+          { alt: 0, temp: 59, groundRun: [330, 220, 135], TODistance: [655, 485, 335] },
+          { alt: 2500, temp: 50, groundRun: [390, 265, 165], TODistance: [735, 545, 385] },
+        ],
+      },
+      {
+        weight: 2300,
+        speed: 42,
+        wind: [0, 10, 20],
+        pressureAltitude: [
+          { alt: 0, temp: 59, groundRun: [210, 135, 75], TODistance: [500, 365, 245] },
+          { alt: 2500, temp: 50, groundRun: [255, 165, 95], TODistance: [545, 405, 275] },
+        ],
+      },
+    ],
+  },
   airplanes: [
     {
       reg: "MMZ",

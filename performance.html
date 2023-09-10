@@ -30,7 +30,6 @@
     <div class="boxarrow"></div>
     <div><input type="text" value="Hello" /></div>
   </div>
-  <div><input type="text" value="Hello" /></div>
   <div>
     <input
       type="text"
@@ -42,14 +41,20 @@
       type="button"
       id="byWeight"
       value="By Weight"
-      onclick="root.byWeight(document.querySelector('#weight').value);"
+      onclick="root.performance.byWeight({
+        data: root.data.C185.takeoff,
+        weight: document.querySelector('#weight').value, //|| 2400,
+        wind: document.querySelector('#headwind').value
+      });"
     />
   </div>
-  <!-- <div class="nav">
-  <a href="/">Home</a> | Flex Navigation
-  <div style="align-self: center">3</div>
-</div> -->
 
+  <input
+  type="text"
+  id="headwind"
+  value="Wind"
+  oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+/>
   <select name="myList" id="myList">
     <option value="Distance50">Distance50</option>
     <option value="TO Speed">TO Speed</option>
@@ -140,17 +145,6 @@
         )} \nTakeoff Distance (50ft): ${Math.round(distance)}`
       )
     }
-    function byWeight(weight) {
-      const speed = root.performance.getTakeoffSpeed(root.data.test, weight)
-      const groundRoll = root.performance.getGroundRoll(root.data.test, speed)
-      const distance = root.performance.get50ftDistance(root.data.test, speed)
-      alert(
-        `Takeoff Speed: ${Math.round(speed)} kts \nGroundRoll: ${Math.round(
-          groundRoll
-        )} \nTakeoff Distance (50ft): ${Math.round(distance)}`
-      )
-    }
-
     const calcButtons = document.querySelectorAll(
       ".MyButtons.CalculateDistance"
     )

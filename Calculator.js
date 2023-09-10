@@ -9,6 +9,17 @@ class Calculator {
   getRatio(value, bounds) {
     return (bounds[1] - bounds[0]) / value // Returns the percentage value is of the range
   }
+  getBetweenRows(array, value) {
+    for (let i = 0; i < array.length - 1; i++) {
+      if (value >= array[i] && value < array[i + 1]) {
+        return [i, i + 1]
+      }
+    }
+    return [-1, -1] // Value is not between any indices
+  }
+  //----------------------------------------------------------------
+  // JS Query Select
+  //----------------------------------------------------------------
   filterDataByProperty(objects, targetValue, propertyName) {
     // First, sort the objects by the specified property if they are not already sorted.
     objects.sort(function (a, b) {
@@ -28,7 +39,7 @@ class Calculator {
         currentObject[propertyName] <= targetValue &&
         targetValue <= nextObject[propertyName]
       ) {
-        matchingObjects.push(currentObject, nextObject)
+        matchingObjects.push(currentObject, nextObject, i)
         break // Stop searching once we find the encompassing objects.
       }
     }
