@@ -52,6 +52,45 @@ class Performance {
     if(root.demo){
       data = root.data.test
     }
+
+    console.log("wind: " , parameters.wind) // *** wind at upper limit fails ***
+    console.log("wind: " , data[0].wind) 
+    const windFactor = root.calc.getRatio(parameters.wind,data[0].wind)
+
+
+    /*
+
+    *** now do this multiplying by wind factor ***
+    (collapse the data)
+
+    pressureAltitude: inputObject.pressureAltitude.map(row => ({
+          alt: row.alt,
+          temp: row.temp,
+          groundRun: row.groundRun.slice(firstColumnIndex, secondColumnIndex + 1),
+          TODistance: row.TODistance.slice(firstColumnIndex, secondColumnIndex + 1),
+        })),
+    */
+    let ret = data[0].pressureAltitude[0].groundRun[0] * windFactor
+    
+
+    console.log("ret: " , ret)
+
+    console.log("windFactor: " , windFactor)
+    /*
+    parameters:wind 
+
+newData[]:
+
+pressureAltitude [
+{alt: 0, temp: 59, groundRun: Array(2), TODistance: Array(2)}
+{alt: 2500, temp: 50, groundRun: Array(2), TODistance: Array(2)}
+]
+speed: 42
+weight: 2300
+wind [10, 20]
+*/
+
+
     // ********************************
     // Next, calculate the wind factor and interpolate the data ...
     // Collapsing the ground and takeoff data based on the wind factor leaving a flat row.
