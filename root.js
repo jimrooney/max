@@ -22,13 +22,11 @@ var root = {
       element.style.border = "1px solid green" // Add a border to the element
       element.style.padding = "5px" // Add padding for better appearance
       element.style.textDecoration = "none" // Remove the default underline
-    }
-    else {
+    } else {
       element.style.border = "1px solid red" // Add a border to the element
       element.style.padding = "5px" // Add padding for better appearance
       element.style.textDecoration = "none" // Remove the default underline
     }
-
   },
   //
   // Load external data

@@ -7,6 +7,24 @@ class UI {
 
     this.init()
   }
+  rotateElement(element, degrees) {
+    if (element) {
+      element.style.transform = `rotate(${degrees}deg)`
+    }
+  }
+  rotateDiv(div, degrees) {
+    console.log("rotate")
+    if (div) {
+        // Ensure degrees are within the range [0, 360)
+        degrees = (degrees % 360 + 360) % 360;
+
+        // Convert degrees to radians
+        const radians = (degrees * Math.PI) / 180;
+
+        // Apply the new rotation
+        div.style.transform = `rotate(${radians}rad)`;
+    }
+}
   init() {
     //
     // Attach event listeners to the document to capture mouse events (drag and up)
@@ -30,6 +48,8 @@ class UI {
           const touch = e.touches[0]
           this.lastPosition = { x: touch.clientX, y: touch.clientY }
           this.updateDivPosition(touch.clientX, touch.clientY)
+          const airplaneIcon = document.getElementById("airplane-icon")
+          this.rotateDiv(airplaneIcon, touch.clientY)
         }
       },
       { passive: false } // Specify passive: false to preventDefault
@@ -47,7 +67,7 @@ class UI {
   // === Set a div to draggable ===
   // Adds an event listener that sets the div as the ActiveDiv when clicked on or touched.
   setDraggable(elementCollection) {
-    elementCollection.each(dragDiv =>{
+    elementCollection.each((dragDiv) => {
       if (!!dragDiv.id) {
         // -- Down --
         dragDiv.addEventListener("mousedown", (e) => {
@@ -64,7 +84,6 @@ class UI {
         )
       }
     })
-    
   }
   setActiveDiv(activeDiv) {
     this.activeDiv = activeDiv
@@ -89,23 +108,22 @@ class UI {
   // == End of dragging ==
   stopDragging() {
     if (!!this.activeDiv) {
-      
     }
     this.activeDiv = null
   }
 }
 
-    // -- Down --
-    // document.addEventListener("mousedown", (e) => {
-    //   e.preventDefault() // Prevent text selection while dragging
-    //   this.startDragging(e.clientX, e.clientY)
-    // })
-    // document.addEventListener(
-    //   "touchstart",
-    //   (e) => {
-    //     e.preventDefault() // Prevent default touch behavior
-    //     const touch = e.touches[0]
-    //     this.startDragging(touch.clientX, touch.clientY)
-    //   },
-    //   { passive: false } // Specify passive: false to preventDefault
-    // )
+// -- Down --
+// document.addEventListener("mousedown", (e) => {
+//   e.preventDefault() // Prevent text selection while dragging
+//   this.startDragging(e.clientX, e.clientY)
+// })
+// document.addEventListener(
+//   "touchstart",
+//   (e) => {
+//     e.preventDefault() // Prevent default touch behavior
+//     const touch = e.touches[0]
+//     this.startDragging(touch.clientX, touch.clientY)
+//   },
+//   { passive: false } // Specify passive: false to preventDefault
+// )
