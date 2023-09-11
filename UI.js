@@ -15,16 +15,16 @@ class UI {
   rotateDiv(div, degrees) {
     console.log("rotate")
     if (div) {
-        // Ensure degrees are within the range [0, 360)
-        degrees = (degrees % 360 + 360) % 360;
+      // Ensure degrees are within the range [0, 360)
+      degrees = ((degrees % 360) + 360) % 360
 
-        // Convert degrees to radians
-        const radians = (degrees * Math.PI) / 180;
+      // Convert degrees to radians
+      const radians = (degrees * Math.PI) / 180
 
-        // Apply the new rotation
-        div.style.transform = `rotate(${radians}rad)`;
+      // Apply the new rotation
+      div.style.transform = `rotate(${radians}rad)`
     }
-}
+  }
   init() {
     //
     // Attach event listeners to the document to capture mouse events (drag and up)
@@ -48,8 +48,6 @@ class UI {
           const touch = e.touches[0]
           this.lastPosition = { x: touch.clientX, y: touch.clientY }
           this.updateDivPosition(touch.clientX, touch.clientY)
-          const airplaneIcon = document.getElementById("airplane-icon")
-          this.rotateDiv(airplaneIcon, touch.clientY)
         }
       },
       { passive: false } // Specify passive: false to preventDefault
@@ -99,6 +97,9 @@ class UI {
       root.ui.activeDiv.style.top = y - divHeight / 2 + "px"
       root.ui.activeDiv.querySelector("input").value =
         root.ui.activeDiv.style.top
+
+      const airplaneIcon = document.getElementById("airplane-icon")
+      this.rotateDiv(airplaneIcon, y)
     }
   }
   // == Start of dragging ==
