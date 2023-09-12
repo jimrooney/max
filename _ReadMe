@@ -6,3 +6,4 @@ Most things are functions and variables within {root}
 
 There is also a $() object that deals with document.querySelectors (for ease of typing/reading)
 
+This is a test.
