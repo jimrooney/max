@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+  <div class="test"></div>
   <head>
 
     <!-- PWA Stuff -->
@@ -34,7 +35,7 @@
   
     <script src="data.js"></script>
     <script src="database.js"></script>
-    <script src="DOM.js"></script>
+    <!-- <script src="DOM.js"></script> -->
     <script src="Airplanes.js"></script>
     <script src="Display.js"></script>
     <script src="Calculator.js"></script>
@@ -97,7 +98,7 @@
           /><br />
           <button id="addButton">Add Data</button>
 
-          <button onclick="$('Airplane').empty()">empty Airplane</button
+          <button onclick="document.getElementById('Airplane').empty()">empty Airplane</button
           ><br />
           <button onclick="root.test()">Root.test</button>
           <a href="mailto:Balance@jimrooney.com">Email</a>

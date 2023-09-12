@@ -6,7 +6,7 @@ let enabledSettings = []
 // Use Array.forEach to add an event listener to each checkbox.
 checkboxes.forEach(function (checkbox) {
   checkbox.addEventListener("change", function () {
-    toggleDiv(this.name)
+    root.toggleDiv(this.name)
     //console.log("Check: ", this.name)
   })
 })

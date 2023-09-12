@@ -95,14 +95,21 @@ class AjaxPromise {
 // JimQuery Object
 // ----------------------------------------------------------------
 function $(param) {
+
+  console.log("Param: ", param)
+
+  
   if (!param) {
     return new ElementCollection(document)
   }
   if (typeof param === "string" || param instanceof String) {
+
     // Check if the param starts with '#' or '.'
-    // if (!param.startsWith("#") && !param.startsWith(".")) {
-    //   param = "#" + param // Add '#' to the beginning
-    // }
+    if (param.startsWith('<')) {
+      console.log("param", param)
+      param = param.substring(1) // Remove the leading '<' character
+      return new ElementCollection(document.querySelector(param))
+    }
     return new ElementCollection(...document.querySelectorAll(param))
   } else {
     return new ElementCollection(param)

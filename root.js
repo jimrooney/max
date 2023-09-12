@@ -1,4 +1,10 @@
-var root = {
+if (!root) {
+  let root
+}
+Array.prototype.each = Array.prototype.forEach // jQuery style method
+
+root = {
+  ...root,
   showWam: true,
   airplanes: new Airplanes(),
   display: new Display(),
@@ -6,34 +12,12 @@ var root = {
   performance: new Performance(),
   calc: new Calculator(),
   ui: new UI(),
-  // Clear PWA Cache
-  clearCache() {
-    console.log("Clearing Cache... ", caches)
-    caches.keys().then(function (names) {
-      for (let name of names) caches.delete(name)
-    })
-    console.log("Done, Cache... ", caches)
-  },
-  flipDemo(element) {
-    this.demo = !this.demo
-    const demo = this.demo
-    console.log("Demo mode: ", demo)
-    if (demo) {
-      element.style.border = "1px solid green" // Add a border to the element
-      element.style.padding = "5px" // Add padding for better appearance
-      element.style.textDecoration = "none" // Remove the default underline
-    } else {
-      element.style.border = "1px solid red" // Add a border to the element
-      element.style.padding = "5px" // Add padding for better appearance
-      element.style.textDecoration = "none" // Remove the default underline
-    }
-  },
   //
   // Load external data
   //
   loadSettings(url = "http://localhost:5500/settings.json") {
     // [ Error handling and sanitization here ] ***
-    url = $("SettingsURL").value || url
+    url = document.getElementById("SettingsURL").value || url
     console.log("LoadSettings: ", url)
     this.load(url)
   },
@@ -50,7 +34,11 @@ var root = {
       .catch((err) => console.log("error: ", err))
   },
   showButtons() {
-    $("Airplanes").empty()
+    Array.from(document.getElementsByClassName("Airplanes")).forEach(
+      (airplane) => {
+        airplane.innerHTML = ""
+      }
+    )
     root.data.airplanes.forEach((plane) => {
       const button = document.createElement("button")
       button.onclick = () => root.setPlane(plane.reg)
@@ -58,81 +46,43 @@ var root = {
       button.classList.add("UI")
       button.classList.add("AirplaneButton")
       button.innerHTML = plane.reg
-      $("Airplanes").appendChild(button)
+      console.log("Adding button")
+
+      document.getElementById("Airplanes").appendChild(button)
+      //      $("Airplanes").appendChild(button)
+
+      // const airplanes = document.getElementsByClassName("Airplanes")
+      // const airplanesArray = [...airplanes]
+
+      // console.log("airplanes ", airplanesArray)
+      // airplanesArray.forEach((airplane) => {
+      //   airplane.appendChild(button)
+      // })
     })
   },
   test: function () {
     console.log("SW V: ", SW_Version)
     return
-    // if (window.indexedDB || self.IndexedDB){
-    //   $("Log").innerHTML = `Supported ${window.indexedDB} ${self.IndexedDB}`
-    //   return
-    // }
-
-    // if (!('indexedDB' in window)) {
-    //   $("Log").innerHTML = 'IndexedDB is not supported'
-    //   return
-    // }
-
-    //console.log("Class: ", $(".flex-container"))
-    const idb = window.indexedDB
-    var dbPromise = idb.open("test-db2", 1, function (upgradeDb) {
-      console.log("making a new object store")
-      if (!upgradeDb.objectStoreNames.contains("firstOS")) {
-        upgradeDb.createObjectStore("firstOS")
-      }
-    })
-
-    $("Log").innerHTML = "Done"
-
-    //check for support
-    // if (!("indexedDB" in window)) {
-    //   console.log("This browser doesn't support IndexedDB")
-    //   return
-    // }
-
-    if ("indexedDB" in window) {
-      $("Log").innerHTML = "IndexedDB is supported"
-    } else {
-      $("Log").innerHTML = "IndexedDB is not supported"
-      return
-    }
-    let openRequest = indexedDB.open("store", 1)
-
-    openRequest.onupgradeneeded = function () {
-      // triggers if the client had no database
-      // ...perform initialization...
-    }
-
-    openRequest.onerror = function () {
-      console.error("Error", openRequest.error)
-    }
-
-    openRequest.onsuccess = function () {
-      let db = openRequest.result
-      // continue working with database using db object
-    }
   },
   alert(msg) {
     console.log("Alert: ", msg)
     alert(msg)
   },
   IOSCheck() {
-    const isIos = () => {
-      const userAgent = window.navigator.userAgent.toLowerCase()
-      return /iphone|ipad|ipod/.test(userAgent)
-    }
-    // Detects if device is in standalone mode
-    const isInStandaloneMode = () =>
-      "standalone" in window.navigator && window.navigator.standalone
-
-    // Checks if should display install popup notification:
-    if (isIos() && !isInStandaloneMode()) {
-      $("Log").innerHTML = "iOS True, not installed"
-    }
-    if (isIos() && isInStandaloneMode) {
-      $("Log").innerHTML = "iOS True, Installed"
-    }
+    // const isIos = () => {
+    //   const userAgent = window.navigator.userAgent.toLowerCase()
+    //   return /iphone|ipad|ipod/.test(userAgent)
+    // }
+    // // Detects if device is in standalone mode
+    // const isInStandaloneMode = () =>
+    //   "standalone" in window.navigator && window.navigator.standalone
+    // // Checks if should display install popup notification:
+    // if (isIos() && !isInStandaloneMode()) {
+    //   document.getElementById("Log").innerHTML = "iOS True, not installed"
+    // }
+    // if (isIos() && isInStandaloneMode) {
+    //   document.getElementById("Log").innerHTML = "iOS True, Installed"
+    // }
   },
   click: {
     timer: 0,
@@ -154,16 +104,16 @@ var root = {
     },
   },
   log: function (text) {
-    //!elementID? elementID = "Log" : null
-    elementID = "Log"
-    $(elementID).innerHTML = text
-    //$(elementID).innerHTML = text
+    // //!elementID? elementID = "Log" : null
+    // elementID = "Log"
+    // document.getElementById(elementID).innerHTML = text
+    // //document.getElementById(elementID).innerHTML = text
   },
   element: (elementID) => {
-    return $(elementID)
+    return document.getElementById(elementID)
   },
   empty: (elementID) => {
-    $(elementID).innerHTML = ""
+    document.getElementById(elementID).innerHTML = ""
   },
   JSONTable(json) {
     // const regex = /},/gi
@@ -186,14 +136,14 @@ var root = {
     // Color Bar
     document.getElementById("Log").style.background = this.plane.regcolor
     // Fuel
-    $("Fuel").innerHTML = "" // Clear fuel selector
-    $("Fuel").appendChild(this.plane.fuelSelector)
+    document.getElementById("Fuel").innerHTML = "" // Clear fuel selector
+    document.getElementById("Fuel").appendChild(this.plane.fuelSelector)
     const F = this.plane.stations.filter((station) =>
       station.type.includes("fuel")
     )
     const FQ = F.reduce((acc, station) => station.liters, 0)
-    $("fuel").value = FQ || this.plane.standardFuel
-    this.plane.changeFuel($("fuel").value)
+    document.getElementById("fuel").value = FQ || this.plane.standardFuel
+    this.plane.changeFuel(document.getElementById("fuel").value)
 
     console.log("Plane:: ", this.plane)
   },
@@ -201,10 +151,12 @@ var root = {
     return Math.round((num + Number.EPSILON) * factor) / factor
   },
   clearPlanes() {
-    $(".AirplaneButton").forEach((button) => {
-      button.classList.remove("Selected")
-      button.style.background = ""
-    })
+    ;[...document.getElementsByClassName("AirplaneButton")].forEach(
+      (button) => {
+        button.classList.remove("Selected")
+        button.style.background = ""
+      }
+    )
   },
   update() {
     // -- Change this -- ***
@@ -212,7 +164,7 @@ var root = {
     //
 
     // Clear airplane container
-    const container = $("Airplane")
+    const container = document.getElementById("Airplane")
     container.innerHTML = ""
     const node = document.createElement("div")
     //
@@ -234,19 +186,19 @@ var root = {
     //
     // Show WB Result
     //
-    $("Out").classList.remove("NotInLimits")
-    $("Out").classList.remove("InLimits")
+    document.getElementById("Out").classList.remove("NotInLimits")
+    document.getElementById("Out").classList.remove("InLimits")
     //
     const WB = this.plane.getWeightAndBalance()
     console.log("WB :", WB)
     if (!WB.isBalanced) {
-      $("Out").classList.add("NotInLimits")
-      $(
+      document.getElementById("Out").classList.add("NotInLimits")
+      document.getElementById(
         "Out"
       ).innerHTML = `Not In Limits... Weight: ${WB.round.weight} CG: ${WB.round.CG}`
     } else {
-      $("Out").classList.add("InLimits")
-      $(
+      document.getElementById("Out").classList.add("InLimits")
+      document.getElementById(
         "Out"
       ).innerHTML = `<center>Weight: ${WB.round.weight} CG: ${WB.round.CG}</center>`
     }
@@ -277,7 +229,7 @@ var root = {
     //
     // Populate WAM screen
     //
-    $("WAM").innerHTML = ""
-    $("WAM").appendChild(WB.table)
+    document.getElementById("WAM").innerHTML = ""
+    document.getElementById("WAM").appendChild(WB.table)
   },
 }

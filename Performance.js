@@ -50,7 +50,16 @@ class Performance {
 
     let data = newData //root.data.test // *** using test data ***
     if(root.demo){
+      console.log("Demo Mode")
       data = root.data.test
+      const groundRoll = this.getGroundRoll(data, speed)
+      const distance = this.get50ftDistance(data, speed)
+      alert(
+        `Takeoff Speed: ${Math.round(speed)} kts \nGroundRoll: ${Math.round(
+          groundRoll
+        )} \nTakeoff Distance (50ft): ${Math.round(distance)}`
+      )
+      return
     }
 
     console.log("wind: " , parameters.wind) // *** wind at upper limit fails ***
@@ -70,12 +79,16 @@ class Performance {
           TODistance: row.TODistance.slice(firstColumnIndex, secondColumnIndex + 1),
         })),
     */
+
+        console.log("windFactor: " , windFactor)
+        console.log("data: " , data)
+
     let ret = data[0].pressureAltitude[0].groundRun[0] * windFactor
     
 
-    console.log("ret: " , ret)
+    
 
-    console.log("windFactor: " , windFactor)
+
     /*
     parameters:wind 
 

@@ -1,6 +1,6 @@
 function init() {
   // Settings Input Field
-  const input = $("SettingsURL")
+  const input = document.getElementById("SettingsURL")
   input.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
       event.preventDefault()
