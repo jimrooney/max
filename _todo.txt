@@ -1,20 +1,8 @@
-/*
-in {Airpalne}
-figure out if we should return fwd1 or fwd2 as forward limit for Caravans
-If the weight is below fwd1's weight, then return the absolute fwd limit.
-
-No idea why this file is .js
-*/
-
 Need to be updated to the new data structure...
     root.byWeight = function (weight) {
       const speed = root.performance.getTakeoffSpeed(root.data.test, weight)
       const groundRoll = root.performance.getGroundRoll(root.data.test, speed)
       const distance = root.performance.get50ftDistance(root.data.test, speed)
-
-
-Currently.
-Demo Mode exists. Set root.demo = true in the console.
 
 {performance}
     // Next, calculate the wind factor
@@ -24,10 +12,6 @@ HERE:
     // Next, calculate the wind factor and interpolate the data ...
     // Collapsing the ground and takeoff data based on the wind factor leaving a flat row.
     // ********************************
-
-Working on getting Balance to have the navbar.
-Running into .js problems though... mainly around $() I think.
-In balance.html 
 
 {ui}
 working on dragdivs in {UI} ... thinking about setting up constraints... X / Y and constraining to a bounding div (parent?)

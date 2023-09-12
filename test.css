@@ -13,7 +13,7 @@
     background-size: 100px 82px;
 }
 
-input[type="text"] {
+#sliderText {
     position: absolute;
     left: 100px; /* Adjust as needed to position the input */
 }

@@ -56,23 +56,19 @@ let root = {
 }
 
 //window.onload = () => {
+// document.body.innerHTML =
+//   `<div class="topnav">
+//   <a class="active" href="index.html">Home</a>
+//   <a href="performance.html">Performance</a>
+//   <a href="balance.html">Balance</a>
+//   </div>` + document.body.innerHTML
+
+// JimQuery version:
 $().ready(() => {
-  // document.body.innerHTML =
-  //   `<div class="topnav">
-  //   <a class="active" href="index.html">Home</a>
-  //   <a href="performance.html">Performance</a>
-  //   <a href="balance.html">Balance</a>
-  //   </div>` + document.body.innerHTML
-
-  // JimQuery version:
-
-
-  console.log("Test: ", $('.test'))
-  console.log("Body: ", $("<body"))
-  $("<body").prepend(
+  $("<body>").prepend(
     `
     <div class="version-div">
-        Version 1.1.1
+        Version 1.1.2
     </div>
     <div class="topnav">
       <a class="active" href="index.html">Home</a>
@@ -87,4 +83,4 @@ $().ready(() => {
   )
 })
 
-root.addStyleSheet('CSS.css')
+root.addStyleSheet("CSS.css")
