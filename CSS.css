@@ -24,6 +24,14 @@ body {
   transform-origin: center center;
   transition: transform 0.3s; /* Add smooth transition effect */
 }
+.MF_Wind {
+  width: 100px; /* Adjust the width and height as needed */
+  height: 100px;
+  background-image: url('images/MF_Wind.svg'); /* Path to your SVG image */
+  background-size: cover; /* Adjust the sizing method as needed */
+  transform-origin: center center;
+  /* transition: transform 0.3s; Add smooth transition effect */
+}
 
 .topnav {
   overflow: hidden;
