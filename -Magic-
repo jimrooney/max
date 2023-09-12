@@ -12,6 +12,17 @@ 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
 in sw.js ... these files will be cached.
 var filesToCache = [
 
+----------------------------------------------------------------
+Clearing Cache:
+Windows... 
+Delete these files... 
+file:///C:/Users/jim/AppData/Local/Microsoft/Edge/User%20Data/Default/Service%20Worker/CacheStorage/
+Generic link... WinR, then %appdata%\..\Local\Microsoft\Edge\User Data\Default\Service Worker\CacheStorage
+
+Android...
+Hamburger Menu >> Clear Data (Chached images and files) >> (pick sites)
+----------------------------------------------------------------
+
 <!-- <div style="height:50; background: #344; z-index:1;position: absolute;">
 <a href="https://fastidious-capybara-7185c5.netlify.app/">Balance on Netlify</a>
 </div> -->
