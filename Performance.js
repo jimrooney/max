@@ -7,7 +7,7 @@ class Performance {
     return "hello"
   }
   byWeight(parameters) {
-    console.log("parameters: ", parameters)
+    console.log("parameters: ", JSON.parse(JSON.stringify(parameters)))
 
     let weight = parameters.weight || 0
     // {

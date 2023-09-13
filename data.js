@@ -14,6 +14,8 @@ const data = {
         pressureAltitude: [
           { alt: 0, temp: 59, groundRun: [490, 345, 220], TODistance: [870, 660, 465] },
           { alt: 2500, temp: 50, groundRun: [595, 415, 235], TODistance: [1015, 765, 550] },
+          { alt: 5000, temp: 41, groundRun: [715, 505, 335], TODistance: [1200, 910, 655] },
+          { alt: 7500, temp: 32, groundRun: [860, 625, 420], TODistance: [1485, 1125, 820] },
         ],
       },
       {
@@ -23,6 +25,8 @@ const data = {
         pressureAltitude: [
           { alt: 0, temp: 59, groundRun: [330, 220, 135], TODistance: [655, 485, 335] },
           { alt: 2500, temp: 50, groundRun: [390, 265, 165], TODistance: [735, 545, 385] },
+          { alt: 5000, temp: 41, groundRun: [465, 325, 205], TODistance: [840, 630, 445] },
+          { alt: 7500, temp: 32, groundRun: [665, 395, 255], TODistance: [975, 735, 525] },
         ],
       },
       {
@@ -32,6 +36,8 @@ const data = {
         pressureAltitude: [
           { alt: 0, temp: 59, groundRun: [210, 135, 75], TODistance: [500, 365, 245] },
           { alt: 2500, temp: 50, groundRun: [255, 165, 95], TODistance: [545, 405, 275] },
+          { alt: 5000, temp: 41, groundRun: [300, 200, 115], TODistance: [615, 455, 310] },
+          { alt: 7500, temp: 32, groundRun: [360, 245, 150], TODistance: [695, 515, 355] },
         ],
       },
     ],
