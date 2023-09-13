@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Style for the arrow SVG */
+    #container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #arrow {
+      width: 100px;
+      height: 100px;
+      transform-origin: center;
+      transform-box: fill-box;
+      transform: rotate(0deg); /* Initial rotation set to 0 degrees (vertical) */
+      pointer-events: none; /* Make sure the arrow doesn't interfere with mouse events */
+      position: relative; /* Allow absolute positioning of the number */
+    }
+
+    /* Style for the angle display */
+    #angle {
+      position: absolute;
+      top: -20px; /* Adjust the position to move it in front of the arrow */
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Container for centering the arrow -->
+  <div id="container">
+    <!-- SVG arrow graphic -->
+    <svg id="arrow" viewBox="0 0 100 100">
+      <polygon points="50,0 0,60 20,60 50,35 80,60 100,60" fill="none" stroke="blue" stroke-width="3" />
+      <line x1="50" y1="60" x2="50" y2="100" stroke="blue" stroke-width="3" />
+      <!-- Number to display the angle -->
+      <div id="angle"></div>
+    </svg>
+  </div>
+
+  <script>
+    // Get the arrow SVG element and the angle div element
+    const arrow = document.getElementById('arrow');
+    const angleDiv = document.getElementById('angle');
+
+    // Function to update the arrow's rotation and angle
+    function updateArrowRotation(event) {
+      // Get the arrow's center coordinates
+      const arrowRect = arrow.getBoundingClientRect();
+      const arrowCenterX = arrowRect.left + arrowRect.width / 2;
+      const arrowCenterY = arrowRect.top + arrowRect.height / 2;
+
+      // Calculate the angle between the arrow center and the mouse position
+      const angleRadians = Math.atan2(event.clientY - arrowCenterY, event.clientX - arrowCenterX);
+      let angleDegrees = (angleRadians * 180) / Math.PI;
+
+      // Adjust the angle to be between 0 and 359 degrees with 0 degrees representing vertical
+      angleDegrees += 90; // Adjust for the initial arrow rotation
+      if (angleDegrees < 0) {
+        angleDegrees += 360;
+      }
+
+      // Calculate the angle as an integer from 0 to 359
+      const angle = Math.round(angleDegrees);
+
+      // Rotate the arrow to point in the calculated direction
+      arrow.style.transform = `rotate(${angle}deg)`;
+
+      // Update the angle display
+      angleDiv.textContent = angle;
+    }
+
+    // Add a mousemove event listener to the document
+    document.addEventListener('mousemove', updateArrowRotation);
+  </script>
+</body>
+</html>
