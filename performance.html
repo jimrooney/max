@@ -27,39 +27,53 @@
   <div id="navbar"></div>
   <div id="follow-div">
     <div class="boxarrow"></div>
-    <div><input type="text" value="Hello" /></div>
+    <div><input id="sliderText" type="text" value="Hello" /></div>
   </div>
   <div>
+    <label for="weight">Weight:</label>
     <input
       type="text"
       id="weight"
       onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
     />
+  </div>
+  <div>
+    <label for="headwind">Headwind:</label>
     <input
-      type="button"
-      id="byWeight"
-      value="By Weight"
-      onclick="root.performance.byWeight({
-        data: root.data.C185.takeoff,
-        weight: document.querySelector('#weight').value, //|| 2400,
-        wind: document.querySelector('#headwind').value
-      });"
+      type="text"
+      id="headwind"
+      value="Zero"
+      oninput="this.value = this.value.replace(/[^0-9]/g, '')"
     />
   </div>
-
-  <input
-  type="text"
-  id="headwind"
-  value="Wind"
-  oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-/>
-  <select name="myList" id="myList">
+  <div>
+    <label for="altitude">Altitude:</label>
+    <input
+      type="text"
+      id="altitude"
+      value="Zero"
+      onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
+      oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+    />
+  </div>
+  <!-- <select name="myList" id="myList">
     <option value="Distance50">Distance50</option>
     <option value="TO Speed">TO Speed</option>
     <option value="Hello" onClick="calc.hello()">Hello</option>
-  </select>
+  </select> -->
   <center><div id="airplane-icon" class="airplane-icon"></div></center>
+  <input
+  type="button"
+  id="byWeight"
+  value="By Weight"
+  onclick="root.performance.byWeight({
+  data: root.data.C185.takeoff,
+  weight: document.querySelector('#weight').value, //|| 2400,
+  wind: document.querySelector('#headwind').value || 0,
+  altitude: document.querySelector('#altitude').value || 0,
+});"
+/>
 </body>
 
 <script type="text/javascript">

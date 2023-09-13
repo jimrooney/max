@@ -1,4 +1,12 @@
 /*
+Things start in navbar.js with the creation of {root}
+
+
+
+
+
+
+
   //alert("Hello! I am an alert box!")
   root.log(P, "Airplane")
 

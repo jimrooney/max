@@ -1,9 +1,11 @@
 I use {name} to denote objects (in notes, not in code)
 Lowercase for declared objects and Uppercase for instantiated (Class) objects.
 
-The main worker here is an object called root (at the root of the namespace)
+The main worker here is an object {root} (at the root of the namespace)
 Most things are functions and variables within {root}
+It is created in navbar.js and then extended in root.js
+
+I've split {root} like this as it includes instantiated classes that can only exist after the classes have loaded, but {root} needs to exist for some basic functions to work.
 
 There is also a $() object that deals with document.querySelectors (for ease of typing/reading)
-
-This is a test.
+This is created in JimQuery.js

@@ -67,29 +67,26 @@ class Performance {
     const windFactor = root.calc.getRatio(parameters.wind,data[0].wind)
 
 
-    /*
 
-    *** now do this multiplying by wind factor ***
-    (collapse the data)
-
-    pressureAltitude: inputObject.pressureAltitude.map(row => ({
-          alt: row.alt,
-          temp: row.temp,
-          groundRun: row.groundRun.slice(firstColumnIndex, secondColumnIndex + 1),
-          TODistance: row.TODistance.slice(firstColumnIndex, secondColumnIndex + 1),
-        })),
-    */
-
+        // We are here ****************************************************************
         console.log("windFactor: " , windFactor)
         console.log("data: " , data)
 
     let ret = data[0].pressureAltitude[0].groundRun[0] * windFactor
-    
-
-    
-
-
     /*
+
+    Now to figure out the altitude interpolation factor.
+    Take the given altitude and interpolate between the two closest rows
+    Then, take that and refactor the standard temperature for that altitude (could also use the standard lapse rate)
+    Refactor the TO and 50ft distances for that altitude.
+    multiply by the temperature difference factor and the wind factor to get the final values.
+
+    Add altitude to the parameters (need txt input field in GUI)
+
+
+
+
+
     parameters:wind 
 
 newData[]:
