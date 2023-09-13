@@ -3,6 +3,7 @@
     width: 100px;
     height: 82px;
     background-color: lightgray;
+    right: 0; /* right justify */
 }
 
 .boxarrow {
@@ -11,11 +12,12 @@
     height: 82px;
     background: url(arrow.svg);
     background-size: 100px 82px;
+    transform: rotate(180deg); /* Rotate the element 180 degrees */
 }
 
 #sliderText {
     position: absolute;
-    left: 100px; /* Adjust as needed to position the input */
+    left: -175px; /* Adjust as needed to position the input */
 }
   body {
     font: normal 16px/1.5 "Helvetica Neue", sans-serif;
