@@ -7,7 +7,13 @@ class Calculator {
     return "hello"
   }
   getRatio(value, bounds) {
-    return (bounds[1] - bounds[0]) / value // Returns the percentage value is of the range
+    bounds.sort((a, b) => b - a)
+    return ((value - bounds[1]) / (bounds[0] - bounds[1]))
+  }
+  useRatio(ratio, bounds) {
+    // Sort the bounds array in descending order
+    bounds.sort((a, b) => b - a)
+    return (bounds[0] - bounds[1]) * ratio + bounds[1]
   }
   getBetweenRows(array, value) {
     for (let i = 0; i < array.length - 1; i++) {

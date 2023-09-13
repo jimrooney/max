@@ -68,7 +68,7 @@ $().ready(() => {
   $("<body>").prepend(
     `
     <div class="version-div">
-        Version 1.1.3
+        Version 1.1.4 [wind]
     </div>
     <div class="topnav">
       <a class="active" href="index.html">Home</a>

@@ -25,31 +25,40 @@ class Performance {
     const speed = this.getTakeoffSpeed(parameters.data, weight)
 
     // ============= Windspeed =============
-    let windspeed = parameters.wind?.replace(/[^0-9]/g, '') || 0
+    let windspeed = parameters.wind?.replace(/[^0-9]/g, "") || 0
     const rows = root.calc.getBetweenRows(parameters.data[0].wind, windspeed)
+
     // Collapse the data by the windspeed
     const firstColumnIndex = rows[0]
     const secondColumnIndex = rows[1]
-    const newData = parameters.data.map(row => {
+    const newData = parameters.data.map((row) => {
       const inputObject = row
-      console.log("inputObject: ", inputObject)
       const outputObject = {
         weight: inputObject.weight,
         speed: inputObject.speed,
         wind: inputObject.wind.slice(firstColumnIndex, secondColumnIndex + 1),
-        pressureAltitude: inputObject.pressureAltitude.map(row => ({
+        pressureAltitude: inputObject.pressureAltitude.map((row) => ({
           alt: row.alt,
           temp: row.temp,
-          groundRun: row.groundRun.slice(firstColumnIndex, secondColumnIndex + 1),
-          TODistance: row.TODistance.slice(firstColumnIndex, secondColumnIndex + 1),
+          groundRun: row.groundRun.slice(
+            firstColumnIndex,
+            secondColumnIndex + 1
+          ),
+          TODistance: row.TODistance.slice(
+            firstColumnIndex,
+            secondColumnIndex + 1
+          ),
         })),
       }
-      return outputObject; // Return the outputObject for each row
+      return outputObject // Return the outputObject for each row
     })
-    console.log("newData: " , newData) // Now with 2 columns instead of 3
+    console.log("newData: ", newData) // Now with 2 columns instead of 3
 
-    let data = newData //root.data.test // *** using test data ***
-    if(root.demo){
+    // ----------------------------------------------------------------
+    // Option to use Test data (root.data.test)
+    // ----------------------------------------------------------------
+    let data = newData
+    if (root.demo) {
       console.log("Demo Mode")
       data = root.data.test
       const groundRoll = this.getGroundRoll(data, speed)
@@ -62,17 +71,49 @@ class Performance {
       return
     }
 
-    console.log("wind: " , parameters.wind) // *** wind at upper limit fails ***
-    console.log("wind: " , data[0].wind) 
-    const windFactor = root.calc.getRatio(parameters.wind,data[0].wind)
+    // ****************************************************************
+    console.log("parameters.wind: ", parameters.wind) // *** wind at upper limit fails ***
+    // ****************************************************************
 
+    const windFactor = root.calc.getRatio(parameters.wind, data[0].wind)
+    // data looks like this:
+    /*
+          [
+            {
+              pressureAltitude: [
+                { alt: 0, temp: 59, groundRun: [490, 345], TODistance: [870, 660] },
+                { alt: 2500, temp: 50, groundRun: [595, 415], TODistance: [1015, 765] },
+              ],
+            }
+          ]
+    */
+    const freezeData = JSON.parse(JSON.stringify(data))
+    console.log("freezeData: ", freezeData)
+    //
+    //  interpolate the groundRun and TODistance values using the windFactor
+    //  Subtract the interpolated difference from the higher distance.
+    //
+    data.forEach((row) => {
+      row.pressureAltitude.forEach((pa) => {
+        pa.groundRun =
+          pa.groundRun[0] - (pa.groundRun[0] - pa.groundRun[1]) * windFactor
+        pa.TODistance =
+          pa.TODistance[0] - (pa.TODistance[0] - pa.TODistance[1]) * windFactor
+      })
+    })
 
+    console.log("Collapsed data ", data)
 
-        // We are here ****************************************************************
-        console.log("windFactor: " , windFactor)
-        console.log("data: " , data)
+    // We are here ****************************************************************
+    // This is where we'll interpolate the data based on temperature and altitude
+    // Currently we assume sealevel and standard temperature
+    // Find an flatten the preassureAltitude row with an alt of 0
+    data.forEach((row) => {
+      const firstRow = row.pressureAltitude.find((obj) => obj.alt === 0)
+      Object.assign(row, firstRow)
+    })
+    console.log("Collapsed data ", data)
 
-    let ret = data[0].pressureAltitude[0].groundRun[0] * windFactor
     /*
 
     Now to figure out the altitude interpolation factor.
@@ -100,13 +141,12 @@ weight: 2300
 wind [10, 20]
 */
 
-
     // ********************************
     // Next, calculate the wind factor and interpolate the data ...
     // Collapsing the ground and takeoff data based on the wind factor leaving a flat row.
     // ********************************
-//                  this needs to turn into that....
-                  // We can also rewrite the following functions to be this structure:
+    //                  this needs to turn into that....
+    // We can also rewrite the following functions to be this structure:
     // {
     //   weight: 3350,
     //   speed: 50,
@@ -123,10 +163,6 @@ wind [10, 20]
 
     //   data = [{}]
 
-
-
-
-
     // const index = 0; // Choose the index you want to use for the arrays
 
     // const inputObject = {
@@ -138,7 +174,7 @@ wind [10, 20]
     //     { alt: 2500, temp: 50, groundRun: [595, 415, 235], TODistance: [1015, 765, 550] },
     //   ],
     // };
-    
+
     // const outputObject = {
     //   weight: inputObject.weight,
     //   speed: inputObject.speed,
@@ -146,13 +182,8 @@ wind [10, 20]
     //   groundRun: inputObject.pressureAltitude[index].groundRun[index],
     //   TODistance: inputObject.pressureAltitude[index].TODistance[index],
     // };
-    
+
     // console.log(outputObject);
-
-
-
-
-
 
     const groundRoll = this.getGroundRoll(data, speed)
     const distance = this.get50ftDistance(data, speed)
@@ -163,11 +194,17 @@ wind [10, 20]
     )
   }
 
-  getPerformance(data, type, weight = 0, wind = 0, temperature = 59,surface = "paved", condition = "dry") {
-
+  getPerformance(
+    data,
+    type,
+    weight = 0,
+    wind = 0,
+    temperature = 59,
+    surface = "paved",
+    condition = "dry"
+  ) {
     const speed = this.getTakeoffSpeed(data[type], weight)
     const rows = root.calc.filterDataByProperty(data, speed, "speed") // Find the two rows that encompass the given speed
-
   }
   //
   //
@@ -194,8 +231,7 @@ wind [10, 20]
     //
     const rows = root.calc.filterDataByProperty(data, speed, "speed") // Find the two rows that encompass the given speed
     const factor =
-      (rows[0].groundRun - rows[1].groundRun) /
-      (rows[0].speed - rows[1].speed)
+      (rows[0].groundRun - rows[1].groundRun) / (rows[0].speed - rows[1].speed)
     const distance = rows[1].groundRun + (speed - rows[1].speed) * factor
     return distance
   }
