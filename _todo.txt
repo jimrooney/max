@@ -8,25 +8,26 @@ Need to be updated to the new data structure...
     // Next, calculate the wind factor
     // then select the ground and takeoff data based on the wind indicies and calculate the factors.
 HERE:
-    // ********************************
-    // Next, calculate the wind factor and interpolate the data ...
-    // Collapsing the ground and takeoff data based on the wind factor leaving a flat row.
-    // ********************************
+
+    Wind top value borked
+    Need to check/convert "zero" to 0 before processing
+    Data is being collapsed, cuttion the pressureAltitude to two elements.
+    It needs to be left alone because we're going to use it later.
+    Need to check to make sure that all the PA data is interpolated.
+
+    // We are here ****************************************************************
+    // This is where we'll interpolate the data based on temperature and altitude
+    // Currently we assume sealevel and standard temperature
+    // Find an flatten the preassureAltitude row with an alt of 0
 
 {ui}
-working on dragdivs in {UI} ... thinking about setting up constraints... X / Y and constraining to a bounding div (parent?)
-
+dragdivs in {UI} ... thinking about setting up constraints... X / Y and constraining to a bounding div (parent?)
 Will want to move the dragdivs relative to the min/max of what setting they control.
 
-Next Up...
-Calculating takeoff and landing values.
+Sliders:
 Click and drag sliders for changing values. Display current selected value floating next to where you're dragging.
-
-
 Sliders... Aft out of limits stops calculating so it throws errors... otherwise the sliders work :)
 need to add colours to out of bounds and limits to out of bounds display points (might not be neccesary to limit as you can only put so much in a seat so you can only throw it so far out of balance.)
-
-
 
 DoubleClick Airpalne Object to open pax edit mode
 
