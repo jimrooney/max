@@ -52,8 +52,7 @@ class Performance {
       }
       return outputObject // Return the outputObject for each row
     })
-    console.log("newData: ", newData) // Now with 2 columns instead of 3
-
+    console.log("newData: ", JSON.parse(JSON.stringify(newData))) // Now with 2 columns (or 1) instead of 3
     // ----------------------------------------------------------------
     // Option to use Test data (root.data.test)
     // ----------------------------------------------------------------
@@ -70,12 +69,6 @@ class Performance {
       )
       return
     }
-
-    // ****************************************************************
-    console.log("parameters.wind: ", parameters.wind) // *** wind at upper limit fails ***
-    // ****************************************************************
-
-    const windFactor = root.calc.getRatio(parameters.wind, data[0].wind)
     // data looks like this:
     /*
           [
@@ -87,18 +80,23 @@ class Performance {
             }
           ]
     */
-    const freezeData = JSON.parse(JSON.stringify(data))
-    console.log("freezeData: ", freezeData)
+    console.log("parameters.wind: ", parameters.wind)
+    console.log("freezeData: ", JSON.parse(JSON.stringify(data)))
     //
     //  interpolate the groundRun and TODistance values using the windFactor
     //  Subtract the interpolated difference from the higher distance.
     //
+    // If at the upper limit wind, all arrays will be single value...
+    // Hence the || operator (just use the value given)
+    const windFactor = root.calc.getRatio(parameters.wind, data[0].wind) || 1
+    console.log("windFactor: ", windFactor)
     data.forEach((row) => {
       row.pressureAltitude.forEach((pa) => {
         pa.groundRun =
-          pa.groundRun[0] - (pa.groundRun[0] - pa.groundRun[1]) * windFactor
+          pa.groundRun[0] - (pa.groundRun[0] - pa.groundRun[1]) * windFactor || pa.groundRun[0]
         pa.TODistance =
-          pa.TODistance[0] - (pa.TODistance[0] - pa.TODistance[1]) * windFactor
+          pa.TODistance[0] - (pa.TODistance[0] - pa.TODistance[1]) * windFactor || pa.TODistance[0]
+
       })
     })
 
