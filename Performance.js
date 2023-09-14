@@ -9,6 +9,10 @@ class Performance {
   byWeight(parameters) {
     console.log("parameters: ", JSON.parse(JSON.stringify(parameters)))
 
+    const maxHeadwind = parameters.data[0].wind.slice(parameters.data[0].wind.length -1)
+    if (parameters.wind > maxHeadwind ) {
+      alert (`Wind value (${parameters.wind}kts) is beyond chart values,\nmaximum headwind value (${maxHeadwind}kts) will be used`)
+    }
     let weight = parameters.weight || 0
     // {
     //   weight: 3350,
