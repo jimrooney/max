@@ -8,7 +8,7 @@ class Calculator {
   }
   getRatio(value, bounds) {
     bounds.sort((a, b) => b - a)
-    return ((value - bounds[1]) / (bounds[0] - bounds[1]))
+    return (value - bounds[1]) / (bounds[0] - bounds[1])
   }
   useRatio(ratio, bounds) {
     // Sort the bounds array in descending order
@@ -20,6 +20,10 @@ class Calculator {
       if (value >= array[i] && value < array[i + 1]) {
         return [i, i + 1]
       }
+    }
+    // Handle the case where value is equal to or greater than the highest element
+    if (value >= array[array.length - 1]) {
+      return [array.length - 1, array.length + 1] // Return the index of the highest element and -1
     }
     return [-1, -1] // Value is not between any indices
   }
