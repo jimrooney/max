@@ -9,16 +9,25 @@ Need to be updated to the new data structure...
     // then select the ground and takeoff data based on the wind indicies and calculate the factors.
 HERE:
 
-    Wind top value borked
-    Need to check/convert "zero" to 0 before processing
-    Data is being collapsed, cuttion the pressureAltitude to two elements.
-    It needs to be left alone because we're going to use it later.
-    Need to check to make sure that all the PA data is interpolated.
+    All wind values below 10kts report out of bounds :(
+
+    
+    // ************** Change this to be the value of the text input field ****************************
+    const targetAltitude = 2500 // *** for testing ********************************
+
+          // then collapse the rows by extracting interpolated data from them based on targetAltitude
+      // ********************************
+
 
     // We are here ****************************************************************
     // This is where we'll interpolate the data based on temperature and altitude
     // Currently we assume sealevel and standard temperature
     // Find an flatten the preassureAltitude row with an alt of 0
+
+    
+Random Stuff:
+    Need to check/convert "zero" to 0 before processing (wind/alt)
+    // *** Maybe set a value here so this condition can be flagged visually in the GUI ***
 
 {ui}
 dragdivs in {UI} ... thinking about setting up constraints... X / Y and constraining to a bounding div (parent?)

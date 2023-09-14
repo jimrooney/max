@@ -9,6 +9,7 @@ class Performance {
   byWeight(parameters) {
     console.log("parameters: ", JSON.parse(JSON.stringify(parameters)))
 
+    // *** Maybe set a value here so this condition can be flagged visually in the GUI ***
     const maxHeadwind = parameters.data[0].wind.slice(parameters.data[0].wind.length -1)
     if (parameters.wind > maxHeadwind ) {
       alert (`Wind value (${parameters.wind}kts) is beyond chart values,\nmaximum headwind value (${maxHeadwind}kts) will be used`)
@@ -92,6 +93,12 @@ class Performance {
     //
     // If at the upper limit wind, all arrays will be single value...
     // Hence the || operator (just use the value given)
+    
+
+    // We are here ****************************************************************
+    // ************** Change this to be the value of the text input field ****************************
+    const targetAltitude = 2500 // *** for testing ********************************
+
     const windFactor = root.calc.getRatio(parameters.wind, data[0].wind) || 1
     console.log("windFactor: ", windFactor)
     data.forEach((row) => {
@@ -100,21 +107,26 @@ class Performance {
           pa.groundRun[0] - (pa.groundRun[0] - pa.groundRun[1]) * windFactor || pa.groundRun[0]
         pa.TODistance =
           pa.TODistance[0] - (pa.TODistance[0] - pa.TODistance[1]) * windFactor || pa.TODistance[0]
-
       })
+      console.log("pressureAltitude:", row.pressureAltitude)
+      const preassureAltitudeRows = root.calc.filterDataByProperty(row.pressureAltitude, targetAltitude, 'alt')
+      console.log("preassureAltitudeRows, ", preassureAltitudeRows)
+      // then collapse the rows by extracting interpolated data from them based on targetAltitude
+      // ********************************
     })
 
     console.log("Collapsed data ", data)
-
-    // We are here ****************************************************************
-    // This is where we'll interpolate the data based on temperature and altitude
-    // Currently we assume sealevel and standard temperature
+    // ****************************************************************
     // Find an flatten the preassureAltitude row with an alt of 0
+    // **** We're replacing this functionality *****************************
     data.forEach((row) => {
       const firstRow = row.pressureAltitude.find((obj) => obj.alt === 0)
-      Object.assign(row, firstRow)
+      Object.assign(row, firstRow) // merging the row up a level in the object
     })
-    console.log("Collapsed data ", data)
+
+    // Then we'll adjust for temperature at altitude
+    // Currently we assume sealevel and standard temperature
+
 
     /*
 

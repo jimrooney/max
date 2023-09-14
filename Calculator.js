@@ -53,7 +53,25 @@ class Calculator {
         break // Stop searching once we find the encompassing objects.
       }
     }
-
     return matchingObjects
   }
+
+  filterAndExtractSurroundingRows(arr, propertyName, targetValue) {
+    // Filter the array to get objects close to the targetValue
+    const filteredArray = arr.filter(obj => Math.abs(obj[propertyName] - targetValue) <= 1);
+  
+    // Sort the filtered array by the property value
+    filteredArray.sort((a, b) => Math.abs(a[propertyName] - targetValue) - Math.abs(b[propertyName] - targetValue));
+  
+    // Find the index of the closest object
+    const index = filteredArray.findIndex(obj => Math.abs(obj[propertyName] - targetValue) === 0);
+  
+    // Extract the two rows surrounding the closest object
+    const beforeRow = filteredArray[index - 1];
+    const afterRow = filteredArray[index + 1];
+  
+    return { beforeRow, afterRow };
+  }
+  
+  
 }
