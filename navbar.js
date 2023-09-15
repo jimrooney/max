@@ -74,6 +74,7 @@ $().ready(() => {
       <a class="active" href="index.html">Home</a>
       <a href="performance.html">Performance</a>
       <a href="balance.html">Balance</a>
+      <a href="crosswind.html">Crosswind</a>
       <a href="test2.html">Test2</a>
       <a href="test3.html">Test3</a>
       <a href="TestArrow.html">Arrow</a>
