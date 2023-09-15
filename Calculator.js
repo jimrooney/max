@@ -72,6 +72,30 @@ class Calculator {
   
     return { beforeRow, afterRow };
   }
+  calculateWindComponents(runwayDirection, windSpeed, windDirection) {
+    // Convert angles to radians
+    const runwayRad = (runwayDirection * Math.PI) / 180;
+    const windRad = (windDirection * Math.PI) / 180;
+  
+    // Calculate the headwind and crosswind components
+    const headwind = windSpeed * Math.cos(windRad - runwayRad);
+    const crosswind = windSpeed * Math.sin(windRad - runwayRad);
+  
+    return {
+      headwind: headwind.toFixed(2), // Round to 2 decimal places
+      crosswind: crosswind.toFixed(2),
+    };
+  }
+  
+  // Example usage:
+  // const runwayDirection = 120; // Runway direction in degrees
+  // const windSpeed = 20; // Wind speed in knots
+  // const windDirection = 240; // Wind direction in degrees
+  
+  // const components = calculateWindComponents(runwayDirection, windSpeed, windDirection);
+  // console.log(`Headwind: ${components.headwind} knots`);
+  // console.log(`Crosswind: ${components.crosswind} knots`);
+  
   
   
 }
