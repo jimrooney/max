@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache Management</title>
+    <style>
+        /* Add some basic styling for the list and buttons */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Available Caches</h1>
+    <ul id="cacheList">
+        <!-- Cache names will be dynamically populated here -->
+    </ul>
+
+    <button id="deleteButton" onclick="deleteSelectedCaches()">Delete Selected Caches</button>
+
+    <script>
+        // Function to populate the list of available caches
+        function populateCacheList() {
+            caches.keys().then(function(cacheNames) {
+                const cacheList = document.getElementById('cacheList');
+                cacheNames.forEach(function(cacheName) {
+                    const listItem = document.createElement('li');
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = 'cacheName';
+                    checkbox.value = cacheName;
+                    listItem.appendChild(checkbox);
+                    listItem.appendChild(document.createTextNode(cacheName));
+                    cacheList.appendChild(listItem);
+                });
+            });
+        }
+
+        // Function to delete selected caches
+        function deleteSelectedCaches() {
+            const selectedCacheNames = Array.from(document.querySelectorAll('input[name="cacheName"]:checked')).map(input => input.value);
+
+            if (selectedCacheNames.length === 0) {
+                alert('Please select at least one cache to delete.');
+                return;
+            }
+
+            selectedCacheNames.forEach(function(cacheName) {
+                caches.delete(cacheName).then(function(deleted) {
+                    if (deleted) {
+                        console.log(`Cache '${cacheName}' has been successfully deleted.`);
+                    } else {
+                        console.log(`Cache '${cacheName}' does not exist.`);
+                    }
+                }).catch(function(error) {
+                    console.error(`Error deleting cache '${cacheName}':`, error);
+                });
+            });
+
+            // Clear the checkboxes after deletion
+            document.querySelectorAll('input[name="cacheName"]:checked').forEach(input => (input.checked = false));
+        }
+
+        // Populate the cache list when the page loads
+        window.addEventListener('load', function() {
+            populateCacheList();
+        });
+    </script>
+</body>
+</html>
