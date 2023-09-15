@@ -2,24 +2,7 @@
 <html>
   <div class="test"></div>
   <head>
-
-    <!-- PWA Stuff -->
-    <link rel="canonical" href="https://balance.jimrooney.com/" />
-    <link rel="manifest" href="manifest.json" />
-    <script>
-      // Register the serviceworker
-      if (navigator.serviceWorker.controller) {
-        console.log("Active service worker found")
-      } else {
-        navigator.serviceWorker
-          .register("/sw.js", { scope: "/" })
-          .then(function (reg) {
-            console.log("Service worker  registered")
-          })
-      }
-    </script>
-    <!-- /PWA Stuff -->
-
+    
     <!-- Navbar -->
     <script src="JimQuery.js"></script>
     <script src="navbar.js"></script>

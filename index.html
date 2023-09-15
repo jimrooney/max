@@ -1,5 +1,24 @@
 <!-- {root} is defined in {navbar} -->
 
+<!-- PWA Stuff -->
+<link rel="canonical" href="https://balance.jimrooney.com/" />
+<link rel="manifest" href="manifest.json" />
+<script>
+  window.addEventListener("load", () => {
+    // Register the serviceworker
+    if (navigator.serviceWorker.controller) {
+      console.log("Active service worker found")
+    } else {
+      navigator.serviceWorker
+        .register("/sw.js", { scope: "/" })
+        .then(function (reg) {
+          console.log("Service worker  registered")
+        })
+    }
+  })
+</script>
+<!-- /PWA Stuff -->
+
 <script src="JimQuery.js"></script>
 <script src="navbar.js"></script>
 <script src="data.js"></script>
@@ -9,12 +28,12 @@
 <script src="Performance.js"></script>
 <script src="UI.js"></script>
 <head>
-    <style>
-        body {
-            background-image: url('images/MF_Wind.svg');
-            background-repeat: no-repeat;
-            background-size: 950px 550px;
-        }
-    </style>
+  <style>
+    body {
+      background-image: url("images/MF_Wind.svg");
+      background-repeat: no-repeat;
+      background-size: 950px 550px;
+    }
+  </style>
 </head>
 <body></body>
