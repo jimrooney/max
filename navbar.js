@@ -79,6 +79,7 @@ $().ready(() => {
       <a href="test3.html">Test3</a>
       <a href="TestArrow.html">Arrow</a>
       <a href="#" onClick="root.clearCache()">Reset Cache</a>
+      <a href="DeleteCaches.html">Delete Cache</a>
       <a href="#" onClick="root.flipDemo(this)">Flip Demo</a>
     </div>
     `
