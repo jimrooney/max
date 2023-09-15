@@ -5,7 +5,7 @@ var filesToCache = [
   'index.html',
   'crosswind.html',
   'crosswindScript.js',
-  'Performance.html',
+  'performance.html',
   'Performance.js',
   'JimQuery.js',
   'navbar.js',
