@@ -58,44 +58,97 @@ class Calculator {
 
   filterAndExtractSurroundingRows(arr, propertyName, targetValue) {
     // Filter the array to get objects close to the targetValue
-    const filteredArray = arr.filter(obj => Math.abs(obj[propertyName] - targetValue) <= 1);
-  
+    const filteredArray = arr.filter(
+      (obj) => Math.abs(obj[propertyName] - targetValue) <= 1
+    )
+
     // Sort the filtered array by the property value
-    filteredArray.sort((a, b) => Math.abs(a[propertyName] - targetValue) - Math.abs(b[propertyName] - targetValue));
-  
+    filteredArray.sort(
+      (a, b) =>
+        Math.abs(a[propertyName] - targetValue) -
+        Math.abs(b[propertyName] - targetValue)
+    )
+
     // Find the index of the closest object
-    const index = filteredArray.findIndex(obj => Math.abs(obj[propertyName] - targetValue) === 0);
-  
+    const index = filteredArray.findIndex(
+      (obj) => Math.abs(obj[propertyName] - targetValue) === 0
+    )
+
     // Extract the two rows surrounding the closest object
-    const beforeRow = filteredArray[index - 1];
-    const afterRow = filteredArray[index + 1];
-  
-    return { beforeRow, afterRow };
+    const beforeRow = filteredArray[index - 1]
+    const afterRow = filteredArray[index + 1]
+
+    return { beforeRow, afterRow }
   }
   calculateWindComponents(runwayDirection, windSpeed, windDirection) {
     // Convert angles to radians
-    const runwayRad = (runwayDirection * Math.PI) / 180;
-    const windRad = (windDirection * Math.PI) / 180;
-  
+    const runwayRad = (runwayDirection * Math.PI) / 180
+    const windRad = (windDirection * Math.PI) / 180
+
     // Calculate the headwind and crosswind components
-    const headwind = windSpeed * Math.cos(windRad - runwayRad);
-    const crosswind = windSpeed * Math.sin(windRad - runwayRad);
-  
+    const headwind = windSpeed * Math.cos(windRad - runwayRad)
+    const crosswind = windSpeed * Math.sin(windRad - runwayRad)
+
     return {
       headwind: headwind.toFixed(2), // Round to 2 decimal places
       crosswind: crosswind.toFixed(2),
-    };
+    }
   }
-  
+
   // Example usage:
   // const runwayDirection = 120; // Runway direction in degrees
   // const windSpeed = 20; // Wind speed in knots
   // const windDirection = 240; // Wind direction in degrees
-  
+
   // const components = calculateWindComponents(runwayDirection, windSpeed, windDirection);
   // console.log(`Headwind: ${components.headwind} knots`);
   // console.log(`Crosswind: ${components.crosswind} knots`);
+
+  /*
+targetAltitude: 3000
+{alt: 5000, temp: 41, groundRun: 505, TODistance: 910}
+{alt: 7500, temp: 32, groundRun: 625, TODistance: 1125}
+
+  Given a property, calculate the factor between it and upper or lower bounds.
+  Apply that factor to the other values.
+  Return the resultant row
+
   
-  
-  
+  */
+  interpolateValues(value, data) {
+
+    console.log("Interpolate: ", data)
+    if (data.length !== 1) {
+      if (data.length > 1){
+        data.pop()
+      }
+      else {
+      throw new Error("Input data array must contain exactly two objects.")
+    }}
+    const obj1 = data[0]
+    const obj2 = data[1]
+
+    const result = {}
+
+    // apply the ratio to the gap between the other object values
+    for (const key in value) { // for each key (should only be one: alt)
+      if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) { // both objects have the key
+
+        // find the ratio between the gap between the object values and the key's value.
+
+        const gap = obj2[key] - obj1[key]
+        const given = value[key]
+        const ratio = gap > 0 ? given/gap : given/obj2[key] // if zero, rato = 1... maybe even <1? ***
+
+        // apply the ratio
+        for (const k in obj2){
+          if (k !== key){
+          result[k] = obj1[k] + (obj2[k] - obj1[k]) * ratio
+        }}
+        console.log("ratio: ", ratio)
+      }
+    }
+
+    return result
+  }
 }
