@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer Circle -->
+  <circle
+     cx="80"
+     cy="80"
+     r="80"
+     fill="none"
+     stroke="#000000"
+     stroke-width="1"
+     id="circle1" />
+  <!-- Lines Connecting the Circles -->
+  <g id="linesGroup">
+    <!-- Calculate and replicate lines every 10 degrees -->
+    <line x1="80" y1="0" x2="80" y2="80" stroke="#000000" stroke-width="1" id="line1" />
+  </g>
+  <!-- Script to create and rotate lines -->
+  <script type="text/ecmascript">
+    <![CDATA[
+      var linesGroup = document.getElementById("linesGroup");
+
+      // Create and rotate lines every 10 degrees
+      for (var i = 0; i < 36; i++) {
+        var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", "80");
+        line.setAttribute("y1", "0");
+        line.setAttribute("x2", "80");
+        line.setAttribute("y2", "80");
+        line.setAttribute("stroke", "#000000");
+        line.setAttribute("stroke-width", "1");
+        line.setAttribute("id", "line" + (i + 2));
+        line.setAttribute("transform", "rotate(" + (i * 10) + " 80 80)");
+        linesGroup.appendChild(line);
+      }
+    ]]>
+  </script>
+    <!-- Inner Circle -->
+  <!-- Inner Circle -->
+  <circle
+     cx="80"
+     cy="80"
+     r="75"
+     fill="none"
+     stroke="#000000"
+     stroke-width="1"
+     id="circle2"
+clip-path="url(#circleClip)"
+	 />
+
+
+
+</svg>
