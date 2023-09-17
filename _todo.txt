@@ -5,11 +5,11 @@ Need to be updated to the new data structure...
       const distance = root.performance.get50ftDistance(root.data.test, speed)
 
 {performance}
-    // Next, calculate the wind factor
-    // then select the ground and takeoff data based on the wind indicies and calculate the factors.
 HERE:
 
-    All wind values below 10kts report out of bounds :(
+Likely same problem with the wind ratio calculator...
+// if 0 gap, means it's the top value, so use that.
+   Proably same issue ---> All wind values below 10kts report out of bounds :(
 
     
     // ************** Change this to be the value of the text input field ****************************

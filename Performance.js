@@ -9,15 +9,15 @@ class Performance {
   byWeight(parameters) {
     console.log("parameters: ", JSON.parse(JSON.stringify(parameters)))
 
-    // *** Maybe set a value here so this condition can be flagged visually in the GUI ***
-    const maxHeadwind = parameters.data[0].wind.slice(
-      parameters.data[0].wind.length - 1
-    )
-    if (parameters.wind > maxHeadwind) {
-      alert(
-        `Wind value (${parameters.wind}kts) is beyond chart values,\nmaximum headwind value (${maxHeadwind}kts) will be used`
-      )
-    }
+    // // *** Maybe set a value here so this condition can be flagged visually in the GUI ***
+    // const maxHeadwind = parameters.data[0].wind.slice(
+    //   parameters.data[0].wind.length - 1
+    // )
+    // if (parameters.wind > maxHeadwind) {
+    //   alert(
+    //     `Wind value (${parameters.wind}kts) is beyond chart values,\nmaximum headwind value (${maxHeadwind}kts) will be used`
+    //   )
+    // }
     let weight = parameters.weight || 0
     // {
     //   weight: 3350,
@@ -37,7 +37,7 @@ class Performance {
     let windspeed = parameters.wind?.replace(/[^0-9]/g, "") || 0
     const rows = root.calc.getBetweenRows(parameters.data[0].wind, windspeed)
 
-    // Collapse the data by the windspeed
+    // Collapse the data by the windspeed // ********* This might not be necessary *********
     const firstColumnIndex = rows[0]
     const secondColumnIndex = rows[1]
     const newData = parameters.data.map((row) => {
@@ -100,24 +100,32 @@ class Performance {
     // Hence the || operator (just use the value given)
 
     // We are here ****************************************************************
-    // ************** Change this to be the value of the text input field ****************************
     const targetAltitude = document.getElementById("altitude").value || 0
     console.log("targetAltitude: ", targetAltitude)
 
     // Tweak PA values for wind
     const windFactor = root.calc.getRatio(parameters.wind, data[0].wind) || 1
-    console.log("windFactor: ", windFactor)
-    data.forEach((row) => {
-      row.pressureAltitude.forEach((pa) => {
-        pa.groundRun =
-          pa.groundRun[0] - (pa.groundRun[0] - pa.groundRun[1]) * windFactor ||
-          pa.groundRun[0]
-        pa.TODistance =
-          pa.TODistance[0] -
-            (pa.TODistance[0] - pa.TODistance[1]) * windFactor ||
-          pa.TODistance[0]
-      })
+    console.log("(ratio) windFactor: ", windFactor)
+
+    data = data.map((row) => {
+      // First, check if the row has a "pressureAltitude" property and if it's an array
+      if (Array.isArray(row.pressureAltitude)) {
+        // Loop through the "pressureAltitude" array and adjust arrays within each object
+        row.pressureAltitude = row.pressureAltitude.map((pa) => {
+          for (let key in pa) {
+            if (Array.isArray(pa[key])) {
+              pa[key] = root.calc.applyRatio(windFactor, pa[key])
+              if (root.trace) console.log ("key: &o | pa[key]: %o", key, pa[key])
+            }
+          }
+          return pa
+        })
+      }
+      return row
     })
+
+    console.log("wind adjusted data: ", data)
+
 
     data = data.map((row) => {
       const preassureAltitudeRows = root.calc.filterDataByProperty(
@@ -125,7 +133,9 @@ class Performance {
         targetAltitude,
         "alt"
       )
-      const frozenAltitudeRows = JSON.parse(JSON.stringify((preassureAltitudeRows)))
+      const frozenAltitudeRows = JSON.parse(
+        JSON.stringify(preassureAltitudeRows)
+      )
       console.log("frozenAltitudeRows: ", frozenAltitudeRows)
       const key = { alt: targetAltitude }
       const data = preassureAltitudeRows
@@ -137,11 +147,8 @@ class Performance {
 
     console.log("altitudeCorrectedData: ", data)
 
-
-//    get rows between by weight
-//    Then interpolate by weight and we're done.
-
-
+    //    get rows between by weight
+    //    Then interpolate by weight and we're done.
 
     return
     const groundRoll = this.getGroundRoll(data, speed)

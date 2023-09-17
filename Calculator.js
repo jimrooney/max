@@ -115,40 +115,76 @@ targetAltitude: 3000
 
   
   */
-  interpolateValues(value, data) {
 
-    console.log("Interpolate: ", data)
+  /*  
+      Value: {alt: '3000'}
+
+      Data: 
+      [{…}, {…}, 1] *** (need to find that "1") *** // frozenAltitudeRows:  (3) [{…}, {…}, 1]
+      [{alt: 2500, temp: 50, groundRun: 505, TODistance: 890}
+      {alt: 5000, temp: 41, groundRun: 610, TODistance: 1055}]
+
+  */
+
+  // Will take the difference between the value's data and apply that ratio to all the other values
+  interpolateValues(value, data) {
+    console.log("Interpolate: \nvalue: %o\n data: %o", value, data)
     if (data.length !== 1) {
-      if (data.length > 1){
+      if (data.length > 1) {
         data.pop()
+      } else {
+        throw new Error("Input data array must contain exactly two objects.")
       }
-      else {
-      throw new Error("Input data array must contain exactly two objects.")
-    }}
+    }
     const obj1 = data[0]
     const obj2 = data[1]
 
     const result = {}
 
     // apply the ratio to the gap between the other object values
-    for (const key in value) { // for each key (should only be one: alt)
-      if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) { // both objects have the key
+    for (const key in value) {
+      // for each key (should only be one: alt)
+      if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
+        // both objects have the key
 
         // find the ratio between the gap between the object values and the key's value.
 
         const gap = obj2[key] - obj1[key]
         const given = value[key]
-        const ratio = gap > 0 ? given/gap : given/obj2[key] // if zero, rato = 1... maybe even <1? ***
+        const ratio = gap > 0 ? given / gap : given / obj2[key] // if 0 gap, means it's the top value, so use that.
 
         // apply the ratio
-        for (const k in obj2){
-          if (k !== key){
-          result[k] = obj1[k] + (obj2[k] - obj1[k]) * ratio
-        }}
+        for (const k in obj2) {
+          if (k !== key) {
+            result[k] = obj1[k] + (obj2[k] - obj1[k]) * ratio
+          }
+        }
         console.log("ratio: ", ratio)
       }
     }
 
     return result
+  }
+
+  adjustValuesByRatio(ratio, [obj1, obj2]) {
+    const result = {}
+    // apply the ratio
+    for (const k in obj2) {
+      const value1 = parseFloat(obj1[k])
+      const value2 = parseFloat(obj2[k])
+      if (!isNaN(value1) && !isNaN(value2)) {
+        result[k] = value1 + (value2 - value1) * ratio
+      } else if (!isNaN(value1)) {
+        result[k] = value1
+      } else if (!isNaN(value2)) {
+        result[k] = value2
+      }
+    }
+    return result
+  }
+  applyRatio(ratio, data) {
+    if (root.trace) console.log("Apply Ratio: ratio: %o data: %o", ratio, data)
+    if (ratio === 1) return data
+    return data.map((row) => row - row * ratio)
   }
 }
