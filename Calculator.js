@@ -6,6 +6,7 @@ class Calculator {
     console.log("hello")
     return "hello"
   }
+  // value (number), [0,1]
   getRatio(value, bounds) {
     bounds.sort((a, b) => b - a)
     return (value - bounds[1]) / (bounds[0] - bounds[1])
@@ -37,7 +38,7 @@ class Calculator {
     })
 
     // Initialize an array to store the matching objects.
-    const matchingObjects = []
+    let matchingObjects = []
 
     // Iterate through the sorted objects array to find the two objects that encompass the target value.
     for (let i = 0; i < objects.length - 1; i++) {
@@ -53,15 +54,28 @@ class Calculator {
         break // Stop searching once we find the encompassing objects.
       }
     }
+    matchingObjects = matchingObjects.filter(
+      (object) => typeof object === "object"
+    )
+    // filter out non objects
     return matchingObjects
   }
 
   filterAndExtractSurroundingRows(arr, propertyName, targetValue) {
-    // Filter the array to get objects close to the targetValue
-    const filteredArray = arr.filter(
-      (obj) => Math.abs(obj[propertyName] - targetValue) <= 1
+    console.log(
+      "Filtering and extracting: %o %o %o",
+      arr,
+      propertyName,
+      targetValue
     )
-
+    // Filter the array to get objects close to the targetValue
+    const filteredArray = arr.filter((obj) => {
+      const alt = parseInt(obj[propertyName], 10)
+      targetValue = parseInt(targetValue, 10)
+      console.log("targetValue: ", Math.abs(alt - targetValue))
+      Math.abs(alt - targetValue) <= 1
+    })
+    console.log("filteredArray: ", filteredArray)
     // Sort the filtered array by the property value
     filteredArray.sort(
       (a, b) =>
@@ -129,17 +143,11 @@ targetAltitude: 3000
   // Will take the difference between the value's data and apply that ratio to all the other values
   interpolateValues(value, data) {
     console.log("Interpolate: \nvalue: %o\n data: %o", value, data)
-    if (data.length !== 1) {
-      if (data.length > 1) {
-        data.pop()
-      } else {
-        throw new Error("Input data array must contain exactly two objects.")
-      }
-    }
+
+    data = data.filter((entry) => Object.keys(data).length > 0) // filter out empty entries
     const obj1 = data[0]
     const obj2 = data[1]
-
-    const result = {}
+    const result = {...value}
 
     // apply the ratio to the gap between the other object values
     for (const key in value) {

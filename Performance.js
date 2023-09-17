@@ -99,7 +99,6 @@ class Performance {
     // If at the upper limit wind, all arrays will be single value...
     // Hence the || operator (just use the value given)
 
-    // We are here ****************************************************************
     const targetAltitude = document.getElementById("altitude").value || 0
     console.log("targetAltitude: ", targetAltitude)
 
@@ -114,8 +113,8 @@ class Performance {
         row.pressureAltitude = row.pressureAltitude.map((pa) => {
           for (let key in pa) {
             if (Array.isArray(pa[key])) {
-              pa[key] = root.calc.applyRatio(windFactor, pa[key])
-              if (root.trace) console.log ("key: &o | pa[key]: %o", key, pa[key])
+              pa[key] = root.calc.applyRatio(windFactor, pa[key])[0]
+              if (root.trace) console.log("key: &o | pa[key]: %o", key, pa[key])
             }
           }
           return pa
@@ -126,27 +125,45 @@ class Performance {
 
     console.log("wind adjusted data: ", data)
 
+    // Interpolate for Altitude
+    // We are here ****************************************************************
+    // Repeate for altitude, adjusting TODistance[] and groundRun[]...
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Strip down the altitudes to just the surrounding altitudes
+    let ratio
     data = data.map((row) => {
       const preassureAltitudeRows = root.calc.filterDataByProperty(
         row.pressureAltitude,
         targetAltitude,
         "alt"
       )
-      const frozenAltitudeRows = JSON.parse(
-        JSON.stringify(preassureAltitudeRows)
-      )
-      console.log("frozenAltitudeRows: ", frozenAltitudeRows)
-      const key = { alt: targetAltitude }
-      const data = preassureAltitudeRows
-      const interpolatedRow = root.calc.interpolateValues(key, data)
-      row = { ...row, ...interpolatedRow, ...key }
-      row.interpolated = interpolatedRow
-      return row
+    // Get the ratio between the target altitude and the surrounding altitudes.
+    // Strip out the altitudes into an array
+    const bounds = preassureAltitudeRows.reduce((accumulator, currentObject) => {
+      accumulator.push(currentObject.alt);
+      return accumulator;
+    }, []);
+    ratio = root.calc.getRatio(targetAltitude, bounds) || 1 // export the ratio
+    row.pressureAltitude = preassureAltitudeRows // reattach the paired down pressure array and return the row
+    return row
     })
 
-    console.log("altitudeCorrectedData: ", data)
-
+    console.log("Data: ", data)
+// *** We just build and return an altitude specific row that we interpolate from these two rows using the ratio ***
     //    get rows between by weight
     //    Then interpolate by weight and we're done.
 
