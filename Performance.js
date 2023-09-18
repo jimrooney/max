@@ -102,9 +102,12 @@ class Performance {
     const targetAltitude = document.getElementById("altitude").value || 0
     console.log("targetAltitude: ", targetAltitude)
 
-    // Tweak PA values for wind
+    // ----------------------------------------------------------------
+    // Adjust PA values for wind
+    // Then return altitude specific single rows for PA
+    // ----------------------------------------------------------------
     const windFactor = root.calc.getRatio(parameters.wind, data[0].wind) || 1
-    console.log("(ratio) windFactor: ", windFactor)
+    if (root.debug) console.log("(ratio) windFactor: ", windFactor)
 
     data = data.map((row) => {
       // First, check if the row has a "pressureAltitude" property and if it's an array
@@ -114,66 +117,59 @@ class Performance {
           for (let key in pa) {
             if (Array.isArray(pa[key])) {
               pa[key] = root.calc.applyRatio(windFactor, pa[key])[0]
-              if (root.trace) console.log("key: &o | pa[key]: %o", key, pa[key])
+              if (root.debug) console.log("key: &o | pa[key]: %o", key, pa[key])
             }
           }
           return pa
         })
+        row.pressureAltitude = root.calc.interpolatePAValues(
+          { alt: targetAltitude },
+          row.pressureAltitude
+        )
       }
+      console.log("row: %o", row)
+      row = { ...row, ...row.pressureAltitude }
       return row
     })
 
-    console.log("wind adjusted data: ", data)
+    console.log("Wind and Height adjusted data: ", data)
 
-    // Interpolate for Altitude
     // We are here ****************************************************************
-    // Repeate for altitude, adjusting TODistance[] and groundRun[]...
+    // ----------------------------------------------------------------
+    // Interpolate for weight
+    // ----------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Strip down the altitudes to just the surrounding altitudes
-    let ratio
-    data = data.map((row) => {
-      const preassureAltitudeRows = root.calc.filterDataByProperty(
-        row.pressureAltitude,
-        targetAltitude,
-        "alt"
-      )
-    // Get the ratio between the target altitude and the surrounding altitudes.
-    // Strip out the altitudes into an array
-    const bounds = preassureAltitudeRows.reduce((accumulator, currentObject) => {
-      accumulator.push(currentObject.alt);
-      return accumulator;
-    }, []);
-    ratio = root.calc.getRatio(targetAltitude, bounds) || 1 // export the ratio
-    row.pressureAltitude = preassureAltitudeRows // reattach the paired down pressure array and return the row
-    return row
-    })
-
-    console.log("Data: ", data)
-// *** We just build and return an altitude specific row that we interpolate from these two rows using the ratio ***
     //    get rows between by weight
     //    Then interpolate by weight and we're done.
 
-    return
-    const groundRoll = this.getGroundRoll(data, speed)
-    const distance = this.get50ftDistance(data, speed)
+    // Can likely use the same technique as above to take the two altitude arrays for each weight and interpolate them into one row.
+    // Then we interpolate the three rows into one based on weight.
+
+    // Strip down the altitudes to just the surrounding altitudes
+    let ratio
+
+    // Flatten the object (remove arrays and objects, just key:value pairs)
+    data = data.map((row) => {
+      const keyValueArray = Object.entries(row)
+      const filteredArray = keyValueArray.filter(
+        ([key, value]) => typeof value !== "object" && !Array.isArray(value)
+      )
+      row = Object.fromEntries(filteredArray)
+      return row
+    })
+
+
+
+    data = root.calc.findClosestObjectsByWeight(data,weight)
+    data = root.calc.interpolateValues({ weight: weight }, data)
+
+console.log("Result: ", data)
+
+
     alert(
-      `Takeoff Speed: ${Math.round(speed)} kts \nGroundRoll: ${Math.round(
-        groundRoll
-      )} \nTakeoff Distance (50ft): ${Math.round(distance)}`
+      `Takeoff Speed: ${Math.round(data.speed)} kts \nGroundRoll: ${Math.round(
+        data.groundRun
+      )} \nTakeoff Distance (50ft): ${Math.round(data.TODistance)}`
     )
   }
 

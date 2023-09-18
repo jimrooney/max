@@ -61,6 +61,24 @@ class Calculator {
     return matchingObjects
   }
 
+  findClosestObjectsByWeight(data, weight) {
+    const sortedData = data.sort(
+      (a, b) => Math.abs(a.weight - weight) - Math.abs(b.weight - weight)
+    )
+    let belowWeight = null
+    let aboveWeight = null
+
+    for (const obj of sortedData) {
+      if (obj.weight <= weight) {
+        belowWeight = obj
+      } else if (obj.weight > weight) {
+        aboveWeight = obj
+      }
+    }
+
+    return [belowWeight, aboveWeight]
+  }
+
   filterAndExtractSurroundingRows(arr, propertyName, targetValue) {
     console.log(
       "Filtering and extracting: %o %o %o",
@@ -141,13 +159,13 @@ targetAltitude: 3000
   */
 
   // Will take the difference between the value's data and apply that ratio to all the other values
-  interpolateValues(value, data) {
+  interpolatePAValues(value, data, flat) {
     console.log("Interpolate: \nvalue: %o\n data: %o", value, data)
 
     data = data.filter((entry) => Object.keys(data).length > 0) // filter out empty entries
     const obj1 = data[0]
     const obj2 = data[1]
-    const result = {...value}
+    const result = { ...value }
 
     // apply the ratio to the gap between the other object values
     for (const key in value) {
@@ -160,6 +178,52 @@ targetAltitude: 3000
         const gap = obj2[key] - obj1[key]
         const given = value[key]
         const ratio = gap > 0 ? given / gap : given / obj2[key] // if 0 gap, means it's the top value, so use that.
+
+        // apply the ratio
+        for (const k in obj2) {
+          if (k !== key) {
+            result[k] = obj1[k] + (obj2[k] - obj1[k]) * ratio
+          }
+        }
+        console.log("ratio: ", ratio)
+      }
+    }
+
+    return result
+  }
+
+  // Will take the difference between the value's data and apply that ratio to all the other values
+  interpolateValues(value, data) {
+    console.log("Interpolate: \nvalue: %o\n data: %o", value, data)
+
+    if (!data[0]) return data[1]
+    if (!data[1]) return data[0]
+
+    // this data cleaning should be done before this function ********************************
+    data = data.filter((entry) => Object.keys(data).length > 0) // filter out empty entries
+    // ****************************************************************
+
+    // should sort theses ********************************
+    const obj1 = data[0] // little
+    const obj2 = data[1] // big
+    const result = { ...value }
+
+    // apply the ratio to the gap between the other object values
+    for (const key in value) {
+      // for each key (should only be one: alt)
+      if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
+        // both objects have the key
+
+        // find the ratio between the gap between the object values and the key's value.
+        const Little = obj1[key]
+        const Big = obj2[key]
+        const given = value[key]
+
+        const partial = given - Little
+        const total = Big - Little
+        let ratio = partial / total 
+        // *** Need a fix here for top weight (reports back 2300 if you use it [3350lbs])
+        //ratio = partial > 0 ? ratio : 1 // if partial is 0, that means no gap, means it's the bottom/top value, so use that.
 
         // apply the ratio
         for (const k in obj2) {
@@ -191,7 +255,7 @@ targetAltitude: 3000
     return result
   }
   applyRatio(ratio, data) {
-    if (root.trace) console.log("Apply Ratio: ratio: %o data: %o", ratio, data)
+    if (root.debug) console.log("Apply Ratio: ratio: %o data: %o", ratio, data)
     if (ratio === 1) return data
     return data.map((row) => row - row * ratio)
   }
