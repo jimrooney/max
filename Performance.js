@@ -123,6 +123,66 @@ class Performance {
           }
           return pa
         })
+      }
+      return row
+    })
+    console.log("Frozen Wind Data: " , JSON.parse(JSON.stringify(data)))
+    console.log("Wind adjusted data: ", data) 
+
+    const adjacentRows = root.calc.findAdjacentRows(data, weight, "weight")
+    const adjacentWeights = adjacentRows.map((item) => item.weight)
+    console.log("Rows: %o Weights: %o", adjacentRows, adjacentWeights)
+    const weightRatio = root.calc.getRatio(weight, adjacentWeights)
+    console.log("weightRatio: ", weightRatio)
+    console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))// I trust the data to this point ********************
+    
+    // Collapse for PA (2 sets of 2 rows become 2 sets of 1 row)
+    // The collapse the two remaining rows for weight
+    // First reach into each PA set and get the adjacent rows... then collapse them by ratio by targetAltitude
+    // Then with the two last rows, get the adjacent rows based on weight and then collapse them.
+
+    data = data.map((row) => { // collapse PA to 2 surrounding rows
+      let surroundingRows = root.calc.findAdjacentRows(
+        row.pressureAltitude,
+        targetAltitude,
+        "alt"
+      )
+      const paRows = surroundingRows.map((item) => item.alt) // [2]
+      const ratio = root.calc.getRatio(targetAltitude,paRows)
+
+      console.log("PA Ratio: ", ratio)
+      console.log("Surrounding Rows: ", surroundingRows)
+
+      const result = root.calc.applyRatioToRow(ratio, surroundingRows)
+        console.log("Result: ", result)
+      row = { ...row, ...result }
+      console.log("Row: ", row)
+      return row
+    })
+    console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))
+
+return
+
+    // Later, for fun, maybe consolodate this into an interpolate function ***
+    data = data.map((row) => {
+      // First, check if the row has a "pressureAltitude" property and if it's an array
+      if (Array.isArray(row.pressureAltitude)) {
+        console.log("row ", row)
+        const ratio = root.calc.getRatio(
+          { alt: targetAltitude },
+          row.pressureAltitude
+        )
+        console.log("Pressure Altitude Ratio: ", ratio)
+        // Loop through the "pressureAltitude" array and adjust arrays within each object
+        row.pressureAltitude = row.pressureAltitude.map((pa) => {
+          for (let key in pa) {
+            if (Array.isArray(pa[key])) {
+              pa[key] = root.calc.applyRatio(ratio, pa[key])
+              console.log("key: &o | pa[key]: %o", key, pa[key])
+            }
+          }
+          return pa
+        })
         // row.pressureAltitude = root.calc.interpolatePAValues(
         //   { alt: targetAltitude },
         //   row.pressureAltitude
@@ -133,7 +193,7 @@ class Performance {
       return row
     })
 
-    console.log("Wind adjusted data: ", data) // I trust the data to this point ********************
+    return
 
     // We are here ****************************************************************
     // ----------------------------------------------------------------
@@ -160,12 +220,10 @@ class Performance {
     })
     console.log("Data:: ", JSON.parse(JSON.stringify(data)))
 
-
-    data = root.calc.findClosestObjectsByWeight(data,weight)
+    data = root.calc.findAdjacentRows(data, weight, "weight")
     data = root.calc.interpolateValues({ weight: weight }, data)
 
-console.log("Result: ", data)
-
+    console.log("Result: ", data)
 
     alert(
       `Takeoff Speed: ${Math.round(data.speed)} kts \nGroundRoll: ${Math.round(
@@ -184,7 +242,7 @@ console.log("Result: ", data)
     condition = "dry"
   ) {
     const speed = this.getTakeoffSpeed(data[type], weight)
-    const rows = root.calc.filterDataByProperty(data, speed, "speed") // Find the two rows that encompass the given speed
+    const rows = root.calc.findAdjacentRows(data, speed, "speed") // Find the two rows that encompass the given speed
   }
   //
   //
@@ -209,7 +267,7 @@ console.log("Result: ", data)
     // Factor = (Distance-Fast - Distance-Slow) / (Speed-Fast - Speed-Slow)
     // DistanceX = DistanceSlow+ (SpeedX- SpeedSlow) * Factor
     //
-    const rows = root.calc.filterDataByProperty(data, speed, "speed") // Find the two rows that encompass the given speed
+    const rows = root.calc.findAdjacentRows(data, speed, "speed") // Find the two rows that encompass the given speed
     const factor =
       (rows[0].groundRun - rows[1].groundRun) / (rows[0].speed - rows[1].speed)
     const distance = rows[1].groundRun + (speed - rows[1].speed) * factor
@@ -221,7 +279,7 @@ console.log("Result: ", data)
     // Factor = (Distance-Fast - Distance-Slow) / (Speed-Fast - Speed-Slow)
     // DistanceX = DistanceSlow+ (SpeedX- SpeedSlow) * Factor
     //
-    const rows = root.calc.filterDataByProperty(data, speed, "speed") // Find the two rows that encompass the given speed
+    const rows = root.calc.findAdjacentRows(data, speed, "speed") // Find the two rows that encompass the given speed
     const factor =
       (rows[0].TODistance - rows[1].TODistance) /
       (rows[0].speed - rows[1].speed)
@@ -235,7 +293,7 @@ console.log("Result: ", data)
     // Factor = (SpeedHeavy - SpeedLight) / (WeightHeavy - WeightLight)
     // DistanceX = SpeedLight + (Given - WeightLight) * Factor
     //
-    const rows = root.calc.filterDataByProperty(data, given, "weight") // Find the two rows that encompass the given speed
+    const rows = root.calc.findAdjacentRows(data, given, "weight") // Find the two rows that encompass the given speed
     const factor =
       (rows[0].speed - rows[1].speed) / (rows[0].weight - rows[1].weight)
     const speed = rows[1].speed + (given - rows[1].weight) * factor
