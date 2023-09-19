@@ -5,21 +5,50 @@ Need to be updated to the new data structure...
       const distance = root.performance.get50ftDistance(root.data.test, speed)
 
 {performance}
-    // Next, calculate the wind factor
-    // then select the ground and takeoff data based on the wind indicies and calculate the factors.
-HERE:
 
-    All wind values below 10kts report out of bounds :(
+This will be the same in both interportors
+        // *** Need a fix here for top weight (reports back 2300 if you use it [3350lbs])
 
-    
-    // ************** Change this to be the value of the text input field ****************************
-    const targetAltitude = 2500 // *** for testing ********************************
+Gets munted on the output of this function
+    // ----------------------------------------------------------------
+    // Adjust PA values for wind
+    // Then return altitude specific single rows for PA
+    // ----------------------------------------------------------------
 
-          // then collapse the rows by extracting interpolated data from them based on targetAltitude
-      // ********************************
+This is wrong and needs fixing:
+        const gap = obj2[key] - obj1[key]
+        const given = value[key]
+        const ratio = gap > 0 ? given / gap : given / obj2[key] // if 0 gap, means it's the top value, so use that.
 
+
+
+
+Mostly getting the right answers...
+// *** Need a fix here for top weight (reports back 2300 if you use it [3350lbs])
+
+
+
+// **********************************************************************
+    // This isn't right.... should be building a Pressure Altitude row and outputting that.
+    // This messes with the takeoff values of the existing rows... we'll use them to figure out the new row, but they shouldn't be messed with.
+
+
+
+
+
+
+
+Likely same problem with the wind ratio calculator...
+// if 0 gap, means it's the top value, so use that.
+   Proably same issue ---> All wind values below 10kts report out of bounds :(
 
     // We are here ****************************************************************
+    Can likely use the same techniques as // Tweak PA values for wind
+    (wind adjustments)
+
+
+    filterDataByProperty sends back an extra array value (int)
+
     // This is where we'll interpolate the data based on temperature and altitude
     // Currently we assume sealevel and standard temperature
     // Find an flatten the preassureAltitude row with an alt of 0

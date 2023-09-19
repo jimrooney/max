@@ -9,11 +9,15 @@ class Performance {
   byWeight(parameters) {
     console.log("parameters: ", JSON.parse(JSON.stringify(parameters)))
 
-    // *** Maybe set a value here so this condition can be flagged visually in the GUI ***
-    const maxHeadwind = parameters.data[0].wind.slice(parameters.data[0].wind.length -1)
-    if (parameters.wind > maxHeadwind ) {
-      alert (`Wind value (${parameters.wind}kts) is beyond chart values,\nmaximum headwind value (${maxHeadwind}kts) will be used`)
-    }
+    // // *** Maybe set a value here so this condition can be flagged visually in the GUI ***
+    // const maxHeadwind = parameters.data[0].wind.slice(
+    //   parameters.data[0].wind.length - 1
+    // )
+    // if (parameters.wind > maxHeadwind) {
+    //   alert(
+    //     `Wind value (${parameters.wind}kts) is beyond chart values,\nmaximum headwind value (${maxHeadwind}kts) will be used`
+    //   )
+    // }
     let weight = parameters.weight || 0
     // {
     //   weight: 3350,
@@ -33,7 +37,7 @@ class Performance {
     let windspeed = parameters.wind?.replace(/[^0-9]/g, "") || 0
     const rows = root.calc.getBetweenRows(parameters.data[0].wind, windspeed)
 
-    // Collapse the data by the windspeed
+    // Collapse the data by the windspeed // ********* This might not be necessary *********
     const firstColumnIndex = rows[0]
     const secondColumnIndex = rows[1]
     const newData = parameters.data.map((row) => {
@@ -85,6 +89,7 @@ class Performance {
             }
           ]
     */
+    console.log("\n\n")
     console.log("parameters.wind: ", parameters.wind)
     console.log("freezeData: ", JSON.parse(JSON.stringify(data)))
     //
@@ -93,118 +98,79 @@ class Performance {
     //
     // If at the upper limit wind, all arrays will be single value...
     // Hence the || operator (just use the value given)
-    
+
+    const targetAltitude = document.getElementById("altitude").value || 0
+    console.log("targetAltitude: ", targetAltitude)
+
+    // ----------------------------------------------------------------
+    // Adjust PA values for wind
+    // ----------------------------------------------------------------
+    console.log("Get Wind Factor: %o %o ", parameters.wind, data[0].wind)
+    const windFactor = root.calc.getRatio(parameters.wind, data[0].wind)
+
+    console.log("(ratio) windFactor: ", windFactor)
+
+    data = data.map((row) => {
+      // First, check if the row has a "pressureAltitude" property and if it's an array
+      if (Array.isArray(row.pressureAltitude)) {
+        // Loop through the "pressureAltitude" array and adjust arrays within each object
+        row.pressureAltitude = row.pressureAltitude.map((pa) => {
+          for (let key in pa) {
+            if (Array.isArray(pa[key])) {
+              pa[key] = root.calc.applyRatio(windFactor, pa[key])
+              if (root.debug) console.log("key: &o | pa[key]: %o", key, pa[key])
+            }
+          }
+          return pa
+        })
+        // row.pressureAltitude = root.calc.interpolatePAValues(
+        //   { alt: targetAltitude },
+        //   row.pressureAltitude
+        // )
+      }
+      // console.log("row: %o", row)
+      // row = { ...row, ...row.pressureAltitude }
+      return row
+    })
+
+    console.log("Wind adjusted data: ", data) // I trust the data to this point ********************
 
     // We are here ****************************************************************
-    // ************** Change this to be the value of the text input field ****************************
-    const targetAltitude = 2500 // *** for testing ********************************
+    // ----------------------------------------------------------------
+    // Interpolate for weight
+    // ----------------------------------------------------------------
 
-    const windFactor = root.calc.getRatio(parameters.wind, data[0].wind) || 1
-    console.log("windFactor: ", windFactor)
-    data.forEach((row) => {
-      row.pressureAltitude.forEach((pa) => {
-        pa.groundRun =
-          pa.groundRun[0] - (pa.groundRun[0] - pa.groundRun[1]) * windFactor || pa.groundRun[0]
-        pa.TODistance =
-          pa.TODistance[0] - (pa.TODistance[0] - pa.TODistance[1]) * windFactor || pa.TODistance[0]
-      })
-      console.log("pressureAltitude:", row.pressureAltitude)
-      const preassureAltitudeRows = root.calc.filterDataByProperty(row.pressureAltitude, targetAltitude, 'alt')
-      console.log("preassureAltitudeRows, ", preassureAltitudeRows)
-      // then collapse the rows by extracting interpolated data from them based on targetAltitude
-      // ********************************
+    //    get rows between by weight
+    //    Then interpolate by weight and we're done.
+
+    // Can likely use the same technique as above to take the two altitude arrays for each weight and interpolate them into one row.
+    // Then we interpolate the three rows into one based on weight.
+
+    // Strip down the altitudes to just the surrounding altitudes
+    let ratio
+
+    // Flatten the object (remove arrays and objects, just key:value pairs)
+    data = data.map((row) => {
+      const keyValueArray = Object.entries(row)
+      const filteredArray = keyValueArray.filter(
+        ([key, value]) => typeof value !== "object" && !Array.isArray(value)
+      )
+      row = Object.fromEntries(filteredArray)
+      return row
     })
-
-    console.log("Collapsed data ", data)
-    // ****************************************************************
-    // Find an flatten the preassureAltitude row with an alt of 0
-    // **** We're replacing this functionality *****************************
-    data.forEach((row) => {
-      const firstRow = row.pressureAltitude.find((obj) => obj.alt === 0)
-      Object.assign(row, firstRow) // merging the row up a level in the object
-    })
-
-    // Then we'll adjust for temperature at altitude
-    // Currently we assume sealevel and standard temperature
+    console.log("Data:: ", JSON.parse(JSON.stringify(data)))
 
 
-    /*
+    data = root.calc.findClosestObjectsByWeight(data,weight)
+    data = root.calc.interpolateValues({ weight: weight }, data)
 
-    Now to figure out the altitude interpolation factor.
-    Take the given altitude and interpolate between the two closest rows
-    Then, take that and refactor the standard temperature for that altitude (could also use the standard lapse rate)
-    Refactor the TO and 50ft distances for that altitude.
-    multiply by the temperature difference factor and the wind factor to get the final values.
-
-    Add altitude to the parameters (need txt input field in GUI)
+console.log("Result: ", data)
 
 
-
-
-
-    parameters:wind 
-
-newData[]:
-
-pressureAltitude [
-{alt: 0, temp: 59, groundRun: Array(2), TODistance: Array(2)}
-{alt: 2500, temp: 50, groundRun: Array(2), TODistance: Array(2)}
-]
-speed: 42
-weight: 2300
-wind [10, 20]
-*/
-
-    // ********************************
-    // Next, calculate the wind factor and interpolate the data ...
-    // Collapsing the ground and takeoff data based on the wind factor leaving a flat row.
-    // ********************************
-    //                  this needs to turn into that....
-    // We can also rewrite the following functions to be this structure:
-    // {
-    //   weight: 3350,
-    //   speed: 50,
-    //   wind: [0, 10, 20],
-    //   pressureAltitude: [
-    //     { alt: 0, temp: 59, groundRun: [490, 345, 220], TODistance: [870, 660, 465] },
-    //     { alt: 2500, temp: 50, groundRun: [595, 415, 235], TODistance: [1015, 765, 550] },
-    //   ],
-    // },
-    // {},
-    // { weight: 3350, speed: 50, wind: 0, groundRun: 490, TODistance: 870 },
-    // { weight: 2800, speed: 46, wind: 0, groundRun: 330, TODistance: 655 },
-    // { weight: 2300, speed: 42, wind: 0, groundRun: 210, TODistance: 500 },
-
-    //   data = [{}]
-
-    // const index = 0; // Choose the index you want to use for the arrays
-
-    // const inputObject = {
-    //   weight: 3350,
-    //   speed: 50,
-    //   wind: [0, 10, 20],
-    //   pressureAltitude: [
-    //     { alt: 0, temp: 59, groundRun: [490, 345, 220], TODistance: [870, 660, 465] },
-    //     { alt: 2500, temp: 50, groundRun: [595, 415, 235], TODistance: [1015, 765, 550] },
-    //   ],
-    // };
-
-    // const outputObject = {
-    //   weight: inputObject.weight,
-    //   speed: inputObject.speed,
-    //   wind: inputObject.wind[index],
-    //   groundRun: inputObject.pressureAltitude[index].groundRun[index],
-    //   TODistance: inputObject.pressureAltitude[index].TODistance[index],
-    // };
-
-    // console.log(outputObject);
-
-    const groundRoll = this.getGroundRoll(data, speed)
-    const distance = this.get50ftDistance(data, speed)
     alert(
-      `Takeoff Speed: ${Math.round(speed)} kts \nGroundRoll: ${Math.round(
-        groundRoll
-      )} \nTakeoff Distance (50ft): ${Math.round(distance)}`
+      `Takeoff Speed: ${Math.round(data.speed)} kts \nGroundRoll: ${Math.round(
+        data.groundRun
+      )} \nTakeoff Distance (50ft): ${Math.round(data.TODistance)}`
     )
   }
 
