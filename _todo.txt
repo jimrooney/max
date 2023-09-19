@@ -6,7 +6,14 @@ Need to be updated to the new data structure...
 
 {performance}
 
+This will be the same in both interportors
+        // *** Need a fix here for top weight (reports back 2300 if you use it [3350lbs])
 
+Gets munted on the output of this function
+    // ----------------------------------------------------------------
+    // Adjust PA values for wind
+    // Then return altitude specific single rows for PA
+    // ----------------------------------------------------------------
 
 This is wrong and needs fixing:
         const gap = obj2[key] - obj1[key]
@@ -15,7 +22,7 @@ This is wrong and needs fixing:
 
 
 
-        
+
 Mostly getting the right answers...
 // *** Need a fix here for top weight (reports back 2300 if you use it [3350lbs])
 

@@ -8,9 +8,12 @@ class Calculator {
   }
   // value (number), [0,1]
   getRatio(value, bounds) {
-    bounds.sort((a, b) => b - a)
-    return (value - bounds[1]) / (bounds[0] - bounds[1])
+    if (bounds.length === 1) return 1
+    bounds.sort((a, b) => a - b) // Sort in ascending order.
+    let ratio = (value - bounds[0]) / (bounds[1] - bounds[0]) // Adjusted formula
+    return ratio
   }
+  
   useRatio(ratio, bounds) {
     // Sort the bounds array in descending order
     bounds.sort((a, b) => b - a)
@@ -160,7 +163,7 @@ targetAltitude: 3000
 
   // Will take the difference between the value's data and apply that ratio to all the other values
   interpolatePAValues(value, data, flat) {
-    console.log("Interpolate: \nvalue: %o\n data: %o", value, data)
+    console.log("InterpolatePAValues: \nvalue: %o\n data: %o", value, data)
 
     data = data.filter((entry) => Object.keys(data).length > 0) // filter out empty entries
     const obj1 = data[0]
@@ -175,10 +178,13 @@ targetAltitude: 3000
 
         // find the ratio between the gap between the object values and the key's value.
 
-        const gap = obj2[key] - obj1[key]
-        const given = value[key]
-        const ratio = gap > 0 ? given / gap : given / obj2[key] // if 0 gap, means it's the top value, so use that.
-
+        // find the ratio between the gap between the object values and the key's value.
+        const min = obj1[key]; 
+        const max = obj2[key];
+        const given = value[key];
+        
+        let ratio = (given - min) / (max - min); 
+        
         // apply the ratio
         for (const k in obj2) {
           if (k !== key) {
@@ -194,7 +200,7 @@ targetAltitude: 3000
 
   // Will take the difference between the value's data and apply that ratio to all the other values
   interpolateValues(value, data) {
-    console.log("Interpolate: \nvalue: %o\n data: %o", value, data)
+    console.log("InterpolateValues: \nvalue: %o\n data: %o", value, data)
 
     if (!data[0]) return data[1]
     if (!data[1]) return data[0]
@@ -254,9 +260,19 @@ targetAltitude: 3000
     }
     return result
   }
+
   applyRatio(ratio, data) {
+    data.sort((a, b) => b - a)
     if (root.debug) console.log("Apply Ratio: ratio: %o data: %o", ratio, data)
-    if (ratio === 1) return data
-    return data.map((row) => row - row * ratio)
+    if (ratio === 1) {
+      if (data.length === 1) return data[0]  
+      return data
+    }
+    const B = data[0]
+    const L = data[1]
+    const P = (B-L) * ratio
+    const ret = B-P
+    if (root.debug) console.log("ret: ", ret)
+    return ret
   }
 }

@@ -104,10 +104,11 @@ class Performance {
 
     // ----------------------------------------------------------------
     // Adjust PA values for wind
-    // Then return altitude specific single rows for PA
     // ----------------------------------------------------------------
-    const windFactor = root.calc.getRatio(parameters.wind, data[0].wind) || 1
-    if (root.debug) console.log("(ratio) windFactor: ", windFactor)
+    console.log("Get Wind Factor: %o %o ", parameters.wind, data[0].wind)
+    const windFactor = root.calc.getRatio(parameters.wind, data[0].wind)
+
+    console.log("(ratio) windFactor: ", windFactor)
 
     data = data.map((row) => {
       // First, check if the row has a "pressureAltitude" property and if it's an array
@@ -116,23 +117,23 @@ class Performance {
         row.pressureAltitude = row.pressureAltitude.map((pa) => {
           for (let key in pa) {
             if (Array.isArray(pa[key])) {
-              pa[key] = root.calc.applyRatio(windFactor, pa[key])[0]
+              pa[key] = root.calc.applyRatio(windFactor, pa[key])
               if (root.debug) console.log("key: &o | pa[key]: %o", key, pa[key])
             }
           }
           return pa
         })
-        row.pressureAltitude = root.calc.interpolatePAValues(
-          { alt: targetAltitude },
-          row.pressureAltitude
-        )
+        // row.pressureAltitude = root.calc.interpolatePAValues(
+        //   { alt: targetAltitude },
+        //   row.pressureAltitude
+        // )
       }
-      console.log("row: %o", row)
-      row = { ...row, ...row.pressureAltitude }
+      // console.log("row: %o", row)
+      // row = { ...row, ...row.pressureAltitude }
       return row
     })
 
-    console.log("Wind and Height adjusted data: ", data)
+    console.log("Wind adjusted data: ", data) // I trust the data to this point ********************
 
     // We are here ****************************************************************
     // ----------------------------------------------------------------
@@ -157,7 +158,7 @@ class Performance {
       row = Object.fromEntries(filteredArray)
       return row
     })
-
+    console.log("Data:: ", JSON.parse(JSON.stringify(data)))
 
 
     data = root.calc.findClosestObjectsByWeight(data,weight)
