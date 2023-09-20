@@ -6,14 +6,15 @@ class Calculator {
     console.log("hello")
     return "hello"
   }
-  
-  getRatio(value, bounds) { // value (number), [0,1]
+
+  getRatio(value, bounds) {
+    // value (number), [0,1]
     if (bounds.length === 1) return 1
     bounds.sort((a, b) => a - b) // Sort in ascending order.
     let ratio = (value - bounds[0]) / (bounds[1] - bounds[0]) // Adjusted formula
     return ratio
   }
-  
+
   getRatio2(value, bounds) {
     bounds.sort((a, b) => b - a) // Descending orer
     const Big = bounds[0]
@@ -203,26 +204,49 @@ targetAltitude: 3000
     return result
   }
 
-
   /*
 [ 
 {alt: 0, temp: 59, groundRun: 210, TODistance: 500}
 {alt: 2500, temp: 50, groundRun: 255, TODistance: 545}
 ]
 */
-  // Will take the difference between the value's data and apply that ratio to all the other values
+  // Ttake the difference between the value's data and apply that ratio to all the other values
+
+  /* The `applyRatioToRow` function takes a ratio and a row of data as input. It applies the ratio to
+  the gap between the values in the row and returns a new row with the adjusted values. The function
+  iterates over each key in the row and checks if both objects in the row have that key. If they do,
+  it applies the ratio to the gap between the values for that key. If the key is an array or the
+  ratio is 1, it returns the corresponding value as is. The function returns the new row with the
+  adjusted values. */
   applyRatioToRow(ratio, data) {
     // apply the ratio to the gap between the other object values
     let result = {}
-    Object.keys(data[0]).forEach(key => {
+    Object.keys(data[0]).forEach((key) => {
       const obj1 = data[0]
       const obj2 = data[1]
-      if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key) && !Array.isArray(obj1[key])) { // both have the key
+
+      if (
+        obj1.hasOwnProperty(key) &&
+        obj2.hasOwnProperty(key) &&
+        !Array.isArray(obj1[key]) &&
+        ratio !== 1
+      ) {
+        // both have the key
         let invert = true
-        if (key === 'temp') invert = false
+        if (key === "temp") invert = false
         result[key] = this.applyRatio(ratio, [obj1[key], obj2[key]], true)
       }
+
+      if (Array.isArray(obj1[key]) || ratio === 1) {
+        result[key] = obj1[key][1]
+        if (key === "temp") result[key] = obj1[key][0]
+      }
+
+      if (ratio === 1) result[key] = obj2[key]
+
+      console.log("Result: ", result)
     })
+
     return result
   }
 
@@ -248,10 +272,13 @@ targetAltitude: 3000
     if (invert) {
       data.sort((a, b) => a - b)
     }
-    if (root.debug) console.log("Apply Ratio: ratio: %o data: %o", ratio, data)
+    console.log("Apply Ratio: ratio: %o data: %o", ratio, data)
     if (ratio === 1) {
-      if (data.length === 1) return data[0]
-      return data
+      if (data.length === 1) {
+        return data[0]
+      } else {
+        return data
+      }
     }
     const B = data[0]
     const L = data[1]
