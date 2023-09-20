@@ -217,7 +217,7 @@ targetAltitude: 3000
     Object.keys(data[0]).forEach(key => {
       const obj1 = data[0]
       const obj2 = data[1]
-      if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) { // both have the key
+      if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key) && !Array.isArray(obj1[key])) { // both have the key
         let invert = true
         if (key === 'temp') invert = false
         result[key] = this.applyRatio(ratio, [obj1[key], obj2[key]], true)

@@ -6,28 +6,9 @@ Need to be updated to the new data structure...
 
 {performance}
 
-Collapsing by PA mostly correct 
-    (exact upper values return arrays rather than values)
-    So 7500ft alt returns arrays
-
-Next up, collapse by weight and test.
-    Later we can add temp.
-
-
-Likely same problem with the wind ratio calculator...
-// if 0 gap, means it's the top value, so use that.
-   Proably same issue ---> All wind values below 10kts report out of bounds :(
-
-    // We are here ****************************************************************
-    Can likely use the same techniques as // Tweak PA values for wind
-    (wind adjustments)
-
-
-    findAdjacentRows sends back an extra array value (int)
-
-    // This is where we'll interpolate the data based on temperature and altitude
-    // Currently we assume sealevel and standard temperature
-    // Find an flatten the preassureAltitude row with an alt of 0
+    // ****************************************************************
+    // Needs a check here... if the values are all arrays, use array [1] values except for temp (use [0] for that)
+    // ****************************************************************
 
     
 Random Stuff:
