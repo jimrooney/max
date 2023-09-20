@@ -128,13 +128,6 @@ class Performance {
     })
     console.log("Frozen Wind Data: " , JSON.parse(JSON.stringify(data)))
     console.log("Wind adjusted data: ", data) 
-
-    const adjacentRows = root.calc.findAdjacentRows(data, weight, "weight")
-    const adjacentWeights = adjacentRows.map((item) => item.weight)
-    console.log("Rows: %o Weights: %o", adjacentRows, adjacentWeights)
-    const weightRatio = root.calc.getRatio(weight, adjacentWeights)
-    console.log("weightRatio: ", weightRatio)
-    console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))// I trust the data to this point ********************
     
     // Collapse for PA (2 sets of 2 rows become 2 sets of 1 row)
     // The collapse the two remaining rows for weight
@@ -159,70 +152,23 @@ class Performance {
       console.log("Row: ", row)
       return row
     })
+
+    const adjacentRows = root.calc.findAdjacentRows(data, weight, "weight")
+    const adjacentWeights = adjacentRows.map((item) => item.weight)
+    console.log("Rows: %o Weights: %o", adjacentRows, adjacentWeights)
+    const weightRatio = root.calc.getRatio(weight, adjacentWeights)
+
+    console.log("weightRatio: ", weightRatio)
     console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))
 
-return
 
-    // Later, for fun, maybe consolodate this into an interpolate function ***
-    data = data.map((row) => {
-      // First, check if the row has a "pressureAltitude" property and if it's an array
-      if (Array.isArray(row.pressureAltitude)) {
-        console.log("row ", row)
-        const ratio = root.calc.getRatio(
-          { alt: targetAltitude },
-          row.pressureAltitude
-        )
-        console.log("Pressure Altitude Ratio: ", ratio)
-        // Loop through the "pressureAltitude" array and adjust arrays within each object
-        row.pressureAltitude = row.pressureAltitude.map((pa) => {
-          for (let key in pa) {
-            if (Array.isArray(pa[key])) {
-              pa[key] = root.calc.applyRatio(ratio, pa[key])
-              console.log("key: &o | pa[key]: %o", key, pa[key])
-            }
-          }
-          return pa
-        })
-        // row.pressureAltitude = root.calc.interpolatePAValues(
-        //   { alt: targetAltitude },
-        //   row.pressureAltitude
-        // )
-      }
-      // console.log("row: %o", row)
-      // row = { ...row, ...row.pressureAltitude }
-      return row
-    })
 
-    return
+    // ****************************************************************
+    // Needs a check here... if the values are all arrays, use array [1] values except for temp (use [0] for that)
+    // ****************************************************************
+    data = root.calc.applyRatioToRow(weightRatio, adjacentRows)
 
-    // We are here ****************************************************************
-    // ----------------------------------------------------------------
-    // Interpolate for weight
-    // ----------------------------------------------------------------
-
-    //    get rows between by weight
-    //    Then interpolate by weight and we're done.
-
-    // Can likely use the same technique as above to take the two altitude arrays for each weight and interpolate them into one row.
-    // Then we interpolate the three rows into one based on weight.
-
-    // Strip down the altitudes to just the surrounding altitudes
-    let ratio
-
-    // Flatten the object (remove arrays and objects, just key:value pairs)
-    data = data.map((row) => {
-      const keyValueArray = Object.entries(row)
-      const filteredArray = keyValueArray.filter(
-        ([key, value]) => typeof value !== "object" && !Array.isArray(value)
-      )
-      row = Object.fromEntries(filteredArray)
-      return row
-    })
-    console.log("Data:: ", JSON.parse(JSON.stringify(data)))
-
-    data = root.calc.findAdjacentRows(data, weight, "weight")
-    data = root.calc.interpolateValues({ weight: weight }, data)
-
+    console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))
     console.log("Result: ", data)
 
     alert(
