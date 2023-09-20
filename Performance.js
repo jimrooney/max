@@ -161,11 +161,7 @@ class Performance {
     console.log("weightRatio: ", weightRatio)
     console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))
 
-
-
-    // ****************************************************************
-    // Needs a check here... if the values are all arrays, use array [1] values except for temp (use [0] for that)
-    // ****************************************************************
+    console.log("applyRatioToRow: ratio: %o  Data: %o ", weightRatio, adjacentRows)
     data = root.calc.applyRatioToRow(weightRatio, adjacentRows)
 
     console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))
