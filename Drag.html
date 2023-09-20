@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="Airplanes.js"></script>
+    <script src="Display.js"></script>
+    <script src="data.js"></script>
+    <script src="Calculator.js"></script>
+    <script src="UI.js"></script>
+    <script src="Performance.js"></script>
+    <script src="root.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #draggableDiv {
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            position: absolute;
+            user-drag: none;
+            -webkit-user-drag: none;
+            cursor: grab;
+        }
+    </style>
+</head>
+<body>
+    <div id="draggableDiv"></div>
+
+    <script>
+        const draggableDiv = document.getElementById('draggableDiv');
+        let startY, currentY = 0;
+        let dragging = false;
+
+        draggableDiv.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            dragging = true;
+            if(root.isIOs) e.preventDefault();
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (dragging) {
+                currentY = e.touches[0].clientY;
+                const offsetY = currentY - startY;
+                draggableDiv.style.transform = `translateY(${offsetY}px)`;
+                if(root.isIOs) e.preventDefault();
+            }
+        });
+
+        window.addEventListener('touchend', () => {
+            dragging = false;
+        });
+    </script>
+</body>
+</html>

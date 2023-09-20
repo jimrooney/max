@@ -1,5 +1,5 @@
 if (!root) {
-  let root
+  var root = {}
 }
 Array.prototype.each = Array.prototype.forEach // jQuery style method
 
@@ -12,6 +12,20 @@ root = {
   performance: new Performance(),
   calc: new Calculator(),
   ui: new UI(),
+
+  // Check for Apple
+  iOSCheck() {
+    const userAgent = navigator.userAgent;
+    const iOSDevices = ["iPhone", "iPad", "iPod"];
+  
+    for (const device of iOSDevices) {
+      if (userAgent.includes(device)) {
+        return true;
+      }
+    }
+  
+    return false;
+  },
   //
   // Load external data
   //
@@ -233,3 +247,4 @@ root = {
     document.getElementById("WAM").appendChild(WB.table)
   },
 }
+root.isiOS = root.iOSCheck()

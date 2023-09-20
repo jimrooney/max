@@ -18,6 +18,28 @@
     alert("button")
   }
   const calc = new Calculator()
+
+  function detectiOS() {
+  const userAgent = navigator.userAgent;
+  const iOSDevices = ["iPhone", "iPad", "iPod"];
+
+  for (const device of iOSDevices) {
+    if (userAgent.includes(device)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+const isiOS = detectiOS();
+
+if (isiOS) {
+  alert("Client is on an iPad or iPhone.");
+} else {
+  alert("Client is not on an iPad or iPhone.");
+}
+
 </script>
 <head>
   <!-- PWA Stuff -->

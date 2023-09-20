@@ -50,7 +50,7 @@ class UI {
           this.updateDivPosition(touch.clientX, touch.clientY)
         }
       },
-      { passive: false } // Specify passive: false to preventDefault
+      { passive: !root.isiOS } // Specify passive: false to preventDefault
     )
 
     // -- Up --
@@ -78,7 +78,7 @@ class UI {
             e.preventDefault() // Prevent default touch behavior
             this.setActiveDiv(dragDiv)
           },
-          { passive: false } // Specify passive: false to preventDefault
+          { passive: !root.isiOS } // Specify passive: false to preventDefault
         )
       }
     })
