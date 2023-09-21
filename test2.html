@@ -4,7 +4,6 @@
 <script src="JimQuery.js"></script>
 <script src="navbar.js"></script>
 
-<!-- <script src="DOM.js"></script> -->
 <script src="data.js"></script>
 <script src="Airplanes.js"></script>
 <script src="Display.js"></script>
@@ -14,219 +13,92 @@
 <script src="root.js"></script>
 
 <script>
-  const clickButton = function () {
-    alert("button")
-  }
-  const calc = new Calculator()
-
-  function detectiOS() {
-  const userAgent = navigator.userAgent;
-  const iOSDevices = ["iPhone", "iPad", "iPod"];
-
-  for (const device of iOSDevices) {
-    if (userAgent.includes(device)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-const isiOS = detectiOS();
-
-if (isiOS) {
-  alert("Client is on an iPad or iPhone.");
-} else {
-  alert("Client is not on an iPad or iPhone.");
-}
-
+  var clickButton
 </script>
 <head>
   <!-- PWA Stuff -->
   <link rel="canonical" href="https://balance.jimrooney.com/" />
   <link rel="manifest" href="manifest.json" />
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            overscroll-behavior: none; /* Disable overscrolling */
+        }
 
-
-
-
+        #draggableDiv {
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            position: absolute;
+            user-drag: none;
+            -webkit-user-drag: none;
+            cursor: grab;
+        }
+    </style>
 </head>
+
 <body>
   <div id="navbar"></div>
-<div id="follow-div">
-  <div class="boxarrow"></div>
-  <input type="text" value="Hello">
-</div>
+  <div id="debug" onclick="clickButton()">HELLO</div>
+  <div id="draggableDiv">
+    <div class="boxarrow"></div>
+    <input type="text" value="Hello" />
+  </div>
 
+  <script>
+    const draggableDiv = document.getElementById('draggableDiv');
+    let startY, initialTranslateY = 0;
+    let dragging = false;
 
+    draggableDiv.addEventListener('touchstart', (e) => {
+        startY = e.touches[0].clientY;
+        initialTranslateY = getTranslateY(draggableDiv);
+        dragging = true;
+        e.preventDefault();
+    });
 
+    window.addEventListener('touchmove', (e) => {
+        if (dragging) {
+            const touch = e.touches[0];
+            const newY = touch.clientY;
+            const offsetY = newY - startY;
+            const newTranslateY = initialTranslateY + offsetY;
+            draggableDiv.style.transform = `translateY(${newTranslateY}px)`;
+            e.preventDefault();
+        }
+    });
 
+    window.addEventListener('touchend', () => {
+        dragging = false;
+    });
 
-<!-- <div class="nav">
-  <a href="/">Home</a> | Flex Navigation
-  <div style="align-self: center">3</div>
-</div> -->
-
-      <select name="myList" id="myList">
-        <option value="Distance50">Distance50</option>
-        <option value="TO Speed">TO Speed</option>
-        <option value="Hello" onClick="calc.hello()">Hello</option>
-      </select>
-
-
-<!-- <nav>
-  <h1 class="logo">LOGO</h1>
-
-  <ul class="menu">
-    <li><a href="">About</a></li>
-    <li>
-      <label for="myList">List:</label>
-
-    </li>
-
-    <li><a href="" onClick="clickButton()">Contact</a></li>
-    <li><a href="" onClick="calc.hello()">Hello</a></li>
-  </ul>
-
-  <ul class="social">
-    <li>
-      <input
-        type="text"
-        id="weight"
-        onkeydown="if (event.keyCode == 13) $('byWeight').click()"
-        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-      />
-    </li>
-    <li>
-      <input
-        type="button"
-        id="byWeight"
-        value="By Weight"
-        onclick="byWeight($('weight').value);"
-      />
-    </li>
-    <li><a href="" class="MyButtons CalculateDistance">Calc</a></li>
-  </ul>
-</nav> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    function getTranslateY(element) {
+        const transformStyle = window.getComputedStyle(element).transform;
+        const matrix = new DOMMatrix(transformStyle);
+        return matrix.m42 || 0;
+    }
+</script>
 </body>
 
-
-
-
-
-
-
-
 <script type="text/javascript">
-  $().ready(()=>{
-  console.log("div ", $("#follow-div"))
-  root.ui.setDraggable($("#follow-div"))
+  $().ready(() => {
+    console.log("div ", $("#follow-div"))
+    root.ui.setDraggable($("#follow-div"))
 
-  $("#follow-div").on("mousedown", function () {
-    root.ui.setActiveDiv(this)
-  })
-
-  // process_touchend = () => {
-  //   console.log("touchend")
-  // }
-  
-  // dragArrow.forEach((arrow) => {
-    // arrow.on("touchend", process_touchend, false)
-    // Create touchend handler
-    // arrow.on(
-    //   "touchend",
-    //   (ev) => {
-    //     // Iterate through the touch points that ended
-    //     for (let i = 0; i < ev.changedTouches.length; i++) {
-    //       console.log("TouchEnd ", ev.changedTouches[i].target)
-    //       console.log("Mouse: ", ev.clientX, ev.clientY)
-    //     }
-    //   },
-    //   false
-    // )
-
-    // Create touchstart handler
-    // arrow.on(
-    //   "touchstart",
-    //   (ev) => {
-    //     // Iterate through the touch points that were activated
-    //     // for this element and process each event 'target'
-    //     for (let i = 0; i < ev.targetTouches.length; i++) {
-    //       console.log("TouchStart ", ev.targetTouches[i].target)
-    //     }
-    //   },
-    //   false
-    // )
-    // arrow.on("mousedown", (event) => {
-    //   console.log("Click Down ", event.clientX, event.clientY)
-    // })
-    // arrow.on("mouseup", (event) => {
-    //   console.log("Mouse Up", event.clientX, event.clientY)
-    // })
-  // })
-
-  function byWeight(weight) {
-    const speed = root.performance.getTakeoffSpeed(root.data.test, weight)
-    const groundRoll = root.performance.getGroundRoll(root.data.test, speed)
-    const distance = root.performance.get50ftDistance(root.data.test, speed)
-    alert(
-      `Takeoff Speed: ${Math.round(speed)} kts \nGroundRoll: ${Math.round(
-        groundRoll
-      )} \nTakeoff Distance (50ft): ${Math.round(distance)}`
-    )
-  }
-
-  const calcButtons = document.querySelectorAll(".MyButtons.CalculateDistance")
-  // Loop through all matching elements and add a click event listener to each
-  calcButtons.forEach(function (calcButton) {
-    calcButton.on("click", function (event) {
-      // Prevent the default behavior of the anchor (e.g., navigating to a new page)
-      event.preventDefault()
-      alert(root.performance.get50ftDistance(root.data.test, 43))
+    $("#follow-div").on("mousedown", function () {
+      root.ui.setActiveDiv(this)
     })
   })
 
-  const dropdown = $("myList")
-  const weight = $("weight")
-
-  // Add a change event listener to the <select> element
-  dropdown.on("change", function () {
-    let selectedValue = dropdown.value
-
-    // Check if the selected value is the one you want to trigger the function for
-    if (selectedValue === "Distance50") {
-      alert(root.performance.get50ftDistance(root.data.test, 43)) // data speed
-      console.log(weight.value)
-    }
-    if (selectedValue === "TO Speed") {
-      alert(root.performance.getTakeoffSpeed(root.data.test, 2400)) // data/weight
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("debug").innerHTML = root.ui.hi
+    clickButton = function () {
+      alert("buttons: ", root.ui.hi)
+      root.ui.init()
     }
   })
-})
 </script>
-

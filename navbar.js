@@ -1,4 +1,4 @@
-let root = {
+var root = {
   addScript(src) {
     // Create a new script element
     let script = document.createElement("script")

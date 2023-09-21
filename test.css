@@ -1,9 +1,12 @@
-#follow-div {
-    position: absolute;
+#follow-div, #draggableDiv {
     width: 100px;
     height: 82px;
     background-color: lightgray;
     right: 0; /* right justify */
+    position: absolute;
+    user-drag: none;
+    -webkit-user-drag: none;
+    cursor: grab;
 }
 
 .boxarrow {

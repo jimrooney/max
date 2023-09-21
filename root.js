@@ -1,4 +1,5 @@
-if (!root) {
+
+if (typeof root === 'undefined') {
   var root = {}
 }
 Array.prototype.each = Array.prototype.forEach // jQuery style method
