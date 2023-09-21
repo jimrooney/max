@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="test.css" />
 <link rel="stylesheet" href="CSS.css" />
+<link rel="stylesheet" href="drag.css" />
 
 <script src="JimQuery.js"></script>
 <script src="navbar.js"></script>
@@ -13,7 +14,10 @@
 <script src="root.js"></script>
 
 <script>
-  var clickButton
+  //var clickButton
+  makeMeDrag = function(){
+    draggableDiv = document.getElementById("draggableDiv")
+  }
 </script>
 <head>
   <!-- PWA Stuff -->
@@ -22,83 +26,18 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            overscroll-behavior: none; /* Disable overscrolling */
-        }
-
-        #draggableDiv {
-            width: 100px;
-            height: 100px;
-            background-color: blue;
-            position: absolute;
-            user-drag: none;
-            -webkit-user-drag: none;
-            cursor: grab;
-        }
-    </style>
 </head>
 
 <body>
+  <div id="draggableContainer">
+    <div class="draggable boxarrow">HELLO</div>
+    <div class="draggable boxarrow">NURSE</div>
+
   <div id="navbar"></div>
-  <div id="debug" onclick="clickButton()">HELLO</div>
-  <div id="draggableDiv">
+  <div id="draggableDiv" class="draggable draggableDiv">
     <div class="boxarrow"></div>
     <input type="text" value="Hello" />
   </div>
-
-  <script>
-    const draggableDiv = document.getElementById('draggableDiv');
-    let startY, initialTranslateY = 0;
-    let dragging = false;
-
-    draggableDiv.addEventListener('touchstart', (e) => {
-        startY = e.touches[0].clientY;
-        initialTranslateY = getTranslateY(draggableDiv);
-        dragging = true;
-        e.preventDefault();
-    });
-
-    window.addEventListener('touchmove', (e) => {
-        if (dragging) {
-            const touch = e.touches[0];
-            const newY = touch.clientY;
-            const offsetY = newY - startY;
-            const newTranslateY = initialTranslateY + offsetY;
-            draggableDiv.style.transform = `translateY(${newTranslateY}px)`;
-            e.preventDefault();
-        }
-    });
-
-    window.addEventListener('touchend', () => {
-        dragging = false;
-    });
-
-    function getTranslateY(element) {
-        const transformStyle = window.getComputedStyle(element).transform;
-        const matrix = new DOMMatrix(transformStyle);
-        return matrix.m42 || 0;
-    }
-</script>
+</div>
 </body>
-
-<script type="text/javascript">
-  $().ready(() => {
-    console.log("div ", $("#follow-div"))
-    root.ui.setDraggable($("#follow-div"))
-
-    $("#follow-div").on("mousedown", function () {
-      root.ui.setActiveDiv(this)
-    })
-  })
-
-  document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("debug").innerHTML = root.ui.hi
-    clickButton = function () {
-      alert("buttons: ", root.ui.hi)
-      root.ui.init()
-    }
-  })
-</script>
+<script src="drag.js"></script>

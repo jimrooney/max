@@ -29,14 +29,7 @@ class UI {
     }
   }
   init() {
-    alert("UI.init() called")
-    document.addEventListener('DOMContentLoaded', function () {
-
-      document.getElementById('debug').innerHTML = "Bugga";
-  })
-
-
-
+    
 //
 // Attach event listeners to the document to capture mouse events (drag and up)
 //
@@ -45,36 +38,36 @@ class UI {
 // Mouse and Touch down events are fired by clicking on the div.
 
 // -- Mouse Move -- (drag)
-document.addEventListener("mousemove", (e) => {
-  if (!!this.activeDiv) {
-    this.lastPosition = { x: e.clientX, y: e.clientY }
-    this.updateDivPosition(e.clientX, e.clientY)
-  }
-})
-// -- Touch Move -- (drag)
-document.addEventListener(
-  "touchmove",
-  (e) => {
-    if (!!this.activeDiv) {
+// document.addEventListener("mousemove", (e) => {
+//   if (!!this.activeDiv) {
+//     this.lastPosition = { x: e.clientX, y: e.clientY }
+//     this.updateDivPosition(e.clientX, e.clientY)
+//   }
+// })
+// // -- Touch Move -- (drag)
+// document.addEventListener(
+//   "touchmove",
+//   (e) => {
+//     if (!!this.activeDiv) {
 
-    }
+//     }
 
-    const touch = e.touches[0]
-    this.lastPosition = { x: touch.clientX, y: touch.clientY }
-    this.updateDivPosition(touch.clientX, touch.clientY)
-    if(root.isIOs) e.preventDefault()
+//     const touch = e.touches[0]
+//     this.lastPosition = { x: touch.clientX, y: touch.clientY }
+//     this.updateDivPosition(touch.clientX, touch.clientY)
+//     if(root.isIOs) e.preventDefault()
 
-    this.log("moving...")
-  },
-)
+//     this.log("moving...")
+//   },
+// )
 
-// -- Up --
-document.addEventListener("mouseup", () => {
-  this.stopDragging()
-})
-document.addEventListener("touchend", () => {
-  this.stopDragging()
-})
+// // -- Up --
+// document.addEventListener("mouseup", () => {
+//   this.stopDragging()
+// })
+// document.addEventListener("touchend", () => {
+//   this.stopDragging()
+// })
 
 
 } // ----------------------- end init() -----------------------
