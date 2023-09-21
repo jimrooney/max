@@ -31,12 +31,19 @@ document.addEventListener("DOMContentLoaded", function () {
       const clientY = e.clientY || e.touches[0].clientY
       const offsetX = clientX - startX
       const offsetY = clientY - startY
-      const newTranslateX = initialTranslateX + offsetX
-      const newTranslateY = initialTranslateY + offsetY
+  
+      // Check if the current draggable element has the "constraint" attribute set to "y"
+      const isYConstrained = currentDraggable.getAttribute("constraint") === "y"
+  
+      // Update the translate values based on the constraint
+      const newTranslateX = isYConstrained ? initialTranslateX : initialTranslateX + offsetX
+      const newTranslateY = isYConstrained ? initialTranslateY + offsetY : initialTranslateY
+  
       currentDraggable.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px)`
       e.preventDefault()
     }
   }
+  
 
   // Touch and Mouse End
   const endEvent = () => {
@@ -47,9 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
   draggableContainer.addEventListener("mousemove", moveEvent)
   draggableContainer.addEventListener("mouseup", endEvent)
 
-  draggableContainer.addEventListener("touchstart", startEvent)
-  window.addEventListener("touchmove", moveEvent)
-  window.addEventListener("touchend", endEvent)
+  draggableContainer.addEventListener("touchstart", startEvent, { passive: false })
+  window.addEventListener("touchmove", moveEvent, { passive: false })
+  window.addEventListener("touchend", endEvent, { passive: false })
 
   function getTranslateY(element) {
     const transformStyle = window.getComputedStyle(element).transform

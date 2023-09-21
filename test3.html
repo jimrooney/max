@@ -1,17 +1,100 @@
+<link rel="stylesheet" href="test.css" />
 <link rel="stylesheet" href="CSS.css" />
-<script src="JimQuery.js"></script>
-<script src="navbar.js"></script>
+<link rel="stylesheet" href="drag.css" />
+
 
 <script>
-    $().ready(()=>{
-        console.log("Still Ready!")
-        console.log($(document))
-    }
-    )
-    </script>
+  //var clickButton
+  makeMeDrag = function(){
+    draggableDiv = document.getElementById("draggableDiv")
+  }
+</script>
+<head>
+  <!-- PWA Stuff -->
+  <link rel="canonical" href="https://balance.jimrooney.com/" />
+  <link rel="manifest" href="manifest.json" />
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 
 <body>
-<div id="navbar"></div>
-<!-- <object data="images/mask.svg" type="image/svg+xml"></object> -->
-<object data="images/CompassRing.svg" type="image/svg+xml"></object>
+  <div id="draggableContainer">
+    <div class="draggable boxarrow" constraint="y" >Y</div>
+    <div class="draggable boxarrow">XY</div>
+
+  <div id="navbar"></div>
+  <div id="draggableDiv" class="draggable draggableDiv">
+    <div class="boxarrow"></div>
+    <input type="text" value="Hello" />
+  </div>
+</div>
 </body>
+<script type="text/javascript">
+    let currentDraggable = null
+let startX,
+  startY,
+  initialTranslateX = 0,
+  initialTranslateY = 0
+let dragging = false
+
+document.addEventListener("DOMContentLoaded", function () {
+  const draggableContainer = document.getElementById("draggableContainer")
+
+  // Touch and Mouse Start
+  const startEvent = (e) => {
+    const target = e.target
+    if (target.classList.contains("draggable")) {
+      currentDraggable = target
+      startX = e.clientX || e.touches[0].clientX
+      startY = e.clientY || e.touches[0].clientY
+      const transformStyle = window.getComputedStyle(currentDraggable).transform
+      const matrix = new DOMMatrix(transformStyle)
+      initialTranslateX = matrix.m41 || 0
+      initialTranslateY = matrix.m42 || 0
+      dragging = true
+      e.preventDefault()
+    }
+  }
+
+  // Touch and Mouse Move
+  const moveEvent = (e) => {
+    if (dragging) {
+      const clientX = e.clientX || e.touches[0].clientX
+      const clientY = e.clientY || e.touches[0].clientY
+      const offsetX = clientX - startX
+      const offsetY = clientY - startY
+  
+      // Check if the current draggable element has the "constraint" attribute set to "y"
+      const isYConstrained = currentDraggable.getAttribute("constraint") === "y"
+  
+      // Update the translate values based on the constraint
+      const newTranslateX = isYConstrained ? initialTranslateX : initialTranslateX + offsetX
+      const newTranslateY = isYConstrained ? initialTranslateY + offsetY : initialTranslateY
+  
+      currentDraggable.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px)`
+      e.preventDefault()
+    }
+  }
+  
+
+  // Touch and Mouse End
+  const endEvent = () => {
+    dragging = false
+  }
+
+  draggableContainer.addEventListener("mousedown", startEvent)
+  draggableContainer.addEventListener("mousemove", moveEvent)
+  draggableContainer.addEventListener("mouseup", endEvent)
+
+  draggableContainer.addEventListener("touchstart", startEvent, { passive: false })
+  window.addEventListener("touchmove", moveEvent, { passive: false })
+  window.addEventListener("touchend", endEvent, { passive: false })
+
+  function getTranslateY(element) {
+    const transformStyle = window.getComputedStyle(element).transform
+    const matrix = new DOMMatrix(transformStyle)
+    return matrix.m42 || 0
+  }
+})
+</script>

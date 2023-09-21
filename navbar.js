@@ -53,6 +53,22 @@ var root = {
       x.style.display = "none"
     }
   },
+  isiOS: function () {
+    return iOSCheck()
+  },
+  // Check for Apple
+  iOSCheck() {
+    const userAgent = navigator.userAgent
+    const iOSDevices = ["iPhone", "iPad", "iPod"]
+
+    for (const device of iOSDevices) {
+      if (userAgent.includes(device)) {
+        return true
+      }
+    }
+    // If no iOS device is detected, return false
+    return false
+  },
 }
 
 //window.onload = () => {

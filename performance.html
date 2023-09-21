@@ -1,6 +1,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <link rel="stylesheet" href="test.css" />
 <link rel="stylesheet" href="CSS.css" />
+<link rel="stylesheet" href="drag.css" />
 
 <script src="JimQuery.js"></script>
 <script src="navbar.js"></script>
@@ -25,9 +26,9 @@
   <link rel="manifest" href="manifest.json" />
 </head>
 <body>
+  <div id="draggableContainer">
   <div id="navbar"></div>
-  <div id="follow-div">
-    <div class="boxarrow"></div>
+  <div class="draggable boxarrow">
     <div><input id="sliderText" type="text" value="Hello Nurse" /></div>
   </div>
   <div>
@@ -75,6 +76,8 @@
   altitude: document.querySelector('#altitude').value || 0,
 });"
 />
+<div class="draggable boxarrow">HELLO</div>
+</div>
 </body>
 
 <script type="text/javascript">
@@ -165,3 +168,4 @@
     })
   })
 </script>
+<script src="drag.js"></script>

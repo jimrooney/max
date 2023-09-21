@@ -6,6 +6,9 @@ Need to be updated to the new data structure...
 
 {performance}
 
+Fix drag.js (needs to have the Apple check/fix)
+[Intervention] Unable to preventDefault inside passive event listener due to target being treated as passive. See <URL>
+
     // ****************************************************************
     // Needs a check here... if the values are all arrays, use array [1] values except for temp (use [0] for that)
     // ****************************************************************
