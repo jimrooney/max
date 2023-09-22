@@ -6,8 +6,10 @@ Need to be updated to the new data structure...
 
 {performance}
 
-Fix drag.js (needs to have the Apple check/fix)
-[Intervention] Unable to preventDefault inside passive event listener due to target being treated as passive. See <URL>
+Altitude slider needs to be reversed (so higher on the screen = higher altitude).
+    All sliders need constraints. Maybe gey limits boxes? Maybe constrain to the boxes?
+    Headwind slider needs to be activated.
+    All sliders need different factors and ratios rather than just percentage of screen.
 
     // ****************************************************************
     // Needs a check here... if the values are all arrays, use array [1] values except for temp (use [0] for that)
