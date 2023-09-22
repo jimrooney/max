@@ -7,7 +7,7 @@ class Performance {
     return "hello"
   }
   byWeight(parameters) {
-    console.log("parameters: ", JSON.parse(JSON.stringify(parameters)))
+  if (root.debug)  console.log("parameters: ", JSON.parse(JSON.stringify(parameters)))
 
     // // *** Maybe set a value here so this condition can be flagged visually in the GUI ***
     // const maxHeadwind = parameters.data[0].wind.slice(
@@ -61,7 +61,7 @@ class Performance {
       }
       return outputObject // Return the outputObject for each row
     })
-    console.log("newData: ", JSON.parse(JSON.stringify(newData))) // Now with 2 columns (or 1) instead of 3
+    if (root.debug) console.log("newData: ", JSON.parse(JSON.stringify(newData))) // Now with 2 columns (or 1) instead of 3
     // ----------------------------------------------------------------
     // Option to use Test data (root.data.test)
     // ----------------------------------------------------------------
@@ -89,9 +89,9 @@ class Performance {
             }
           ]
     */
-    console.log("\n\n")
-    console.log("parameters.wind: ", parameters.wind)
-    console.log("freezeData: ", JSON.parse(JSON.stringify(data)))
+          if(root.debug) console.log("\n\n")
+          if(root.debug) console.log("parameters.wind: ", parameters.wind)
+          if(root.debug) console.log("freezeData: ", JSON.parse(JSON.stringify(data)))
     //
     //  interpolate the groundRun and TODistance values using the windFactor
     //  Subtract the interpolated difference from the higher distance.
@@ -100,15 +100,15 @@ class Performance {
     // Hence the || operator (just use the value given)
 
     const targetAltitude = document.getElementById("altitude").value || 0
-    console.log("targetAltitude: ", targetAltitude)
+    if(root.debug) console.log("targetAltitude: ", targetAltitude)
 
     // ----------------------------------------------------------------
     // Adjust PA values for wind
     // ----------------------------------------------------------------
-    console.log("Get Wind Factor: %o %o ", parameters.wind, data[0].wind)
+    if(root.debug) console.log("Get Wind Factor: %o %o ", parameters.wind, data[0].wind)
     const windFactor = root.calc.getRatio(parameters.wind, data[0].wind)
 
-    console.log("(ratio) windFactor: ", windFactor)
+    if(root.debug) console.log("(ratio) windFactor: ", windFactor)
 
     data = data.map((row) => {
       // First, check if the row has a "pressureAltitude" property and if it's an array
@@ -126,8 +126,8 @@ class Performance {
       }
       return row
     })
-    console.log("Frozen Wind Data: " , JSON.parse(JSON.stringify(data)))
-    console.log("Wind adjusted data: ", data) 
+    if (root.debug)     console.log("Frozen Wind Data: " , JSON.parse(JSON.stringify(data)))
+    if (root.debug)     console.log("Wind adjusted data: ", data) 
     
     // Collapse for PA (2 sets of 2 rows become 2 sets of 1 row)
     // The collapse the two remaining rows for weight
@@ -143,30 +143,37 @@ class Performance {
       const paRows = surroundingRows.map((item) => item.alt) // [2]
       const ratio = root.calc.getRatio(targetAltitude,paRows)
 
-      console.log("PA Ratio: ", ratio)
-      console.log("Surrounding Rows: ", surroundingRows)
+      if(root.debug) console.log("PA Ratio: ", ratio)
+      if(root.debug) console.log("Surrounding Rows: ", surroundingRows)
 
       const result = root.calc.applyRatioToRow(ratio, surroundingRows)
-        console.log("Result: ", result)
+      if(root.debug)    console.log("Result: ", result)
       row = { ...row, ...result }
-      console.log("Row: ", row)
+      if(root.debug) console.log("Row: ", row)
       return row
     })
 
     const adjacentRows = root.calc.findAdjacentRows(data, weight, "weight")
     const adjacentWeights = adjacentRows.map((item) => item.weight)
-    console.log("Rows: %o Weights: %o", adjacentRows, adjacentWeights)
+    if(root.debug) console.log("Rows: %o Weights: %o", adjacentRows, adjacentWeights)
     const weightRatio = root.calc.getRatio(weight, adjacentWeights)
 
-    console.log("weightRatio: ", weightRatio)
-    console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))
+    if(root.debug) console.log("weightRatio: ", weightRatio)
+    if(root.debug) console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))
 
-    console.log("applyRatioToRow: ratio: %o  Data: %o ", weightRatio, adjacentRows)
+    if(root.debug) console.log("applyRatioToRow: ratio: %o  Data: %o ", weightRatio, adjacentRows)
     data = root.calc.applyRatioToRow(weightRatio, adjacentRows)
 
-    console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))
-    console.log("Result: ", data)
+    if(root.debug) console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))
+    if(root.debug) console.log("Result: ", data)
 
+    const ret = {
+      speed: data.speed,
+      groundRun: data.groundRun,
+      TODistance: data.TODistance,
+      data: data,
+    }
+    return ret
     alert(
       `Takeoff Speed: ${Math.round(data.speed)} kts \nGroundRoll: ${Math.round(
         data.groundRun

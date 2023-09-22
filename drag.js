@@ -24,25 +24,58 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Touch and Mouse Move
-  const moveEvent = (e) => {
-    if (dragging) {
-      const clientX = e.clientX || e.touches[0].clientX
-      const clientY = e.clientY || e.touches[0].clientY
-      const offsetX = clientX - startX
-      const offsetY = clientY - startY
-  
-      // Check if the current draggable element has the "constraint" attribute set to "y"
-      const isYConstrained = currentDraggable.getAttribute("constraint") === "y"
-  
-      // Update the translate values based on the constraint
-      const newTranslateX = isYConstrained ? initialTranslateX : initialTranslateX + offsetX
-      const newTranslateY = isYConstrained ? initialTranslateY + offsetY : initialTranslateY
-  
-      currentDraggable.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px)`
-      e.preventDefault()
+const moveEvent = (e) => {
+  if (dragging) {
+    const clientX = e.clientX || e.touches[0].clientX
+    const clientY = e.clientY || e.touches[0].clientY
+    const offsetX = clientX - startX
+    const offsetY = clientY - startY
+
+    // Check if the current draggable element has the "constraint" attribute set to "y"
+    const constraint = currentDraggable.getAttribute("constraint")
+
+    // Update the translate values based on the constraint
+    let newTranslateX = initialTranslateX
+    let newTranslateY = initialTranslateY
+
+    switch (constraint) {
+      case "x":
+        newTranslateX += offsetX
+      break
+      case "y":
+        newTranslateY += offsetY
+        break
+        default:
+          newTranslateX += offsetX
+          newTranslateY += offsetY
     }
+
+    currentDraggable.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px`
+
+    // Prevent the default touchmove behavior to prevent scrolling
+    e.preventDefault()
+    updateEvent(currentDraggable)
   }
+}
+const updateEvent = (obj) => {
+  // Get bounding client rect to get on-screen position
+  const rect = obj.getBoundingClientRect();
+  const control = obj.getAttribute("control")
+  const display = document.getElementById(control)
+  const screenHeight = window.innerHeight;
+
+  const factor = rect.y / screenHeight
+  const objHeightPercent = (rect.y / screenHeight) * 10000; 
+
+
+display.value = objHeightPercent
+doClick() // ***** In performance.html, needs to change, but this will make it fire for now *****
+
+
+  // rect contains top, left, bottom, right, x, y properties
+ // console.log("OBJ %", objHeightPercent)
+}
+  
   
 
   // Touch and Mouse End

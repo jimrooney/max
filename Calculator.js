@@ -244,7 +244,7 @@ targetAltitude: 3000
 
       if (ratio === 1) result[key] = obj2[key]
 
-      console.log("Result: ", result)
+      if(root.debug)   console.log("Result: ", result)
     })
 
     return result
@@ -272,7 +272,7 @@ targetAltitude: 3000
     if (invert) {
       data.sort((a, b) => a - b)
     }
-    console.log("Apply Ratio: ratio: %o data: %o", ratio, data)
+    if(root.debug) console.log("Apply Ratio: ratio: %o data: %o", ratio, data)
     if (ratio === 1) {
       if (data.length === 1) {
         return data[0]
