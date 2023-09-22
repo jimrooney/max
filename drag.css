@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    overscroll-behavior: none; /* Disable overscrolling */
+}
+
+#draggableDiv {
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    position: absolute;
+    user-drag: none;
+    -webkit-user-drag: none;
+    cursor: grab;
+}

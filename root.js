@@ -1,5 +1,6 @@
-if (!root) {
-  let root
+
+if (typeof root === 'undefined') {
+  var root = {}
 }
 Array.prototype.each = Array.prototype.forEach // jQuery style method
 
@@ -233,3 +234,4 @@ root = {
     document.getElementById("WAM").appendChild(WB.table)
   },
 }
+root.isiOS = root.iOSCheck()

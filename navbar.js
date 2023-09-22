@@ -1,4 +1,4 @@
-let root = {
+var root = {
   addScript(src) {
     // Create a new script element
     let script = document.createElement("script")
@@ -53,6 +53,22 @@ let root = {
       x.style.display = "none"
     }
   },
+  isiOS: function () {
+    return iOSCheck()
+  },
+  // Check for Apple
+  iOSCheck() {
+    const userAgent = navigator.userAgent
+    const iOSDevices = ["iPhone", "iPad", "iPod"]
+
+    for (const device of iOSDevices) {
+      if (userAgent.includes(device)) {
+        return true
+      }
+    }
+    // If no iOS device is detected, return false
+    return false
+  },
 }
 
 //window.onload = () => {
@@ -68,7 +84,7 @@ $().ready(() => {
   $("<body>").prepend(
     `
     <div class="version-div">
-        Version 1.2.3 [Nexus1]
+        Version 1.3.0 [MVP]
     </div>
     <div class="topnav">
       <a class="active" href="index.html">Home</a>

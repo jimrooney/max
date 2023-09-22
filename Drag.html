@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            overscroll-behavior: none; /* Disable overscrolling */
+        }
+
+        #draggableDiv {
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            position: absolute;
+            user-drag: none;
+            -webkit-user-drag: none;
+            cursor: grab;
+        }
+    </style>
+</head>
+<body>
+    <div id="draggableDiv"></div>
+
+    <script>
+        const draggableDiv = document.getElementById('draggableDiv');
+        let startY, initialTranslateY = 0;
+        let dragging = false;
+
+        draggableDiv.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            initialTranslateY = getTranslateY(draggableDiv);
+            dragging = true;
+            e.preventDefault();
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (dragging) {
+                const touch = e.touches[0];
+                const newY = touch.clientY;
+                const offsetY = newY - startY;
+                const newTranslateY = initialTranslateY + offsetY;
+                draggableDiv.style.transform = `translateY(${newTranslateY}px)`;
+                e.preventDefault();
+            }
+        });
+
+        window.addEventListener('touchend', () => {
+            dragging = false;
+        });
+
+        function getTranslateY(element) {
+            const transformStyle = window.getComputedStyle(element).transform;
+            const matrix = new DOMMatrix(transformStyle);
+            return matrix.m42 || 0;
+        }
+    </script>
+</body>
+</html>

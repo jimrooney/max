@@ -4,8 +4,11 @@ class UI {
     this.dragDivs = {}
     this.activeDiv = null
     this.lastPosition = { x: 0, y: 0 }
-
+    this.hi = "HI"
     this.init()
+  }
+  log(message){
+    document.getElementById('debug').innerHTML = "Bugga"
   }
   rotateElement(element, degrees) {
     if (element) {
@@ -26,41 +29,48 @@ class UI {
     }
   }
   init() {
-    //
-    // Attach event listeners to the document to capture mouse events (drag and up)
-    //
+    
+//
+// Attach event listeners to the document to capture mouse events (drag and up)
+//
 
-    // -- Down --
-    // Mouse and Touch down events are fired by clicking on the div.
+// -- Down --
+// Mouse and Touch down events are fired by clicking on the div.
 
-    // -- Mouse Move -- (drag)
-    document.addEventListener("mousemove", (e) => {
-      if (!!this.activeDiv) {
-        this.lastPosition = { x: e.clientX, y: e.clientY }
-        this.updateDivPosition(e.clientX, e.clientY)
-      }
-    })
-    // -- Touch Move -- (drag)
-    document.addEventListener(
-      "touchmove",
-      (e) => {
-        if (!!this.activeDiv) {
-          const touch = e.touches[0]
-          this.lastPosition = { x: touch.clientX, y: touch.clientY }
-          this.updateDivPosition(touch.clientX, touch.clientY)
-        }
-      },
-      { passive: false } // Specify passive: false to preventDefault
-    )
+// -- Mouse Move -- (drag)
+// document.addEventListener("mousemove", (e) => {
+//   if (!!this.activeDiv) {
+//     this.lastPosition = { x: e.clientX, y: e.clientY }
+//     this.updateDivPosition(e.clientX, e.clientY)
+//   }
+// })
+// // -- Touch Move -- (drag)
+// document.addEventListener(
+//   "touchmove",
+//   (e) => {
+//     if (!!this.activeDiv) {
 
-    // -- Up --
-    document.addEventListener("mouseup", () => {
-      this.stopDragging()
-    })
-    document.addEventListener("touchend", () => {
-      this.stopDragging()
-    })
-  } // ----------------------- end init() -----------------------
+//     }
+
+//     const touch = e.touches[0]
+//     this.lastPosition = { x: touch.clientX, y: touch.clientY }
+//     this.updateDivPosition(touch.clientX, touch.clientY)
+//     if(root.isIOs) e.preventDefault()
+
+//     this.log("moving...")
+//   },
+// )
+
+// // -- Up --
+// document.addEventListener("mouseup", () => {
+//   this.stopDragging()
+// })
+// document.addEventListener("touchend", () => {
+//   this.stopDragging()
+// })
+
+
+} // ----------------------- end init() -----------------------
 
   // === Set a div to draggable ===
   // Adds an event listener that sets the div as the ActiveDiv when clicked on or touched.
@@ -75,10 +85,9 @@ class UI {
         dragDiv.addEventListener(
           "touchstart",
           (e) => {
-            e.preventDefault() // Prevent default touch behavior
             this.setActiveDiv(dragDiv)
+            if(root.isIOs) e.preventDefault()
           },
-          { passive: false } // Specify passive: false to preventDefault
         )
       }
     })
