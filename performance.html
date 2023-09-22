@@ -35,8 +35,7 @@
     \nTO Distance: ${Math.round(data.TODistance)}`
 
     document.getElementById("output").value = out
-//    document.querySelector("#output").value = "out"
-
+    //    document.querySelector("#output").value = "out"
   }
 </script>
 <head>
@@ -47,10 +46,48 @@
 <body>
   <div id="draggableContainer">
     <div id="navbar"></div>
-    <div class="draggable boxarrow" constraint="y" control="altitude">
-      <div><input id="sliderText" type="text" value="Hello Nurse" /></div>
+
+    <!-- Altitude Slider -->
+    <div
+      class="draggable boxarrow justifyRight"
+      constraint="y"
+      control="altitude"
+      style="right: 30px; transform: rotate(0deg)"
+    >
+      <div>
+        <label for="altitude">Altitude:</label>
+        <input
+          type="text"
+          id="altitude"
+          value="Zero"
+          onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
+          oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+          style="margin-top: -40px"
+        />
+      </div>
     </div>
-    <div>
+
+        <!-- Weight Slider -->
+        <div
+        class="draggable boxarrow justifyRight"
+        constraint="y"
+        control="weight"
+        style="right: 250px; transform: rotate(0deg)"
+      >
+        <div>
+          <label for="weight">Weight:</label>
+          <input
+            type="text"
+            id="weight"
+            value="2300"
+            onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            style="margin-top: -40px"
+          />
+        </div>
+      </div>
+
+    <!-- <div>
       <label for="weight">Weight:</label>
       <input
         type="text"
@@ -58,26 +95,18 @@
         onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
       />
-    </div>
+    </div> -->
     <div>
       <label for="headwind">Headwind:</label>
       <input
         type="text"
         id="headwind"
-        value="Zero"
+        value="0"
         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
       />
     </div>
     <div>
-      <label for="altitude">Altitude:</label>
-      <input
-        type="text"
-        id="altitude"
-        value="Zero"
-        onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
-        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-      />
-      <br>
+      <br />
       <label for="output">Output:</label>
       <textarea id="output" name="output" rows="5" cols="50"></textarea>
     </div>
