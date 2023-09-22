@@ -15,7 +15,7 @@
     height: 82px;
     background: url(arrow.svg);
     background-size: 100px 82px;
-    transform: rotate(180deg); /* Rotate the element 180 degrees */
+    /* transform: rotate(180deg); Rotate the element 180 degrees */
 }
 
 #sliderText {
