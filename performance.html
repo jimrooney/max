@@ -47,7 +47,7 @@
   <div id="draggableContainer">
     <div id="navbar"></div>
 
-    <div class="justifyRight" style="right: 300px">Right</div>
+    <!-- Altitude Slider -->
     <div
       class="draggable boxarrow justifyRight"
       constraint="y"
@@ -62,12 +62,32 @@
           value="Zero"
           onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-          style="margin-top: -40px;"
+          style="margin-top: -40px"
         />
       </div>
     </div>
 
-    <div>
+        <!-- Weight Slider -->
+        <div
+        class="draggable boxarrow justifyRight"
+        constraint="y"
+        control="weight"
+        style="right: 250px; transform: rotate(0deg)"
+      >
+        <div>
+          <label for="weight">Weight:</label>
+          <input
+            type="text"
+            id="weight"
+            value="2300"
+            onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+            style="margin-top: -40px"
+          />
+        </div>
+      </div>
+
+    <!-- <div>
       <label for="weight">Weight:</label>
       <input
         type="text"
@@ -75,13 +95,13 @@
         onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
       />
-    </div>
+    </div> -->
     <div>
       <label for="headwind">Headwind:</label>
       <input
         type="text"
         id="headwind"
-        value="Zero"
+        value="0"
         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
       />
     </div>
