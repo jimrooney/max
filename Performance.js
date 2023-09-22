@@ -34,7 +34,7 @@ class Performance {
     const speed = this.getTakeoffSpeed(parameters.data, weight)
 
     // ============= Windspeed =============
-    let windspeed = parameters.wind?.replace(/[^0-9]/g, "") || 0
+    let windspeed = parameters.wind.replace(/[^0-9]/g, "") || 0
     const rows = root.calc.getBetweenRows(parameters.data[0].wind, windspeed)
 
     // Collapse the data by the windspeed // ********* This might not be necessary *********

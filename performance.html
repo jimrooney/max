@@ -20,6 +20,8 @@
   }
   const calc = new Calculator()
   function doClick() {
+    let output = JSON.stringify(root.data.C185.takeoff)
+    document.getElementById("output").value = output
     const parameters = {
       data: root.data.C185.takeoff,
       weight: document.querySelector("#weight").value, //|| 2400,
@@ -32,7 +34,8 @@
     \nGround Run: ${Math.round(data.groundRun)}
     \nTO Distance: ${Math.round(data.TODistance)}`
 
-    document.querySelector("#output").value = out
+    document.getElementById("output").value = out
+//    document.querySelector("#output").value = "out"
 
   }
 </script>
