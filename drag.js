@@ -65,7 +65,8 @@ const updateEvent = (obj) => {
   const screenHeight = window.innerHeight;
 
   const factor = rect.y / screenHeight
-  const objHeightPercent = (rect.y / screenHeight) * 10000; 
+  const flip = screenHeight - screenHeight * factor
+  const objHeightPercent = flip * 10 //(rect.y / screenHeight) * 10000; 
 
 
 display.value = objHeightPercent
