@@ -15,28 +15,34 @@
 <script src="root.js"></script>
 
 <script>
-  const clickButton = function () {
-    alert("button")
-  }
   const calc = new Calculator()
+
+  $().ready(() => {
+    root.parameters = {
+      data: root.data.C185.takeoff,
+      weight: document.querySelector("#weight").value, //|| 2400,
+      wind: document.querySelector("#headwind").value || 0,
+      altitude: document.querySelector("#altitude").value || 0,
+    }
+  })
+
   function doClick() {
-    let output = JSON.stringify(root.data.C185.takeoff)
-    document.getElementById("output").value = output
+    console.log("doClick")
     const parameters = {
       data: root.data.C185.takeoff,
       weight: document.querySelector("#weight").value, //|| 2400,
       wind: document.querySelector("#headwind").value || 0,
       altitude: document.querySelector("#altitude").value || 0,
     }
-    const data = root.performance.byWeight(parameters)
-
-    const out = `Speed: ${Math.round(data.speed)}
-    \nGround Run: ${Math.round(data.groundRun)}
-    \nTO Distance: ${Math.round(data.TODistance)}`
+    const result = root.performance.byWeight(parameters)
+    const out = `Speed: ${Math.round(result.speed)}
+\nGround Run: ${Math.round(result.groundRun)}
+\nTO Distance: ${Math.round(result.TODistance)}`
 
     document.getElementById("output").value = out
-    //    document.querySelector("#output").value = "out"
   }
+
+  
 </script>
 <head>
   <!-- PWA Stuff -->
@@ -46,6 +52,25 @@
 <body>
   <div id="draggableContainer">
     <div id="navbar"></div>
+
+    <!-- Output -->
+    <div>
+      <br />
+      <label for="output">Output:</label>
+      <textarea id="output" name="output" rows="5" cols="50"></textarea>
+    </div>
+
+    <!-- Buttons -->
+    <div>
+      <input type="button" id="doClick" value="doClick" onclick="doClick()" />
+      <input
+        type="button"
+        id="byWeight"
+        value="By Weight"
+        onclick="root.performance.byWeight();"
+      />
+      <p></p>
+    </div>
 
     <!-- Altitude Slider -->
     <div
@@ -59,7 +84,7 @@
         <input
           type="text"
           id="altitude"
-          value="Zero"
+          value="0"
           onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
           style="margin-top: -40px"
@@ -67,64 +92,54 @@
       </div>
     </div>
 
-        <!-- Weight Slider -->
-        <div
-        class="draggable boxarrow justifyRight"
-        constraint="y"
-        control="weight"
-        style="right: 250px; transform: rotate(0deg)"
-      >
+    <!-- Weight Slider -->
+    <div
+      class="draggable boxarrow justifyRight"
+      constraint="y"
+      control="weight"
+      style="right: 250px; transform: rotate(0deg)"
+    >
+      <div>
+        <label for="weight">Weight:</label>
+        <input
+          type="text"
+          id="weight"
+          value="2300"
+          onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
+          oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+          style="margin-top: -40px"
+        />
+      </div>
+    </div>
+
+    <!-- Headwind Slider -->
+    <div
+      class="headwind"
+      style="
+        position: absolute;
+        left: 100px;
+        width: 500px;
+        height: 10px;
+        background-color: rgb(255, 0, 0);
+      "
+    >
+      <div class="draggable boxarrow" constraint="x" control="headwind">
         <div>
-          <label for="weight">Weight:</label>
+          <label for="headwind">Headwind:</label>
           <input
             type="text"
-            id="weight"
-            value="2300"
+            id="headwind"
+            value="0"
             onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
             oninput="this.value = this.value.replace(/[^0-9]/g, '')"
             style="margin-top: -40px"
           />
         </div>
       </div>
-
-    <!-- <div>
-      <label for="weight">Weight:</label>
-      <input
-        type="text"
-        id="weight"
-        onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
-        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-      />
-    </div> -->
-    <div>
-      <label for="headwind">Headwind:</label>
-      <input
-        type="text"
-        id="headwind"
-        value="0"
-        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-      />
-    </div>
-    <div>
-      <br />
-      <label for="output">Output:</label>
-      <textarea id="output" name="output" rows="5" cols="50"></textarea>
     </div>
 
+    <!-- Airplane Icon -->
     <center><div id="airplane-icon" class="airplane-icon"></div></center>
-    <input type="button" id="doClick" value="doClick" onclick="doClick()" />
-    <input
-      type="button"
-      id="byWeight"
-      value="By Weight"
-      onclick="root.performance.byWeight({
-  data: root.data.C185.takeoff,
-  weight: document.querySelector('#weight').value, //|| 2400,
-  wind: document.querySelector('#headwind').value || 0,
-  altitude: document.querySelector('#altitude').value || 0,
-});"
-    />
-    <div class="draggable boxarrow" constraint="x">HELLO</div>
   </div>
 </body>
 

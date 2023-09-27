@@ -6,12 +6,19 @@ Need to be updated to the new data structure...
 
 {performance}
 
-test
 
-Altitude slider needs to be reversed (so higher on the screen = higher altitude).
-    All sliders need constraints. Maybe gey limits boxes? Maybe constrain to the boxes?
-    Headwind slider needs to be activated.
-    All sliders need different factors and ratios rather than just percentage of screen.
+Still messing with root.parameters ... setting a default in performance.html...
+    The last line of performance.js updateEvent() calls byWeight with parameters...
+    root.performance.byWeight(parameters)...
+    Maybe instead, set them to root.parameters and make the call rather than passing them?
+    Then root is always reliable. Drag sets the values that get pulled since the user can override them by
+        typing them in manually.
+
+
+Wind slider is now constrained to its parent div rect. :)
+    The calculations fail if its not parsed to an int though... ?
+    All sliders need constraints.
+    Min/Max should be pulled from root.parameters (same as headwind does)
 
     // ****************************************************************
     // Needs a check here... if the values are all arrays, use array [1] values except for temp (use [0] for that)
