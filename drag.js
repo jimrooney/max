@@ -24,60 +24,102 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-const moveEvent = (e) => {
-  if (dragging) {
-    const clientX = e.clientX || e.touches[0].clientX
-    const clientY = e.clientY || e.touches[0].clientY
-    const offsetX = clientX - startX
-    const offsetY = clientY - startY
+  const moveEvent = (e) => {
+    if (dragging) {
+      const clientX = e.clientX || e.touches[0].clientX
+      const clientY = e.clientY || e.touches[0].clientY
+      const offsetX = clientX - startX
+      const offsetY = clientY - startY
 
-    // Check if the current draggable element has the "constraint" attribute set to "y"
-    const constraint = currentDraggable.getAttribute("constraint")
+      // Check if the current draggable element has the "constraint" attribute set to "y"
+      const constraint = currentDraggable.getAttribute("constraint")
 
-    // Update the translate values based on the constraint
-    let newTranslateX = initialTranslateX
-    let newTranslateY = initialTranslateY
+      // Update the translate values based on the constraint
+      let newTranslateX = initialTranslateX
+      let newTranslateY = initialTranslateY
 
-    switch (constraint) {
-      case "x":
-        newTranslateX += offsetX
-      break
-      case "y":
-        newTranslateY += offsetY
-        break
+      switch (constraint) {
+        case "x":
+          newTranslateX += offsetX
+          break
+        case "y":
+          newTranslateY += offsetY
+          break
         default:
           newTranslateX += offsetX
           newTranslateY += offsetY
+      }
+
+      currentDraggable.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px`
+
+      // Prevent the default touchmove behavior to prevent scrolling
+      e.preventDefault()
+      updateEvent(currentDraggable)
+    }
+  }
+  const updateEvent = (obj) => {
+    // Get bounding client rect to get on-screen position
+    const rect = obj.getBoundingClientRect() // rect contains top, left, bottom, right, x, y properties
+    const control = obj.getAttribute("control") // gets what this object controls, like "altitude"
+    const constraint = obj.getAttribute("constraint")
+    const display = document.getElementById(control) // the display box on the div
+    const screenHeight = window.innerHeight
+    const screenWidth = window.innerWidth
+
+    const bounds = {
+      wind: getBounds(root.parameters.data[0].wind),
     }
 
-    currentDraggable.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px`
+    const divStyle = window.getComputedStyle(obj.parentNode)
+    const container = {
+      width: parseInt(divStyle.getPropertyValue("width"), 10),
+      height: parseInt(divStyle.getPropertyValue("height"), 10),
+      style: divStyle,
+    }
 
-    // Prevent the default touchmove behavior to prevent scrolling
-    e.preventDefault()
-    updateEvent(currentDraggable)
+    const factor = rect.y / parseInt(container.height)
+    const xfactor = rect.x / parseInt(container.width)
+
+    const flip = container.height - parseInt(container.height) * factor // flip vertical, so higher on the screen = higher altitude
+    const objHeightPercent = flip * 10 //(rect.y / screenHeight) * 10000;
+
+    // updates the tracked dragger's output display value
+    switch (constraint) {
+      case "x":
+        display.value = parseInt(xfactor * bounds.wind[1], 10)
+        break
+      case "y":
+        display.value = objHeightPercent
+        break
+    }
+
+    let output = JSON.stringify(root.data.C185.takeoff)
+    document.getElementById("output").value = output
+    const parameters = {
+      data: root.data.C185.takeoff,
+      weight: document.querySelector("#weight").value, //|| 2400,
+      wind: document.querySelector("#headwind").value || 0,
+      altitude: document.querySelector("#altitude").value || 0,
+    }
+
+
+// **********************************************************************************************************
+// passing in parameters...
+    const result = root.performance.byWeight(parameters) // do the calculations
+// **********************************************************************************************************
+
+
+
+
+
+
+    // Just displaying raw data to a text field for now ********************************
+    const out = `Speed: ${Math.round(result.speed)}
+\nGround Run: ${Math.round(result.groundRun)}
+\nTO Distance: ${Math.round(result.TODistance)}`
+
+    document.getElementById("output").value = out
   }
-}
-const updateEvent = (obj) => {
-  // Get bounding client rect to get on-screen position
-  const rect = obj.getBoundingClientRect();
-  const control = obj.getAttribute("control")
-  const display = document.getElementById(control)
-  const screenHeight = window.innerHeight;
-
-  const factor = rect.y / screenHeight
-  const flip = screenHeight - screenHeight * factor
-  const objHeightPercent = flip * 10 //(rect.y / screenHeight) * 10000; 
-
-
-display.value = objHeightPercent
-doClick() // ***** In performance.html, needs to change, but this will make it fire for now *****
-
-
-  // rect contains top, left, bottom, right, x, y properties
- // console.log("OBJ %", objHeightPercent)
-}
-  
-  
 
   // Touch and Mouse End
   const endEvent = () => {
@@ -88,7 +130,9 @@ doClick() // ***** In performance.html, needs to change, but this will make it f
   draggableContainer.addEventListener("mousemove", moveEvent)
   draggableContainer.addEventListener("mouseup", endEvent)
 
-  draggableContainer.addEventListener("touchstart", startEvent, { passive: false })
+  draggableContainer.addEventListener("touchstart", startEvent, {
+    passive: false,
+  })
   window.addEventListener("touchmove", moveEvent, { passive: false })
   window.addEventListener("touchend", endEvent, { passive: false })
 
@@ -98,3 +142,23 @@ doClick() // ***** In performance.html, needs to change, but this will make it f
     return matrix.m42 || 0
   }
 })
+
+function getBounds(arr) {
+  if (arr.length === 0) {
+    return []; // Return an empty array if the input array is empty
+  }
+
+  return arr.reduce(function (acc, current) {
+    // Find the lowest value
+    if (current < acc[0]) {
+      acc[0] = current;
+    }
+
+    // Find the highest value
+    if (current > acc[1]) {
+      acc[1] = current;
+    }
+
+    return acc;
+  }, [Infinity, -Infinity]); // Initialize with Infinity and -Infinity
+}
