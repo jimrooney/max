@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Get bounding client rect to get on-screen position
     const rect = obj.getBoundingClientRect() // rect contains top, left, bottom, right, x, y properties
     const control = obj.getAttribute("control") // gets what this object controls, like "altitude"
+    const sliderbar = document.getElementById(obj.getAttribute("bar"))
     const constraint = obj.getAttribute("constraint")
     const display = document.getElementById(control) // the display box on the div
     const screenHeight = window.innerHeight
@@ -68,31 +69,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const bounds = {
       wind: getBounds(root.parameters.data[0].wind),
+      alt: getBounds(
+        root.parameters.data[0].pressureAltitude.map((item) => item.alt)
+      ),
+      weight: getBounds(root.parameters.data.map((item) => item.weight)),
     }
 
-    const divStyle = window.getComputedStyle(obj.parentNode)
+    // Get references to the inner and containing divs
+    const innerDiv = obj
+    const containingDiv = sliderbar
+
+    // Get the positions of both divs
+    const innerDivRect = innerDiv.getBoundingClientRect()
+    const containingDivRect = containingDiv.getBoundingClientRect()
+
+    // Calculate the position of the inner div relative to the containing div
+    const relativeX = innerDivRect.left - containingDivRect.left
+    const relativeY = innerDivRect.top - containingDivRect.top
+
     const container = {
-      width: parseInt(divStyle.getPropertyValue("width"), 10),
-      height: parseInt(divStyle.getPropertyValue("height"), 10),
-      style: divStyle,
+      width: containingDiv.offsetWidth,
+      height: containingDiv.offsetHeight,
+      x: containingDivRect.left,
+      y: containingDivRect.top,
     }
 
-    const factor = rect.y / parseInt(container.height)
-    const xfactor = rect.x / parseInt(container.width)
-
-    const flip = container.height - parseInt(container.height) * factor // flip vertical, so higher on the screen = higher altitude
-    const objHeightPercent = flip * 10 //(rect.y / screenHeight) * 10000;
+    const dragBox = {
+      rectangle: rect,
+      x: rect.left,
+      y: rect.top,
+      relativeX: relativeX,
+      relativeY: relativeY,
+      ratioX: relativeX / parseInt(container.width),
+      ratioY: 1 - relativeY / parseInt(container.height),
+    }
+    const GUICalc = {
+      headwind: root.getValueInRange((dragBox.ratioX * bounds.wind[1]),bounds.wind),
+      altitude: root.getValueInRange((dragBox.ratioY * bounds.alt[1]),bounds.alt),
+      weight: root.getValueInRange((dragBox.ratioY * bounds.weight[1]),bounds.weight),
+    }
 
     // updates the tracked dragger's output display value
-    switch (constraint) {
-      case "x":
-        display.value = parseInt(xfactor * bounds.wind[1], 10)
-        break
-      case "y":
-        display.value = objHeightPercent
-        break
-    }
+    display.value = Math.round(GUICalc[control])
+    
 
+
+    // **********************************************************************************************************
+    // Pulls the values from the text boxes we just filled... we can skip this step and wire them directly to the calculations
+    // **********************************************************************************************************
     let output = JSON.stringify(root.data.C185.takeoff)
     document.getElementById("output").value = output
     const parameters = {
@@ -102,21 +126,16 @@ document.addEventListener("DOMContentLoaded", function () {
       altitude: document.querySelector("#altitude").value || 0,
     }
 
-
-// **********************************************************************************************************
-// passing in parameters...
+    // **********************************************************************************************************
+    // passing in parameters...
     const result = root.performance.byWeight(parameters) // do the calculations
-// **********************************************************************************************************
-
-
-
-
-
+    // **********************************************************************************************************
 
     // Just displaying raw data to a text field for now ********************************
-    const out = `Speed: ${Math.round(result.speed)}
-\nGround Run: ${Math.round(result.groundRun)}
-\nTO Distance: ${Math.round(result.TODistance)}`
+    const out = `
+    Speed: ${Math.round(result.speed)}
+    Ground Run: ${Math.round(result.groundRun)}
+    TO Distance: ${Math.round(result.TODistance)}`
 
     document.getElementById("output").value = out
   }
@@ -145,20 +164,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function getBounds(arr) {
   if (arr.length === 0) {
-    return []; // Return an empty array if the input array is empty
+    return [] // Return an empty array if the input array is empty
   }
 
-  return arr.reduce(function (acc, current) {
-    // Find the lowest value
-    if (current < acc[0]) {
-      acc[0] = current;
-    }
+  return arr.reduce(
+    function (acc, current) {
+      // Find the lowest value
+      if (current < acc[0]) {
+        acc[0] = current
+      }
 
-    // Find the highest value
-    if (current > acc[1]) {
-      acc[1] = current;
-    }
+      // Find the highest value
+      if (current > acc[1]) {
+        acc[1] = current
+      }
 
-    return acc;
-  }, [Infinity, -Infinity]); // Initialize with Infinity and -Infinity
+      return acc
+    },
+    [Infinity, -Infinity]
+  ) // Initialize with Infinity and -Infinity
 }
