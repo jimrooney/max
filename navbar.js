@@ -84,7 +84,7 @@ $().ready(() => {
   $("<body>").prepend(
     `
     <div class="version-div">
-        Version 1.3.2 [Wind Slider]
+        Version 1.3.3 [Altitude Slider]
     </div>
     <div class="topnav">
       <a class="active" href="index.html">Home</a>
