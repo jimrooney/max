@@ -34,6 +34,17 @@ root = {
       })
       .catch((err) => console.log("error: ", err))
   },
+  getValueInRange(value, arr) {
+    const [low, high] = arr;
+    
+    if (value >= low && value <= high) {
+      return value;
+    } else if (value > high) {
+      return high;
+    } else {
+      return low;
+    }
+  },
   showButtons() {
     Array.from(document.getElementsByClassName("Airplanes")).forEach(
       (airplane) => {

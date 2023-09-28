@@ -69,31 +69,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const bounds = {
       wind: getBounds(root.parameters.data[0].wind),
-      alt: getBounds(root.parameters.data[0].pressureAltitude.map(item => item.alt)),
-      weight: getBounds(root.parameters.data.map(item => item.weight)),
+      alt: getBounds(
+        root.parameters.data[0].pressureAltitude.map((item) => item.alt)
+      ),
+      weight: getBounds(root.parameters.data.map((item) => item.weight)),
     }
 
+    // Get references to the inner and containing divs
+    const innerDiv = obj
+    const containingDiv = sliderbar
 
+    // Get the positions of both divs
+    const innerDivRect = innerDiv.getBoundingClientRect()
+    const containingDivRect = containingDiv.getBoundingClientRect()
 
-// Get references to the inner and containing divs
-const innerDiv = obj
-const containingDiv = sliderbar
-
-// Get the positions of both divs
-const innerDivRect = innerDiv.getBoundingClientRect();
-const containingDivRect = containingDiv.getBoundingClientRect();
-
-// Calculate the position of the inner div relative to the containing div
-const relativeX = innerDivRect.left - containingDivRect.left;
-const relativeY = innerDivRect.top - containingDivRect.top;
+    // Calculate the position of the inner div relative to the containing div
+    const relativeX = innerDivRect.left - containingDivRect.left
+    const relativeY = innerDivRect.top - containingDivRect.top
 
     const container = {
       width: containingDiv.offsetWidth,
       height: containingDiv.offsetHeight,
       x: containingDivRect.left,
       y: containingDivRect.top,
-    };
-    
+    }
+
     const dragBox = {
       rectangle: rect,
       x: rect.left,
@@ -101,32 +101,22 @@ const relativeY = innerDivRect.top - containingDivRect.top;
       relativeX: relativeX,
       relativeY: relativeY,
       ratioX: relativeX / parseInt(container.width),
-      ratioY: relativeY / parseInt(container.height),
+      ratioY: 1 - relativeY / parseInt(container.height),
     }
-
-    const factor = rect.y / parseInt(container.height)
-    const xfactor = rect.x / parseInt(container.width)
-
-    const factorFlipped = 1 - factor // flip vertical, so higher on the screen = higher altitude
-    const objHeightPercent = factorFlipped * 10 //(rect.y / screenHeight) * 10000;
+    const GUICalc = {
+      headwind: root.getValueInRange((dragBox.ratioX * bounds.wind[1]),bounds.wind),
+      altitude: root.getValueInRange((dragBox.ratioY * bounds.alt[1]),bounds.alt),
+      weight: root.getValueInRange((dragBox.ratioY * bounds.weight[1]),bounds.weight),
+    }
 
     // updates the tracked dragger's output display value
-    switch (control) {
-      case "headwind":
-        display.value = parseInt(xfactor * bounds.wind[1], 10)
-        break
-      case "altitude":
-        display.value = (1- dragBox.ratioY) * bounds.alt[1]
-        //display.value = parseInt(factorFlipped * bounds.alt[1], 10)
-        break
-        case "weight":
-          display.value = parseInt(factorFlipped * bounds.weight[1], 10)
-        break
-        default:
-          display.value = objHeightPercent
-          break
-    }
+    display.value = Math.round(GUICalc[control])
+    
 
+
+    // **********************************************************************************************************
+    // Pulls the values from the text boxes we just filled... we can skip this step and wire them directly to the calculations
+    // **********************************************************************************************************
     let output = JSON.stringify(root.data.C185.takeoff)
     document.getElementById("output").value = output
     const parameters = {
@@ -142,9 +132,10 @@ const relativeY = innerDivRect.top - containingDivRect.top;
     // **********************************************************************************************************
 
     // Just displaying raw data to a text field for now ********************************
-    const out = `Speed: ${Math.round(result.speed)}
-\nGround Run: ${Math.round(result.groundRun)}
-\nTO Distance: ${Math.round(result.TODistance)}`
+    const out = `
+    Speed: ${Math.round(result.speed)}
+    Ground Run: ${Math.round(result.groundRun)}
+    TO Distance: ${Math.round(result.TODistance)}`
 
     document.getElementById("output").value = out
   }
