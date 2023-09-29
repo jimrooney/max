@@ -69,10 +69,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const bounds = {
       wind: getBounds(root.parameters.data[0].wind),
-      alt: getBounds(
-        root.parameters.data[0].pressureAltitude.map((item) => item.alt)
-      ),
+      alt: getBounds(root.parameters.data[0].pressureAltitude.map((item) => item.alt)),
       weight: getBounds(root.parameters.data.map((item) => item.weight)),
+      temp: [0, 50],
     }
 
     // Get references to the inner and containing divs
@@ -101,18 +100,22 @@ document.addEventListener("DOMContentLoaded", function () {
       relativeX: relativeX,
       relativeY: relativeY,
       ratioX: relativeX / parseInt(container.width),
-      ratioY: 1 - relativeY / parseInt(container.height),
+      ratioY: 1 - relativeY / parseInt(container.height), // reverse for vertical values.. so higher position = higher number
     }
+
     const GUICalc = {
-      headwind: root.getValueInRange((dragBox.ratioX * bounds.wind[1]),bounds.wind),
-      altitude: root.getValueInRange((dragBox.ratioY * bounds.alt[1]),bounds.alt),
-      weight: root.getValueInRange((dragBox.ratioY * bounds.weight[1]),bounds.weight),
+      headwind: root.getValueInRange(dragBox.ratioX * bounds.wind[1], bounds.wind),
+      altitude: root.getValueInRange(dragBox.ratioY * bounds.alt[1], bounds.alt),
+      weight: root.getValueInRange(
+        // more complex because the lower bound isn't zero
+        dragBox.ratioY * (bounds.weight[1] - bounds.weight[0]) + bounds.weight[0],
+        bounds.weight
+      ),
+      temp: root.getValueInRange(dragBox.ratioY * bounds.temp[1], bounds.temp),
     }
 
     // updates the tracked dragger's output display value
     display.value = Math.round(GUICalc[control])
-    
-
 
     // **********************************************************************************************************
     // Pulls the values from the text boxes we just filled... we can skip this step and wire them directly to the calculations
@@ -124,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
       weight: document.querySelector("#weight").value, //|| 2400,
       wind: document.querySelector("#headwind").value || 0,
       altitude: document.querySelector("#altitude").value || 0,
+      temp: document.querySelector("#temp").value || 0,
     }
 
     // **********************************************************************************************************

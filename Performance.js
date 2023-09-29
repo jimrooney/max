@@ -157,18 +157,15 @@ class Performance {
     if(root.debug) console.log("FrozenData: " , JSON.parse(JSON.stringify(data)))
     if(root.debug) console.log("Result: ", data)
 
+    const tmpAdjusted = root.calc.adjustValuesByTemp(root.calc.celsiusToFahrenheit(parameters.temp) , data.temp, [data.groundRun, data.TODistance])
+
     const ret = {
       speed: data.speed,
-      groundRun: data.groundRun,
-      TODistance: data.TODistance,
+      groundRun: tmpAdjusted[0],
+      TODistance: tmpAdjusted[1],
       data: data,
     }
     return ret
-    alert(
-      `Takeoff Speed: ${Math.round(data.speed)} kts \nGroundRoll: ${Math.round(
-        data.groundRun
-      )} \nTakeoff Distance (50ft): ${Math.round(data.TODistance)}`
-    )
   }
 
   getPerformance(

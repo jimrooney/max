@@ -7,6 +7,15 @@ class Calculator {
     return "hello"
   }
 
+  celsiusToFahrenheit(celsius) {
+    const fahrenheit = celsius * (9 / 5) + 32
+    return fahrenheit
+  }
+  fahrenheitToCelsius(fahrenheit) {
+    const celsius = (fahrenheit - 32) * (5 / 9)
+    return celsius
+  }
+
   getRatio(value, bounds) {
     // value (number), [0,1]
     if (bounds.length === 1) return 1
@@ -244,10 +253,39 @@ targetAltitude: 3000
 
       if (ratio === 1) result[key] = obj2[key]
 
-      if(root.debug)   console.log("Result: ", result)
+      if (root.debug) console.log("Result: ", result)
     })
 
     return result
+  }
+
+  adjustValuesByTemp(actualTemp, standardTemp, array) {
+    if (actualTemp <= standardTemp) {
+      return array;
+    }
+  
+    const unitsAbove59 = actualTemp - standardTemp;
+    const increment = 25; // 25 units above 59
+    const increaseFactor = Math.floor(unitsAbove59 / increment);
+    const percentageIncrease = 0.1 * increaseFactor;
+  
+    const resultArray = array.map((value) => {
+      return value + percentageIncrease * value;
+    });
+  
+    return resultArray;
+  }
+
+  calculatePressureAltitude(fieldElevationFeet, pressureHpa) {
+    // Standard pressure at sea level in hPa
+    const standardPressureHpa = 1013.25
+
+    // Calculate the pressure altitude
+    const pressureAltitudeFeet =
+      145366.45 * (1 - Math.pow(pressureHpa / standardPressureHpa, 0.190284)) +
+      fieldElevationFeet
+
+    return pressureAltitudeFeet
   }
 
   adjustValuesByRatio(ratio, [obj1, obj2]) {
@@ -272,7 +310,7 @@ targetAltitude: 3000
     if (invert) {
       data.sort((a, b) => a - b)
     }
-    if(root.debug) console.log("Apply Ratio: ratio: %o data: %o", ratio, data)
+    if (root.debug) console.log("Apply Ratio: ratio: %o data: %o", ratio, data)
     if (ratio === 1) {
       if (data.length === 1) {
         return data[0]
