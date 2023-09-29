@@ -65,7 +65,7 @@
         type="button"
         id="byWeight"
         value="By Weight"
-        onclick="root.performance.byWeight();"
+        onclick="doClick()"
       />
       <p></p>
     </div>
@@ -165,7 +165,39 @@
         </div>
       </div>
     </div>
-
+    <!-- Temperature Slider -->
+    <div
+      id="TempSliderBar"
+      style="
+        position: absolute;
+        right: 500px;
+        width: 10px;
+        height: 400px;
+        background-color: rgb(255, 251, 0);
+      "
+    >
+      <div style="position: absolute; top: 300px; right: 30px">
+        <div
+          class="draggable boxarrow justifyRight"
+          constraint="y"
+          control="temp"
+          bar="TempSliderBar"
+          style="right: 30px; transform: rotate(0deg); position: relative"
+        >
+          <div style="position: absolute; bottom: 0">
+            <label for="temp">Temperature:</label>
+            <input
+              type="text"
+              id="temp"
+              value="0"
+              onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+              style="margin-top: -100px"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- Airplane Icon -->
     <center><div id="airplane-icon" class="airplane-icon"></div></center>
   </div>
@@ -180,16 +212,6 @@
       root.ui.setActiveDiv(this)
     })
 
-    root.byWeight = function (weight) {
-      const speed = root.performance.getTakeoffSpeed(root.data.test, weight)
-      const groundRoll = root.performance.getGroundRoll(root.data.test, speed)
-      const distance = root.performance.get50ftDistance(root.data.test, speed)
-      alert(
-        `Takeoff Speed: ${Math.round(speed)} kts \nGroundRoll: ${Math.round(
-          groundRoll
-        )} \nTakeoff Distance (50ft): ${Math.round(distance)}`
-      )
-    }
     const calcButtons = document.querySelectorAll(
       ".MyButtons.CalculateDistance"
     )

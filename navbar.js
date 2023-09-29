@@ -84,7 +84,7 @@ $().ready(() => {
   $("<body>").prepend(
     `
     <div class="version-div">
-        Version 1.3.4 [Sliders]
+        Version 1.3.5 [Temperature]
     </div>
     <div class="topnav">
       <a class="active" href="index.html">Home</a>
