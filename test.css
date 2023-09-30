@@ -15,6 +15,7 @@
     height: 82px;
     background: url(arrow.svg);
     background-size: 100px 82px;
+    z-index: 10;
     /* transform: rotate(180deg); Rotate the element 180 degrees */
 }
 
