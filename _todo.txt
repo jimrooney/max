@@ -2,12 +2,9 @@
 This is the trigger from drag... need to singlepoint this.
     const result = root.performance.byWeight(parameters) // do the calculations
 
-Sliders are working and constrained.
-    Altitude slider needs to have 2300 as the "bottom" value (currenlty just bottoms out at 2300, not the bottom of the slider)
-
-
-
-
+Add in pressure.
+Interpolate temperature and we're functionally complete.
+Then start working on pulling in different plane data (GA8)
 
 
 Still messing with root.parameters ... setting a default in performance.html...
