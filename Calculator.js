@@ -64,17 +64,12 @@ class Calculator {
       const nextObject = objects[i + 1]
 
       // Check if the target value falls between the current object's property value and the next object's property value.
-      if (
-        currentObject[propertyName] <= targetValue &&
-        targetValue <= nextObject[propertyName]
-      ) {
+      if (currentObject[propertyName] <= targetValue && targetValue <= nextObject[propertyName]) {
         matchingObjects.push(currentObject, nextObject, i)
         break // Stop searching once we find the encompassing objects.
       }
     }
-    matchingObjects = matchingObjects.filter(
-      (object) => typeof object === "object"
-    )
+    matchingObjects = matchingObjects.filter((object) => typeof object === "object")
     // filter out non objects
     return matchingObjects
   }
@@ -98,12 +93,7 @@ class Calculator {
   // }
 
   filterAndExtractSurroundingRows(arr, propertyName, targetValue) {
-    console.log(
-      "Filtering and extracting: %o %o %o",
-      arr,
-      propertyName,
-      targetValue
-    )
+    console.log("Filtering and extracting: %o %o %o", arr, propertyName, targetValue)
     // Filter the array to get objects close to the targetValue
     const filteredArray = arr.filter((obj) => {
       const alt = parseInt(obj[propertyName], 10)
@@ -113,16 +103,10 @@ class Calculator {
     })
     console.log("filteredArray: ", filteredArray)
     // Sort the filtered array by the property value
-    filteredArray.sort(
-      (a, b) =>
-        Math.abs(a[propertyName] - targetValue) -
-        Math.abs(b[propertyName] - targetValue)
-    )
+    filteredArray.sort((a, b) => Math.abs(a[propertyName] - targetValue) - Math.abs(b[propertyName] - targetValue))
 
     // Find the index of the closest object
-    const index = filteredArray.findIndex(
-      (obj) => Math.abs(obj[propertyName] - targetValue) === 0
-    )
+    const index = filteredArray.findIndex((obj) => Math.abs(obj[propertyName] - targetValue) === 0)
 
     // Extract the two rows surrounding the closest object
     const beforeRow = filteredArray[index - 1]
@@ -234,12 +218,7 @@ targetAltitude: 3000
       const obj1 = data[0]
       const obj2 = data[1]
 
-      if (
-        obj1.hasOwnProperty(key) &&
-        obj2.hasOwnProperty(key) &&
-        !Array.isArray(obj1[key]) &&
-        ratio !== 1
-      ) {
+      if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key) && !Array.isArray(obj1[key]) && ratio !== 1) {
         // both have the key
         let invert = true
         if (key === "temp") invert = false
@@ -261,31 +240,51 @@ targetAltitude: 3000
 
   adjustValuesByTemp(actualTemp, standardTemp, array) {
     if (actualTemp <= standardTemp) {
-      return array;
+      return array
     }
-  
-    const unitsAbove59 = actualTemp - standardTemp;
-    const increment = 25; // 25 units above 59
-    const increaseFactor = Math.floor(unitsAbove59 / increment);
-    const percentageIncrease = 0.1 * increaseFactor;
-  
+
+    const unitsAbove59 = actualTemp - standardTemp
+    const increment = 25 // 25 units above 59
+    const increaseFactor = Math.floor(unitsAbove59 / increment)
+    const percentageIncrease = 0.1 * increaseFactor
+
     const resultArray = array.map((value) => {
-      return value + percentageIncrease * value;
-    });
-  
-    return resultArray;
+      return value + percentageIncrease * value
+    })
+
+    return resultArray
   }
 
-  calculatePressureAltitude(fieldElevationFeet, pressureHpa) {
-    // Standard pressure at sea level in hPa
-    const standardPressureHpa = 1013.25
+  calculatePressureAltitude(altitudeInFeet, QNHInhPa) {
+    const standardPressureInhPa = 1013.25;
+    const expFactor = 1 / 5.256;
+    const factor = Math.pow(QNHInhPa / standardPressureInhPa, expFactor);
+    const pressureAltitude = (1 - factor) * 145366.45;
+    return pressureAltitude;
+  }
 
-    // Calculate the pressure altitude
-    const pressureAltitudeFeet =
-      145366.45 * (1 - Math.pow(pressureHpa / standardPressureHpa, 0.190284)) +
-      fieldElevationFeet
+  calculateDensityAltitude(QNH, altitude, OAT) {
+    // Constants for the standard atmosphere.
+    const ISA_SEA_LEVEL_TEMP_C = 15 // Standard temperature at sea level in Celsius.
+    const ISA_TEMP_LAPSE_RATE_C_PER_METER = -0.0065 // Temperature lapse rate in Celsius per meter.
 
-    return pressureAltitudeFeet
+    // Convert QNH from hPa to Pascals (1 hPa = 100 Pascals).
+    const QNH_Pascals = QNH * 100
+
+    // Calculate the pressure altitude (PA) using the barometric formula.
+    const PA = (1 - (QNH_Pascals / 101325) ** 0.190284) * 44307.7
+
+    // Calculate the ISA temperature at the given altitude.
+    const ISA_temp_C = ISA_SEA_LEVEL_TEMP_C + ISA_TEMP_LAPSE_RATE_C_PER_METER * altitude
+
+    // Calculate the density altitude.
+    const densityAltitude = PA + 120 * (OAT - ISA_temp_C)
+
+    return densityAltitude
+  }
+  convertInHgToQNH(inHg) {
+    const QNH_hPa = inHg * 33.8639
+    return QNH_hPa
   }
 
   adjustValuesByRatio(ratio, [obj1, obj2]) {

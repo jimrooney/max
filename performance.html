@@ -51,73 +51,106 @@
   <div id="draggableContainer">
     <div id="navbar"></div>
 
-    <!-- Output -->
-    <div>
-      <br />
-      <label for="output">Output:</label>
-      <textarea id="output" name="output" rows="5" cols="50"></textarea>
-    </div>
-
-    <!-- Buttons -->
-    <div>
-      <input type="button" id="doClick" value="doClick" onclick="doClick()" />
-      <input type="button" id="byWeight" value="By Weight" onclick="doClick()" />
-      <p></p>
-    </div>
-
-    <!-- Altitude Slider -->
-    <div id="AltitudeSliderBar" style="position: absolute; right: 5px; width: 10px; height: 200px; background-color: rgb(0, 13, 255)">
-      <div style="position: absolute; z-index: 1; top: 20px; right: 0px">
-        <div
-          class="draggable boxarrow justifyRight"
-          constraint="y"
-          control="altitude"
-          bar="AltitudeSliderBar"
-          style="right: -10px; transform: rotate(0deg); position: relative"
-        >
-          <div style="position: absolute; bottom: 0; z-index: -2">
-            <label for="altitude" style="margin-top: -100px; z-index: -1; position: absolute">Altitude:</label>
-            <input
-              type="text"
-              id="altitude"
-              value="0"
-              onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
-              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-              style="width: 50px; height: 20px; margin-top: -80px; z-index: -1; position: absolute"
-            />
+    <!-- Sliders -->
+    <div style="position: relative; left: 50%; top: 75%; transform: translate(-50%, -50%)">
+      <!-- Altitude Slider -->
+      <div id="AltitudeSliderBar" style="position: absolute; right: 10%; width: 10px; height: 200px; background-color: rgb(0, 13, 255)">
+        <div style="position: absolute; z-index: 1; top: 20px; right: 0px">
+          <div
+            class="draggable boxarrow justifyRight"
+            constraint="y"
+            control="altitude"
+            bar="AltitudeSliderBar"
+            style="right: -10px; transform: rotate(0deg); position: relative"
+          >
+            <div style="position: absolute; bottom: 0; z-index: -2">
+              <label for="altitude" style="margin-top: -100px; z-index: -1; position: absolute">Altitude:</label>
+              <input
+                type="text"
+                id="altitude"
+                value="0"
+                onkeydown="if (event.keyCode == 13) root.performance.doPerformance()"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                style="width: 50px; height: 20px; margin-top: -80px; z-index: -1; position: absolute"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- Weight Slider -->
-    <div id="WeightSliderBar" style="position: absolute; right: 100px; width: 10px; height: 200px; background-color: rgb(0, 255, 34)">
-      <div style="position: absolute; z-index: 1; top: 20px; right: 0px">
-        <div
-          class="draggable boxarrow justifyRight"
-          constraint="y"
-          control="weight"
-          bar="WeightSliderBar"
-          style="right: -10px; transform: rotate(0deg); position: relative"
-        >
-          <div style="position: absolute; bottom: 0; z-index: -2">
-            <label for="weight" style="margin-top: -100px; z-index: -1; position: absolute">Weight:</label>
-            <input
-              type="text"
-              id="weight"
-              value="2300"
-              onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
-              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-              style="width: 50px; height: 20px; margin-top: -80px; z-index: -1; position: absolute"
-            />
+      <!-- Weight Slider -->
+      <div id="WeightSliderBar" style="position: absolute; right: 40%; width: 10px; height: 200px; background-color: rgb(0, 255, 34)">
+        <div style="position: absolute; z-index: 1; top: 20px; right: 0px">
+          <div
+            class="draggable boxarrow justifyRight"
+            constraint="y"
+            control="weight"
+            bar="WeightSliderBar"
+            style="right: -10px; transform: rotate(0deg); position: relative"
+          >
+            <div style="position: absolute; bottom: 0; z-index: -2">
+              <label for="weight" style="margin-top: -100px; z-index: -1; position: absolute">Weight:</label>
+              <input
+                type="text"
+                id="weight"
+                value="2300"
+                onkeydown="if (event.keyCode == 13) root.performance.doPerformance()"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                style="width: 50px; height: 20px; margin-top: -80px; z-index: -1; position: absolute"
+              />
+            </div>
           </div>
         </div>
       </div>
+      <!-- Temperature Slider -->
+      <div id="TempSliderBar" style="position: absolute; right: 73%; width: 10px; height: 200px; background-color: rgb(255, 251, 0)">
+        <div style="position: absolute; z-index: 1; top: 20px; right: 0px">
+          <div
+            class="draggable boxarrow justifyRight"
+            constraint="y"
+            control="temp"
+            bar="TempSliderBar"
+            style="right: -10px; transform: rotate(0deg); position: relative"
+          >
+            <div style="position: absolute; bottom: 0">
+              <label for="temp" style="margin-top: -100px; z-index: -1; position: absolute">Temperature:</label>
+              <input
+                type="text"
+                id="temp"
+                value="0"
+                onkeydown="if (event.keyCode == 13) root.performance.doPerformance()"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                style="width: 50px; height: 20px; margin-top: -80px; z-index: -1; position: absolute"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
+    <!-- /Sliders -->
+
+
+
+
+
     <!-- Headwind Slider -->
     <div
       class="headwind"
       id="HeadwindSliderBar"
-      style="position: absolute; top:600px; left: 100px; width: 200px; height: 10px; background-color: rgb(255, 0, 0)"
+      style="position: absolute; top: 500px; left: 30%; width: 200px; height: 10px; background-color: rgb(255, 0, 0)"
     >
       <div class="draggable boxarrow" constraint="x" control="headwind" bar="HeadwindSliderBar">
         <div>
@@ -126,39 +159,60 @@
             type="text"
             id="headwind"
             value="0"
-            onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
+            onkeydown="if (event.keyCode == 13) root.performance.doPerformance()"
             oninput="this.value = this.value.replace(/[^0-9]/g, '')"
             style="margin-top: -40px"
           />
         </div>
       </div>
     </div>
-    <!-- Temperature Slider -->
-    <div id="TempSliderBar" style="position: absolute; right: 200px; width: 10px; height: 200px; background-color: rgb(255, 251, 0)">
-      <div style="position: absolute; z-index: 1; top: 20px; right: 0px">
-        <div
-          class="draggable boxarrow justifyRight"
-          constraint="y"
-          control="temp"
-          bar="TempSliderBar"
-          style="right: -10px; transform: rotate(0deg); position: relative"
-        >
-          <div style="position: absolute; bottom: 0">
-            <label for="temp" style="margin-top: -100px; z-index: -1; position: absolute">Temperature:</label>
-            <input
-              type="text"
-              id="temp"
-              value="0"
-              onkeydown="if (event.keyCode == 13) document.querySelector('#byWeight').click()"
-              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-              style="width: 50px; height: 20px; margin-top: -80px; z-index: -1; position: absolute"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+
     <!-- Airplane Icon -->
     <!-- <center><div id="airplane-icon" class="airplane-icon"></div></center> -->
+
+    <!-- Buttons -->
+    <div style="bottom: 0; position: absolute; z-index: 3; right: 0">
+      <input type="button" id="doClick" value="Calc" onclick="root.performance.doPerformance()" />
+      <p></p>
+    </div>
+    <!-- Output -->
+    <div style="bottom: 0; position: absolute">
+      <label for="output">Output:</label>
+      <textarea id="output" name="output" rows="5" cols="50"></textarea>
+    </div>
+
+
+
+              <!-- QNH -->
+      <!-- QNH Slider -->
+      <!-- <div id="QNHSliderbBar" style="position: absolute; right: 45%; top: 45%; width: 10px; height: 100px; background-color: rgb(0, 200, 255)">
+        <div style="position: absolute; z-index: 2; top: 60px; right: 10px">
+          <div
+            class="draggable boxarrow justifyRight"
+            constraint="y"
+            control="QNH"
+            bar="QNHSliderbBar"
+            style="right: -10px; transform: rotate(0deg); position: relative"
+          >
+            <div style="position: absolute; bottom: 0; z-index: -2">
+              <label for="weight" style="margin-top: -100px; z-index: -1; position: absolute">QNH:</label>
+              <input
+                type="text"
+                id="QNH"
+                value="1013"
+                onkeydown="if (event.keyCode == 13) root.performance.doPerformance()"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                style="width: 50px; height: 20px; margin-top: -80px; z-index: -1; position: absolute"
+              />
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+
+
+
+
   </div>
 </body>
 
