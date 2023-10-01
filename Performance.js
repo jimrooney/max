@@ -20,6 +20,17 @@ class Performance {
     // },
     // {},
 
+    let targetAltitude = document.getElementById("altitude").value || 0
+    if(root.debug) console.log("targetAltitude: ", targetAltitude)
+
+    // const QNH =  document.getElementById("QNH").value || 1013
+    // if (QNH !== 1013) {
+    //   targetAltitude = root.calc.calculatePressureAltitude( targetAltitude, QNH )
+    // }
+    // console.log("targetAltitude: ", targetAltitude)
+
+
+
     // ========== Takeoff Speed ==========
     const speed = this.getTakeoffSpeed(parameters.data, weight)
 
@@ -88,9 +99,6 @@ class Performance {
     //
     // If at the upper limit wind, all arrays will be single value...
     // Hence the || operator (just use the value given)
-
-    const targetAltitude = document.getElementById("altitude").value || 0
-    if(root.debug) console.log("targetAltitude: ", targetAltitude)
 
     // ----------------------------------------------------------------
     // Adjust PA values for wind
@@ -167,7 +175,34 @@ class Performance {
     }
     return ret
   }
+  doPerformance(){
+        // **********************************************************************************************************
+    // Pulls the values from the text boxes we just filled... we can skip this step and wire them directly to the calculations
+    // **********************************************************************************************************
+    let output = JSON.stringify(root.data.C185.takeoff)
+    document.getElementById("output").value = output
+    const parameters = {
+      data: root.data.C185.takeoff,
+      weight: document.querySelector("#weight").value, //|| 2400,
+      wind: document.querySelector("#headwind").value || 0,
+      altitude: document.querySelector("#altitude").value || 0,
+      temp: document.querySelector("#temp").value || 0,
+      // QNH: document.querySelector("#QNH").value || 0,
+    }
 
+    // **********************************************************************************************************
+    // passing in parameters...
+    const result = root.performance.byWeight(parameters) // do the calculations
+    // **********************************************************************************************************
+
+    // Just displaying raw data to a text field for now ********************************
+    const out = `
+    Speed: ${Math.round(result.speed)}
+    Ground Run: ${Math.round(result.groundRun)}
+    TO Distance: ${Math.round(result.TODistance)}`
+
+    document.getElementById("output").value = out
+  }
   getPerformance(
     data,
     type,

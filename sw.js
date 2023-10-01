@@ -1,30 +1,21 @@
-var SW_Version = 16;
+var SW_Version = 17;
 var cacheName = 'Balance2';
 var filesToCache = [
 '/',
-  // 'index.html',
-  // 'crosswind.html',
-  // 'crosswindScript.js',
-  // 'performance.html',
-  // 'Performance.js',
-  // 'JimQuery.js',
-  // 'navbar.js',
-  // 'CSS.css',
-  // 'script.js',
-  // 'Airplane.js',
-  // 'Airplanes.js',
-  // 'C206.js',
-  // 'C208.js',
-  // 'data.js',
-  // 'Display.js',
-  // 'DOM.js',
-  // 'GA8.js',
-  // 'UI.js',
-  // 'root.js',
-  // 'Seat.js',
-  // 'Station.js',
-  // 'Sliders.css',
-  // 'Sliders.js'
+'CSS.css',
+'Calculator.js',
+'DOM.js',
+'JimQuery.js',
+'Performance.js',
+'Sliders.css',
+'Sliders.js',
+'UI.js',
+'data.js',
+'manifest.json',
+'navbar.js',
+'performance.html',
+'root.js',
+'test.css',
 ];
 self.addEventListener('install', function(e) {
   console.log('[ServiceWorker] Install');

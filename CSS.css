@@ -11,10 +11,10 @@ label {
 /* =========== Navbar =========== */
 .version-div {
   position: absolute;
-  top: 0;
+  bottom: 12%;
   right: 0;
   background-color: #333;
-  color: white;
+  color: rgb(0, 0, 0);
   padding: 5px 10px;
   z-index: 2; /* Ensures it's displayed in front */
 }
@@ -45,9 +45,9 @@ label {
   float: left;
   color: #f2f2f2;
   text-align: center;
-  padding: 14px 16px;
+  padding: 10px 12px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 10px;
 }
 
 .topnav a:hover {

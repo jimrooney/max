@@ -6,6 +6,8 @@ Add in pressure.
 Interpolate temperature and we're functionally complete.
 Then start working on pulling in different plane data (GA8)
 
+Make "ByClick" button work again (calls wrong byweight function)
+Make inputting text values move the sliders (can use the percentage factor to set the slider y point)
 
 Still messing with root.parameters ... setting a default in performance.html...
     The last line of performance.js updateEvent() calls byWeight with parameters...

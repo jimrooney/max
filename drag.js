@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
       alt: getBounds(root.parameters.data[0].pressureAltitude.map((item) => item.alt)),
       weight: getBounds(root.parameters.data.map((item) => item.weight)),
       temp: [0, 50],
+      // QNH: [950, 1040],
     }
 
     // Get references to the inner and containing divs
@@ -111,37 +112,19 @@ document.addEventListener("DOMContentLoaded", function () {
         dragBox.ratioY * (bounds.weight[1] - bounds.weight[0]) + bounds.weight[0],
         bounds.weight
       ),
+      // QNH: root.getValueInRange(
+      //   // more complex because the lower bound isn't zero
+      //   dragBox.ratioY * (bounds.QNH[1] - bounds.QNH[0]) + bounds.QNH[0],
+      //   bounds.QNH
+      // ),
       temp: root.getValueInRange(dragBox.ratioY * bounds.temp[1], bounds.temp),
     }
 
     // updates the tracked dragger's output display value
     display.value = Math.round(GUICalc[control])
 
-    // **********************************************************************************************************
-    // Pulls the values from the text boxes we just filled... we can skip this step and wire them directly to the calculations
-    // **********************************************************************************************************
-    let output = JSON.stringify(root.data.C185.takeoff)
-    document.getElementById("output").value = output
-    const parameters = {
-      data: root.data.C185.takeoff,
-      weight: document.querySelector("#weight").value, //|| 2400,
-      wind: document.querySelector("#headwind").value || 0,
-      altitude: document.querySelector("#altitude").value || 0,
-      temp: document.querySelector("#temp").value || 0,
-    }
-
-    // **********************************************************************************************************
-    // passing in parameters...
-    const result = root.performance.byWeight(parameters) // do the calculations
-    // **********************************************************************************************************
-
-    // Just displaying raw data to a text field for now ********************************
-    const out = `
-    Speed: ${Math.round(result.speed)}
-    Ground Run: ${Math.round(result.groundRun)}
-    TO Distance: ${Math.round(result.TODistance)}`
-
-    document.getElementById("output").value = out
+    // All values updated, run the calculations
+    root.performance.doPerformance()
   }
 
   // Touch and Mouse End
