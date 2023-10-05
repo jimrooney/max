@@ -2,9 +2,11 @@
 This is the trigger from drag... need to singlepoint this.
     const result = root.performance.byWeight(parameters) // do the calculations
 
-Add in pressure.
-Interpolate temperature and we're functionally complete.
-Then start working on pulling in different plane data (GA8)
+Grass Runway checkbox added... should run the calc anytime it changes
+    so you can do side by side checks
+    
+Need to rebuild / paralell build with the concept of pressureAltitude.
+Start working on pulling in different plane data (GA8)
 
 Make "ByClick" button work again (calls wrong byweight function)
 Make inputting text values move the sliders (can use the percentage factor to set the slider y point)
