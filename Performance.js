@@ -166,13 +166,22 @@ class Performance {
     if(root.debug) console.log("Result: ", data)
 
     const tmpAdjusted = root.calc.adjustValuesByTemp(root.calc.celsiusToFahrenheit(parameters.temp) , data.temp, [data.groundRun, data.TODistance])
-
+    
     const ret = {
       speed: data.speed,
       groundRun: tmpAdjusted[0],
       TODistance: tmpAdjusted[1],
       data: data,
     }
+
+    const grass = document.getElementById("grass_runway")
+    if(grass.checked)
+    {
+      const factor = ret.TODistance * .06
+      ret.TODistance = ret.TODistance + factor
+      ret.groundRun = ret.groundRun + factor
+    }
+    
     return ret
   }
   doPerformance(){
