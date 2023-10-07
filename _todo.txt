@@ -1,10 +1,8 @@
 
 This is the trigger from drag... need to singlepoint this.
     const result = root.performance.byWeight(parameters) // do the calculations
+    --> One Click to do calculations... root.performance.doPerformance()
 
-Grass Runway checkbox added... should run the calc anytime it changes
-    so you can do side by side checks
-    
 Need to rebuild / paralell build with the concept of pressureAltitude.
 Start working on pulling in different plane data (GA8)
 
