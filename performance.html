@@ -28,18 +28,19 @@
 
   function doClick() {
     console.log("doClick")
-    const parameters = {
-      data: root.data.C185.takeoff,
-      weight: document.querySelector("#weight").value, //|| 2400,
-      wind: document.querySelector("#headwind").value || 0,
-      altitude: document.querySelector("#altitude").value || 0,
-    }
-    const result = root.performance.byWeight(parameters)
-    const out = `Speed: ${Math.round(result.speed)}
-\nGround Run: ${Math.round(result.groundRun)}
-\nTO Distance: ${Math.round(result.TODistance)}`
+    root.performance.doPerformance()
+    //     const parameters = {
+    //       data: root.data.C185.takeoff,
+    //       weight: document.querySelector("#weight").value, //|| 2400,
+    //       wind: document.querySelector("#headwind").value || 0,
+    //       altitude: document.querySelector("#altitude").value || 0,
+    //     }
+    //     const result = root.performance.byWeight(parameters)
+    //     const out = `Speed: ${Math.round(result.speed)}
+    // \nGround Run: ${Math.round(result.groundRun)}
+    // \nTO Distance: ${Math.round(result.TODistance)}`
 
-    document.getElementById("output").value = out
+    //     document.getElementById("output").value = out
   }
 </script>
 <head>
@@ -125,26 +126,8 @@
           </div>
         </div>
       </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
     <!-- /Sliders -->
-
-
-
-
 
     <!-- Headwind Slider -->
     <div
@@ -181,11 +164,9 @@
       <textarea id="output" name="output" rows="5" cols="50"></textarea>
     </div>
 
-
-
-              <!-- QNH -->
-      <!-- QNH Slider -->
-      <!-- <div id="QNHSliderbBar" style="position: absolute; right: 45%; top: 45%; width: 10px; height: 100px; background-color: rgb(0, 200, 255)">
+    <!-- QNH -->
+    <!-- QNH Slider -->
+    <!-- <div id="QNHSliderbBar" style="position: absolute; right: 45%; top: 45%; width: 10px; height: 100px; background-color: rgb(0, 200, 255)">
         <div style="position: absolute; z-index: 2; top: 60px; right: 10px">
           <div
             class="draggable boxarrow justifyRight"
@@ -209,10 +190,8 @@
         </div>
       </div> -->
 
-
-      <label><input type="checkbox" id="grass_runway" value="grass" checked>Grass Runway</label>
-
-
+    <!-- Grass Runway Option -->
+    <label><input type="checkbox" id="grass_runway" value="grass" onclick="root.performance.doPerformance()" checked />Grass Runway</label>
   </div>
 </body>
 
