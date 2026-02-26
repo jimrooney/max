@@ -224,7 +224,7 @@ button:disabled {
         <span>Surface</span>
         <select id="surface" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
           <option value="paved">Paved/Dry</option>
-          <option value="grass">Short Grass (dry)</option>
+          <option value="grass">Short Dry Grass / Gravel</option>
         </select>
       </label>
       <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
@@ -297,6 +297,7 @@ button:disabled {
         <div>
           <div class="text-muted uppercase tracking-wider text-xs">Baseline Source</div>
           <div class="text-sm font-bold"><span id="src">—</span></div>
+          <div id="ga8Compare" class="text-xs text-muted mt-1"></div>
         </div>
         <div>
           <div class="text-muted uppercase tracking-wider text-xs">Computed Pressure Altitude</div>
@@ -329,7 +330,7 @@ button:disabled {
       <summary class="cursor-pointer font-bold">Data &amp; Method</summary>
       <p class="text-sm mt-2">This tool interpolates the selected aircraft AFM/POH grid over Weight, Pressure Altitude, and OAT (tri-linear first, then IDW on sparse points). Pressure altitude can be auto-computed from runway elevation plus QNH (hPa) or altimeter (inHg), or estimated from OAT plus elevation when pressure is not entered.</p>
       <pre id="dataDump" class="font-mono text-xs whitespace-pre-wrap bg-input-bg border border-input-border rounded-xl p-3 mt-2 max-h-64 overflow-auto"></pre>
-      <p class="text-sm mt-2">Corrections are aircraft-specific. Caravan uses prior generic planning factors; Kodiak uses the wind/slope/grass notes from the provided POH image; C172 (180 hp) uses chart notes. Verify all corrections against the official AFM/POH and your SOPs.</p>
+      <p class="text-sm mt-2">Corrections are aircraft-specific. Caravan uses prior generic planning factors; Kodiak uses the wind/slope/grass notes from the provided POH image; C172 (180 hp) uses chart notes; GA8 maps the "grass" selection to chart "Short Dry Grass / Gravel". Verify all corrections against the official AFM/POH and your SOPs.</p>
     </details>
 
     <p class="text-xs text-muted mt-5">Prototype planning aid only. Verify against the official AFM/POH and company SOP. Tailwinds and contaminated/soft surfaces can dramatically increase distances.</p>
@@ -3866,7 +3867,8 @@ function applyCorrections(dist, { aircraft = 'caravan', headKts = 0, slopePct = 
       factor *= (1 + 0.10 * (slopePct / 1));
     }
     if (surface === 'grass') {
-      factor *= 1.07;
+      // GA8 chart mapping: UI "grass" option represents "Short Dry Grass / Gravel".
+      factor *= 1.12;
     }
   } else if (aircraft === 'c172_180') {
     if (headKts > 0) {
@@ -3898,34 +3900,53 @@ function applyCorrections(dist, { aircraft = 'caravan', headKts = 0, slopePct = 
 
 /* src/engine/ga8-equation.js */
 // GA8 Airvan ground roll and o50 equations
-// Derived by regression on AFM Section 5 nomogram data (14° flap)
-//
-// GR(ft) = (W / W_ref)^2 × exp(h(PA, OAT))
-// o50(ft) = GR × (1 + 0.6057/σ)   where σ is density ratio
-//
-// Weight exponent of 2.0 matches piston aircraft physics (GR ∝ W²).
-// h(PA,OAT) polynomial fitted to uncalibrated W=1200 + W=1814 data (R² = 0.9999).
-// o50 ratio calibrated to AFM chart example: 625m/370m = 1.689 at σ=0.879.
+// Re-calibrated against the full in-app GA8 re-digitized chart table (14° flap).
+// Model form (log-space, ft output):
+// ln(distance) = b0 + b1*ln(W/Wref) + b2*pn + b3*tn + b4*pn² + b5*tn² + b6*pn*tn + b7*ln(W/Wref)*pn + b8*ln(W/Wref)*tn
+// where pn = PA/10000, tn = OAT/40, Wref = 1814 kg.
+// Fit error on table points: ~1.23% MAPE (GR), ~1.23% MAPE (o50).
 
 const W_REF = 1814; // reference weight (kg), GA8 max gross
 
-// Polynomial coefficients for h(PA, OAT) in log-space
-// Inputs are normalized: pn = PA/10000, tn = OAT/40
-const H = [
-  6.911442770279331,     // intercept
-  1.008233120088826,     // pn
-  0.4783407256099565,    // tn
-  0.041670339615218654,  // pn²
-  0.015139188957839026,  // tn²
-  0.008853542973726617,  // pn × tn
-  0.03227338871250904,   // pn² × tn
-  -0.005344925618352806  // pn × tn²
+const GA8_GR_COEF = [
+  6.7054746012828925,
+  1.47624379112181,
+  1.0404988082087163,
+  0.4154147721599631,
+  0.09628302778848367,
+  -0.028589876658854613,
+  0.032178417594112135,
+  0.17789455846347996,
+  -0.2228606184733457
 ];
 
-function densityRatio(paFt, oatC) {
-  const delta = Math.pow(1 - 6.8756e-6 * paFt, 5.2559);
-  const theta = (oatC + 273.15) / 288.15;
-  return delta / theta;
+const GA8_O50_COEF = [
+  7.15930335489653,
+  1.47634309269889,
+  1.1713673356175014,
+  0.468897364317601,
+  0.11843059723294046,
+  -0.03029266162292696,
+  0.044766802904603734,
+  0.17790298133783747,
+  -0.2230813960162441
+];
+
+function ga8EvalDistance(wKg, paFt, oatC, coef) {
+  const wr = Math.max(wKg / W_REF, 1e-9);
+  const lw = Math.log(wr);
+  const pn = paFt / 10000;
+  const tn = oatC / 40;
+  const h = coef[0]
+    + coef[1] * lw
+    + coef[2] * pn
+    + coef[3] * tn
+    + coef[4] * pn * pn
+    + coef[5] * tn * tn
+    + coef[6] * pn * tn
+    + coef[7] * lw * pn
+    + coef[8] * lw * tn;
+  return Math.exp(h);
 }
 
 /**
@@ -3936,36 +3957,7 @@ function densityRatio(paFt, oatC) {
  * @returns {number} ground roll in feet
  */
 function ga8GroundRoll(wKg, paFt, oatC) {
-  const pn = paFt / 10000;
-  const tn = oatC / 40;
-  const h = H[0]
-    + H[1] * pn
-    + H[2] * tn
-    + H[3] * pn * pn
-    + H[4] * tn * tn
-    + H[5] * pn * tn
-    + H[6] * pn * pn * tn
-    + H[7] * pn * tn * tn;
-
-  return Math.pow(wKg / W_REF, 2) * Math.exp(h);
-}
-
-/**
- * o50/gr ratio calibrated to AFM chart example.
- * ratio = 1 + 0.6057/σ
- *
- * At sea level standard (σ=1.0): ratio ≈ 1.61
- * At chart example (PA=4000, 10°C, σ=0.879): ratio = 1.689 (exact match)
- * At 8000 ft / 40°C (σ≈0.68): ratio ≈ 1.89
- *
- * @param {number} paFt - pressure altitude in feet
- * @param {number} oatC - outside air temperature in °C
- * @returns {number} o50/gr ratio
- */
-function ga8O50Ratio(paFt, oatC) {
-  const sigma = densityRatio(paFt, oatC);
-  if (sigma <= 0.20) return 1 + 0.6057 / 0.20; // cap at extreme DA
-  return 1 + 0.6057 / sigma;
+  return ga8EvalDistance(wKg, paFt, oatC, GA8_GR_COEF);
 }
 
 /**
@@ -3976,7 +3968,7 @@ function ga8O50Ratio(paFt, oatC) {
  * @returns {number} o50 distance in feet
  */
 function ga8Over50(wKg, paFt, oatC) {
-  return ga8GroundRoll(wKg, paFt, oatC) * ga8O50Ratio(paFt, oatC);
+  return ga8EvalDistance(wKg, paFt, oatC, GA8_O50_COEF);
 }
 
 /* src/engine/compute.js */
@@ -4005,15 +3997,43 @@ function computeTakeoff(inputs, dataset) {
   // 4. Base distance — equation or interpolation
   let grC, o50C, source;
   const correctionsKey = dataset.corrections || aircraftKey;
+  const ga8Comparison = {
+    enabled: false,
+    legacy: null,
+    nomograph: null
+  };
+
+  function computeCorrectedFromBase(grBase, o50Base) {
+    let grOut = applyCorrections(grBase, { aircraft: correctionsKey, headKts: wind.head, slopePct: slope, surface, paFt: pa });
+    let o50Out = applyCorrections(o50Base, { aircraft: correctionsKey, headKts: wind.head, slopePct: slope, surface, paFt: pa });
+
+    // C172 grass special case
+    if (correctionsKey === 'c172_180' && surface === 'grass') {
+      const grassAdd = 0.15 * grOut;
+      grOut += grassAdd;
+      o50Out += grassAdd;
+    }
+    return { gr: grOut, o50: o50Out };
+  }
 
   if (dataset.equation === 'ga8') {
-    // GA8: direct equation model (no table interpolation)
-    const grBase = ga8GroundRoll(w, pa, oat);
-    const o50Base = ga8Over50(w, pa, oat);
-    source = `${name}: equation model (14° flap)`;
+    // GA8: equation model is primary, legacy interpolation is shown for comparison.
+    const grEq = ga8GroundRoll(w, pa, oat);
+    const o50Eq = ga8Over50(w, pa, oat);
+    const eqOut = computeCorrectedFromBase(grEq, o50Eq);
+    grC = eqOut.gr;
+    o50C = eqOut.o50;
+    source = `${name}: nomograph-equation model (14° flap)`;
 
-    grC = applyCorrections(grBase, { aircraft: correctionsKey, headKts: wind.head, slopePct: slope, surface, paFt: pa });
-    o50C = applyCorrections(o50Base, { aircraft: correctionsKey, headKts: wind.head, slopePct: slope, surface, paFt: pa });
+    const legacyFlap = interpolateAcrossFlaps(table, flaps, w, pa, oat);
+    if (legacyFlap) {
+      const legacyW = applyWeightModel(legacyFlap, w, table, model);
+      const legacyBase = applyFlapModel(legacyW, flaps, model);
+      const legacyOut = computeCorrectedFromBase(legacyBase.gr, legacyBase.o50);
+      ga8Comparison.enabled = true;
+      ga8Comparison.legacy = { gr: Math.round(legacyOut.gr), o50: Math.round(legacyOut.o50) };
+      ga8Comparison.nomograph = { gr: Math.round(grC), o50: Math.round(o50C) };
+    }
   } else {
     // All other aircraft: table interpolation pipeline
     const flapsLoaded = availableFlaps(table);
@@ -4034,15 +4054,9 @@ function computeTakeoff(inputs, dataset) {
     const base = applyFlapModel(baseW, flaps, model);
     source = `${name}: ${base.source}`;
 
-    grC = applyCorrections(base.gr, { aircraft: correctionsKey, headKts: wind.head, slopePct: slope, surface, paFt: pa });
-    o50C = applyCorrections(base.o50, { aircraft: correctionsKey, headKts: wind.head, slopePct: slope, surface, paFt: pa });
-  }
-
-  // C172 grass special case
-  if (correctionsKey === 'c172_180' && surface === 'grass') {
-    const grassAdd = 0.15 * grC;
-    grC += grassAdd;
-    o50C += grassAdd;
+    const baseOut = computeCorrectedFromBase(base.gr, base.o50);
+    grC = baseOut.gr;
+    o50C = baseOut.o50;
   }
 
   // 6. Final values
@@ -4058,6 +4072,7 @@ function computeTakeoff(inputs, dataset) {
     grMarginM: ftToM(grC * marginFactor),
     o50MarginM: ftToM(o50C * marginFactor),
     source,
+    ga8Comparison,
     wind,
     pa: Math.round(pa),
     paMethod,
@@ -4330,6 +4345,7 @@ const BUILTIN_DATASETS = {
     label: 'Loaded dataset: GA8 AFM Section 5 nomogram (14\u00b0 flap, re-digitized from high-res chart)',
     baselineFlaps: 'Flaps 14\u00b0',
     defaults: { w: 1814, flaps: 14, minW: 1200, maxW: 1814 },
+    equation: 'ga8',
     model: { refWeightKg: 1814, grWeightExp: 1.5, o50WeightExp: 1.5, flapStepPct: 0.05 },
     builtin: true
   },
@@ -4373,7 +4389,8 @@ function getOutputElements() {
     head: byId('headComp'), cross: byId('crossComp'), headLabel: byId('headLabel'),
     src: byId('src'), dump: byId('dataDump'), paUsed: byId('paUsed'),
     paMethod: byId('paMethod'), wxStatus: byId('wxStatus'),
-    rwyLenFt: byId('rwyLenFt'), rwyLenM: byId('rwyLenM')
+    rwyLenFt: byId('rwyLenFt'), rwyLenM: byId('rwyLenM'),
+    ga8Compare: byId('ga8Compare')
   };
 }
 
@@ -4448,6 +4465,7 @@ function renderResults(result) {
     out.gr.textContent = out.o50.textContent = out.grm.textContent = out.o50m.textContent = '\u2014';
     out.grM.textContent = out.o50M.textContent = out.grmM.textContent = out.o50mM.textContent = '\u2014';
     out.src.textContent = result.errorMsg;
+    if (out.ga8Compare) out.ga8Compare.textContent = '';
   } else {
     out.gr.textContent = result.gr;
     out.o50.textContent = result.o50;
@@ -4458,6 +4476,18 @@ function renderResults(result) {
     out.grmM.textContent = result.grMarginM;
     out.o50mM.textContent = result.o50MarginM;
     out.src.textContent = result.source;
+    if (out.ga8Compare) {
+      if (result.ga8Comparison && result.ga8Comparison.enabled) {
+        const c = result.ga8Comparison;
+        const dGr = c.nomograph.gr - c.legacy.gr;
+        const dO50 = c.nomograph.o50 - c.legacy.o50;
+        const dGrSign = dGr >= 0 ? '+' : '';
+        const dO50Sign = dO50 >= 0 ? '+' : '';
+        out.ga8Compare.textContent = `GA8 compare (legacy -> nomograph): GR ${c.legacy.gr} -> ${c.nomograph.gr} ft (${dGrSign}${dGr}), 50 ft ${c.legacy.o50} -> ${c.nomograph.o50} ft (${dO50Sign}${dO50})`;
+      } else {
+        out.ga8Compare.textContent = '';
+      }
+    }
   }
 }
 

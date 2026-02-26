@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "aircraft": "GA8",
+  "chart": "GA8 TAKEOFF DISTANCE CHART - 14 deg FLAP (Metric Units)",
+  "units": {
+    "distance": "m",
+    "oat": "C",
+    "weight": "kg",
+    "wind": "kt",
+    "slope": "%",
+    "obstacle": "ft"
+  },
+  "image": {
+    "path": "c:\\Home\\Code\\Performance\\ga8-page67.png",
+    "reference": {
+      "x_left": 354,
+      "x_right": 2041,
+      "y_top": 304,
+      "y_bottom": 3048
+    }
+  },
+  "panels": [
+    {
+      "id": "oat_pa",
+      "kind": "family",
+      "x_domain_px": [354, 876],
+      "family_key": "pa_ft",
+      "families": [
+        {
+          "key": 0,
+          "points": [
+            [0, 0],
+            [1, 1]
+          ]
+        },
+        {
+          "key": 1000,
+          "points": [
+            [0, 0],
+            [1, 1]
+          ]
+        }
+      ],
+      "input_axis": {
+        "name": "oat_c",
+        "ticks": [
+          [369, -35],
+          [854, 45]
+        ]
+      }
+    },
+    {
+      "id": "weight",
+      "kind": "family",
+      "x_domain_px": [876, 1396],
+      "family_key": "weight_kg",
+      "families": [
+        {
+          "key": 1100,
+          "points": [
+            [0, 0],
+            [1, 1]
+          ]
+        },
+        {
+          "key": 1800,
+          "points": [
+            [0, 0],
+            [1, 1]
+          ]
+        }
+      ],
+      "input_axis": {
+        "name": "weight_kg",
+        "ticks": [
+          [938, 1100],
+          [1391, 1800]
+        ]
+      }
+    },
+    {
+      "id": "wind",
+      "kind": "family",
+      "x_domain_px": [1396, 1502],
+      "family_key": "wind_kt",
+      "families": [
+        {
+          "key": -5,
+          "points": [
+            [0, 0],
+            [1, 1]
+          ]
+        },
+        {
+          "key": 20,
+          "points": [
+            [0, 0],
+            [1, 1]
+          ]
+        }
+      ],
+      "input_axis": {
+        "name": "wind_kt",
+        "ticks": [
+          [1413, -5],
+          [1497, 20]
+        ]
+      }
+    },
+    {
+      "id": "slope",
+      "kind": "family",
+      "x_domain_px": [1502, 1620],
+      "family_key": "slope_pct",
+      "families": [
+        {
+          "key": -2,
+          "points": [
+            [0, 0],
+            [1, 1]
+          ]
+        },
+        {
+          "key": 2,
+          "points": [
+            [0, 0],
+            [1, 1]
+          ]
+        }
+      ],
+      "input_axis": {
+        "name": "slope_pct",
+        "ticks": [
+          [1511, -2],
+          [1619, 2]
+        ]
+      }
+    },
+    {
+      "id": "surface",
+      "kind": "categorical",
+      "x_domain_px": [1620, 1760],
+      "categories": [
+        "paved",
+        "grass"
+      ],
+      "traces": {
+        "paved": [
+          [0, 0],
+          [1, 1]
+        ],
+        "grass": [
+          [0, 0],
+          [1, 1]
+        ]
+      }
+    },
+    {
+      "id": "obstacle",
+      "kind": "family",
+      "x_domain_px": [1760, 2041],
+      "family_key": "obstacle_ft",
+      "families": [
+        {
+          "key": 0,
+          "points": [
+            [0, 0],
+            [1, 1]
+          ]
+        },
+        {
+          "key": 50,
+          "points": [
+            [0, 0],
+            [1, 1]
+          ]
+        }
+      ],
+      "input_axis": {
+        "name": "obstacle_ft",
+        "ticks": [
+          [1908, 50],
+          [2039, 0]
+        ]
+      },
+      "output_axis": {
+        "name": "distance_m",
+        "ticks": [
+          [3045, 50],
+          [305, 1700]
+        ]
+      }
+    }
+  ]
+}
