@@ -1,0 +1,4784 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0c10" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <script src="JimQuery.js"></script>
+  <script src="navbar.js"></script>
+  <title>Takeoff Calculator</title>
+  <style>
+:root {
+  --color-bg: #0b0c10;
+  --color-panel: #111318;
+  --color-ink: #eaecef;
+  --color-muted: #9aa4b2;
+  --color-acc: #4da3ff;
+  --color-border: #1c2330;
+  --color-input-bg: #0f1218;
+  --color-input-border: #2a3242;
+  --color-danger: #ff7b7b;
+  --color-pill-bg: #1b2433;
+}
+* { box-sizing: border-box; }
+body, .bg-bg { background: var(--color-bg); color: var(--color-ink); }
+.bg-panel { background: var(--color-panel); }
+.bg-input-bg { background: var(--color-input-bg); }
+.bg-pill-bg { background: var(--color-pill-bg); }
+.bg-acc { background: var(--color-acc); }
+.text-ink { color: var(--color-ink); }
+.text-muted { color: var(--color-muted); }
+.text-danger { color: var(--color-danger); }
+.text-acc { color: var(--color-acc); }
+.border { border-width: 1px; border-style: solid; }
+.border-border { border-color: var(--color-border); }
+.border-input-border { border-color: var(--color-input-border); }
+.border-dashed { border-style: dashed; }
+.border-0 { border: 0; }
+.rounded-lg { border-radius: 0.5rem; }
+.rounded-xl { border-radius: 0.75rem; }
+.rounded-2xl { border-radius: 1rem; }
+.rounded-full { border-radius: 9999px; }
+.w-full { width: 100%; }
+.max-w-\[1000px\] { max-width: 1000px; }
+.max-w-2xl { max-width: 42rem; }
+.min-w-\[200px\] { min-width: 200px; }
+.max-h-\[90vh\] { max-height: 90vh; }
+.max-h-64 { max-height: 16rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mx-4 { margin-left: 1rem; margin-right: 1rem; }
+.my-0 { margin-top: 0; margin-bottom: 0; }
+.p-2 { padding: 0.5rem; }
+.p-2\.5 { padding: 0.625rem; }
+.p-3 { padding: 0.75rem; }
+.p-3\.5 { padding: 0.875rem; }
+.p-6 { padding: 1.5rem; }
+.px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+.px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+.px-3\.5 { padding-left: 0.875rem; padding-right: 0.875rem; }
+.py-0\.5 { padding-top: 0.125rem; padding-bottom: 0.125rem; }
+.py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+.py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+.py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 0.75rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-5 { margin-top: 1.25rem; }
+.gap-1 { gap: 0.25rem; }
+.gap-1\.5 { gap: 0.375rem; }
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: 1fr; }
+@media (min-width: 640px) { .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.flex { display: flex; }
+.flex-1 { flex: 1 1 0%; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.self-end { align-self: flex-end; }
+.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.875rem; }
+.text-lg { font-size: 1.125rem; }
+.text-2xl { font-size: 1.5rem; }
+.font-bold { font-weight: 700; }
+.font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.uppercase { text-transform: uppercase; }
+.whitespace-pre-wrap { white-space: pre-wrap; }
+.leading-none { line-height: 1; }
+.cursor-pointer { cursor: pointer; }
+.tracking-wider { letter-spacing: 0.05em; }
+.inline-block { display: inline-block; }
+.overflow-auto { overflow: auto; }
+.overflow-y-auto { overflow-y: auto; }
+.hidden { display: none; }
+.fixed { position: fixed; }
+.inset-0 { inset: 0; }
+.z-50 { z-index: 50; }
+.bg-black\/60 { background: rgba(0, 0, 0, 0.6); }
+.text-green-400 { color: #4ade80; }
+.hover\:underline:hover { text-decoration: underline; }
+.hover\:text-ink:hover { color: var(--color-ink); }
+input, select, button, textarea {
+  font: inherit;
+}
+input, select, textarea {
+  color: var(--color-ink);
+  border: 1px solid var(--color-input-border);
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-acc);
+  box-shadow: 0 0 0 2px rgba(77, 163, 255, 0.2);
+}
+input:disabled {
+  opacity: 0.5;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.slider-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.setting-slider {
+  width: 100%;
+  accent-color: var(--color-acc);
+  cursor: pointer;
+}
+  </style>
+</head>
+<body class="bg-bg text-ink" style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; margin: 0; padding: 0; background: var(--color-bg); color: var(--color-ink);">
+  <div class="max-w-[1000px] mx-auto py-6 px-4">
+    <h1 id="title" class="text-2xl font-bold mb-1">Takeoff Calculator</h1>
+    <div class="text-muted text-sm mb-4">Baseline: <strong id="baselineFlaps">Flaps TO/APR</strong>, paved/dry, level, zero wind. <span id="datasetPill" class="inline-block bg-pill-bg border border-input-border rounded-full px-2 py-0.5 text-xs text-muted">Loaded dataset: —</span></div>
+
+    <div class="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Aircraft</span>
+        <select id="aircraft" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm"></select>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Weight (kg)</span>
+        <div class="slider-stack">
+          <input id="w" type="number" value="3995" min="2722" step="1" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <input id="wSlider" type="range" min="2722" max="3995" step="1" class="setting-slider">
+        </div>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Pressure Altitude (ft)</span>
+        <div class="slider-stack">
+          <input id="pa" type="number" value="0" step="100" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <input id="paSlider" type="range" min="-1000" max="14000" step="100" class="setting-slider">
+        </div>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Auto Pressure Altitude</span>
+        <select id="autoPA" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <option value="on">On</option>
+          <option value="off">Off</option>
+        </select>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>OAT (&deg;C)</span>
+        <div class="slider-stack">
+          <input id="oat" type="number" value="15" step="1" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <input id="oatSlider" type="range" min="-20" max="50" step="1" class="setting-slider">
+        </div>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Flaps (&deg;)</span>
+        <div class="slider-stack">
+          <input id="flaps" type="number" value="20" min="0" max="30" step="10" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <input id="flapsSlider" type="range" min="0" max="30" step="1" class="setting-slider">
+        </div>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Runway Heading (&deg;M)</span>
+        <div class="slider-stack">
+          <input id="rwy" type="number" value="60" step="10" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <input id="rwySlider" type="range" min="0" max="360" step="10" class="setting-slider">
+        </div>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Runway Length (ft)</span>
+        <input id="rwyLen" type="number" value="" step="1" placeholder="Auto from preset" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Wind From (&deg;M)</span>
+        <div class="slider-stack">
+          <input id="windDir" type="number" value="60" step="10" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <input id="windDirSlider" type="range" min="0" max="360" step="10" class="setting-slider">
+        </div>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Wind Speed (kt)</span>
+        <div class="slider-stack">
+          <input id="windSpd" type="number" value="0" step="1" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <input id="windSpdSlider" type="range" min="0" max="40" step="1" class="setting-slider">
+        </div>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Runway Slope (%)</span>
+        <div class="slider-stack">
+          <input id="slope" type="number" value="0" step="0.1" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <input id="slopeSlider" type="range" min="-5" max="5" step="0.1" class="setting-slider">
+        </div>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Surface</span>
+        <select id="surface" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <option value="paved">Paved/Dry</option>
+          <option value="grass">Short Grass (dry)</option>
+        </select>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Planning Margin (%)</span>
+        <div class="slider-stack">
+          <input id="margin" type="number" value="25" step="5" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <input id="marginSlider" type="range" min="0" max="100" step="5" class="setting-slider">
+        </div>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Preset Runway</span>
+        <select id="presetRwy" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+          <option value="">— None —</option>
+          <option value="NZQN05">NZQN RWY 05 (050&deg;)</option>
+          <option value="NZQN23">NZQN RWY 23 (230&deg;)</option>
+          <option value="NZQN14">NZQN RWY 14 (140&deg;)</option>
+          <option value="NZQN32">NZQN RWY 32 (320&deg;)</option>
+          <option value="NZMF11">NZMF RWY 11 (110&deg;)</option>
+          <option value="NZMF29">NZMF RWY 29 (290&deg;)</option>
+          <option value="NZGY14">NZGY RWY 14 (140&deg;)</option>
+          <option value="NZGY32">NZGY RWY 32 (320&deg;)</option>
+          <option value="NZRC04">NZRC RWY 04 (040&deg;)</option>
+          <option value="NZRC22">NZRC RWY 22 (220&deg;)</option>
+          <option value="NZGT15">NZGT RWY 15 (150&deg;)</option>
+          <option value="NZGT33">NZGT RWY 33 (330&deg;)</option>
+          <option value="NZWF11">NZWF RWY 11 (110&deg;)</option>
+          <option value="NZWF29">NZWF RWY 29 (290&deg;)</option>
+          <option value="NZMC13">NZMC RWY 13 (130&deg;)</option>
+          <option value="NZMC31">NZMC RWY 31 (310&deg;)</option>
+          <option value="KMFV03">KMFV RWY 03 (034&deg;)</option>
+          <option value="KMFV21">KMFV RWY 21 (214&deg;)</option>
+        </select>
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Airport ICAO</span>
+        <input id="airport" type="text" value="NZQN" maxlength="4" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm uppercase">
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Runway Elevation (ft)</span>
+        <input id="elev" type="number" value="1171" step="1" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>Altimeter (inHg)</span>
+        <input id="altim" type="number" value="" step="0.01" placeholder="29.92" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+      </label>
+      <label class="flex flex-col gap-1.5 bg-panel p-2.5 rounded-xl border border-border">
+        <span>QNH (hPa)</span>
+        <input id="qnh" type="number" value="" step="1" placeholder="1013" class="bg-input-bg text-ink border border-input-border rounded-lg p-2 text-sm">
+      </label>
+      <div class="flex flex-wrap gap-2 items-end self-end">
+        <button class="bg-acc text-[#001c38] border-0 rounded-xl px-3.5 py-2.5 font-bold cursor-pointer text-sm" id="btnLoadWx" title="Load live weather">Load Weather</button>
+        <button class="bg-acc text-[#001c38] border-0 rounded-xl px-3.5 py-2.5 font-bold cursor-pointer text-sm" id="btnManageAircraft" title="Import/manage custom aircraft">Aircraft</button>
+        <button class="bg-acc text-[#001c38] border-0 rounded-xl px-3.5 py-2.5 font-bold cursor-pointer text-sm" id="btnCopyJSON" title="Copy AFM data JSON">Copy JSON</button>
+        <button class="bg-acc text-[#001c38] border-0 rounded-xl px-3.5 py-2.5 font-bold cursor-pointer text-sm" id="btnReset">Reset</button>
+        <span id="wxStatus" class="text-muted text-xs"></span>
+      </div>
+    </div>
+
+    <!-- Results Card -->
+    <div class="bg-panel border border-border rounded-2xl p-3.5 mt-4">
+      <div class="flex gap-3 items-center flex-wrap">
+        <div>
+          <div class="text-muted uppercase tracking-wider text-xs">Head/Tailwind Component</div>
+          <div class="text-2xl font-bold"><span id="headComp">0</span> kt <span id="headLabel" class="text-muted">headwind</span></div>
+        </div>
+        <div>
+          <div class="text-muted uppercase tracking-wider text-xs">Crosswind Component</div>
+          <div class="text-2xl font-bold"><span id="crossComp">0</span> kt</div>
+        </div>
+        <div>
+          <div class="text-muted uppercase tracking-wider text-xs">Baseline Source</div>
+          <div class="text-sm font-bold"><span id="src">—</span></div>
+        </div>
+        <div>
+          <div class="text-muted uppercase tracking-wider text-xs">Computed Pressure Altitude</div>
+          <div class="text-sm font-bold"><span id="paUsed">—</span> ft <span id="paMethod" class="text-muted">manual</span></div>
+        </div>
+        <div>
+          <div class="text-muted uppercase tracking-wider text-xs">Selected Runway Length</div>
+          <div class="text-sm font-bold"><span id="rwyLenFt">—</span> ft (<span id="rwyLenM">—</span> m)</div>
+        </div>
+      </div>
+      <div class="flex gap-3 flex-wrap mt-3">
+        <div class="bg-panel border border-border rounded-2xl p-3.5 flex-1 min-w-[200px]">
+          <div class="text-muted uppercase tracking-wider text-xs">Ground Roll</div>
+          <div class="text-2xl font-bold"><span id="gr">—</span> ft (<span id="grM">—</span> m)</div>
+        </div>
+        <div class="bg-panel border border-border rounded-2xl p-3.5 flex-1 min-w-[200px]">
+          <div class="text-muted uppercase tracking-wider text-xs">Over 50 ft</div>
+          <div class="text-2xl font-bold"><span id="o50">—</span> ft (<span id="o50M">—</span> m)</div>
+        </div>
+        <div class="bg-panel border border-border rounded-2xl p-3.5 flex-1 min-w-[200px]">
+          <div class="text-muted uppercase tracking-wider text-xs">With Margin</div>
+          <div class="text-sm font-bold">GR <span id="grm">—</span> ft (<span id="grmM">—</span> m) &middot; 50 ft <span id="o50m">—</span> ft (<span id="o50mM">—</span> m)</div>
+        </div>
+      </div>
+      <div class="text-muted text-xs mt-2">Displayed distances include wind/slope/surface corrections. Margin multiplies the corrected result.</div>
+    </div>
+
+    <!-- Data & Method Details -->
+    <details class="border border-dashed border-input-border rounded-xl p-3 mt-4">
+      <summary class="cursor-pointer font-bold">Data &amp; Method</summary>
+      <p class="text-sm mt-2">This tool interpolates the selected aircraft AFM/POH grid over Weight, Pressure Altitude, and OAT (tri-linear first, then IDW on sparse points). Pressure altitude can be auto-computed from runway elevation plus QNH (hPa) or altimeter (inHg), or estimated from OAT plus elevation when pressure is not entered.</p>
+      <pre id="dataDump" class="font-mono text-xs whitespace-pre-wrap bg-input-bg border border-input-border rounded-xl p-3 mt-2 max-h-64 overflow-auto"></pre>
+      <p class="text-sm mt-2">Corrections are aircraft-specific. Caravan uses prior generic planning factors; Kodiak uses the wind/slope/grass notes from the provided POH image; C172 (180 hp) uses chart notes. Verify all corrections against the official AFM/POH and your SOPs.</p>
+    </details>
+
+    <p class="text-xs text-muted mt-5">Prototype planning aid only. Verify against the official AFM/POH and company SOP. Tailwinds and contaminated/soft surfaces can dramatically increase distances.</p>
+  </div>
+
+  <script>
+const caravanTable = [
+  {"flaps": 20, "w": 3995, "pa": 0, "oat": -10, "gr": 1185, "o50": 1855},
+  {"flaps": 20, "w": 3995, "pa": 0, "oat": 0, "gr": 1270, "o50": 1970},
+  {"flaps": 20, "w": 3995, "pa": 0, "oat": 10, "gr": 1355, "o50": 2095},
+  {"flaps": 20, "w": 3995, "pa": 0, "oat": 20, "gr": 1445, "o50": 2225},
+  {"flaps": 20, "w": 3995, "pa": 0, "oat": 30, "gr": 1535, "o50": 2360},
+  {"flaps": 20, "w": 3995, "pa": 0, "oat": 40, "gr": 1730, "o50": 2675},
+  {"flaps": 20, "w": 3995, "pa": 2000, "oat": -10, "gr": 1350, "o50": 2095},
+  {"flaps": 20, "w": 3995, "pa": 2000, "oat": 0, "gr": 1450, "o50": 2230},
+  {"flaps": 20, "w": 3995, "pa": 2000, "oat": 10, "gr": 1545, "o50": 2375},
+  {"flaps": 20, "w": 3995, "pa": 2000, "oat": 20, "gr": 1650, "o50": 2525},
+  {"flaps": 20, "w": 3995, "pa": 2000, "oat": 30, "gr": 1835, "o50": 2820},
+  {"flaps": 20, "w": 3995, "pa": 2000, "oat": 40, "gr": 2105, "o50": 3285},
+  {"flaps": 20, "w": 3995, "pa": 4000, "oat": -10, "gr": 1545, "o50": 2375},
+  {"flaps": 20, "w": 3995, "pa": 4000, "oat": 0, "gr": 1660, "o50": 2530},
+  {"flaps": 20, "w": 3995, "pa": 4000, "oat": 10, "gr": 1775, "o50": 2700},
+  {"flaps": 20, "w": 3995, "pa": 4000, "oat": 20, "gr": 1965, "o50": 3010},
+  {"flaps": 20, "w": 3995, "pa": 4000, "oat": 30, "gr": 2245, "o50": 3495},
+  {"flaps": 20, "w": 3995, "pa": 4000, "oat": 40, "gr": 2585, "o50": 4115},
+  {"flaps": 20, "w": 3995, "pa": 6000, "oat": -10, "gr": 1775, "o50": 2705},
+  {"flaps": 20, "w": 3995, "pa": 6000, "oat": 0, "gr": 1910, "o50": 2895},
+  {"flaps": 20, "w": 3995, "pa": 6000, "oat": 10, "gr": 2120, "o50": 3245},
+  {"flaps": 20, "w": 3995, "pa": 6000, "oat": 20, "gr": 2410, "o50": 3745},
+  {"flaps": 20, "w": 3995, "pa": 6000, "oat": 30, "gr": 2765, "o50": 4395},
+  {"flaps": 20, "w": 3995, "pa": 6000, "oat": 40, "gr": 3215, "o50": 5260},
+  {"flaps": 20, "w": 3995, "pa": 8000, "oat": -10, "gr": 2050, "o50": 3110},
+  {"flaps": 20, "w": 3995, "pa": 8000, "oat": 0, "gr": 2305, "o50": 3540},
+  {"flaps": 20, "w": 3995, "pa": 8000, "oat": 10, "gr": 2605, "o50": 4060},
+  {"flaps": 20, "w": 3995, "pa": 8000, "oat": 20, "gr": 2975, "o50": 4730},
+  {"flaps": 20, "w": 3995, "pa": 8000, "oat": 30, "gr": 3450, "o50": 5640},
+  {"flaps": 20, "w": 3995, "pa": 8000, "oat": 40, "gr": 4045, "o50": 6870},
+  {"flaps": 20, "w": 3995, "pa": 10000, "oat": -10, "gr": 2500, "o50": 3850},
+  {"flaps": 20, "w": 3995, "pa": 10000, "oat": 0, "gr": 2850, "o50": 4455},
+  {"flaps": 20, "w": 3995, "pa": 10000, "oat": 10, "gr": 3230, "o50": 5155},
+  {"flaps": 20, "w": 3995, "pa": 10000, "oat": 20, "gr": 3720, "o50": 6095},
+  {"flaps": 20, "w": 3995, "pa": 10000, "oat": 30, "gr": 4370, "o50": 7410},
+  {"flaps": 20, "w": 3995, "pa": 12000, "oat": -10, "gr": 3105, "o50": 4885},
+  {"flaps": 20, "w": 3995, "pa": 12000, "oat": 0, "gr": 3545, "o50": 5690},
+  {"flaps": 20, "w": 3995, "pa": 12000, "oat": 10, "gr": 4085, "o50": 6710},
+  {"flaps": 20, "w": 3995, "pa": 12000, "oat": 20, "gr": 4790, "o50": 8140},
+  {"flaps": 20, "w": 3765, "pa": 0, "oat": -10, "gr": 1005, "o50": 1595},
+  {"flaps": 20, "w": 3765, "pa": 0, "oat": 0, "gr": 1090, "o50": 1695},
+  {"flaps": 20, "w": 3765, "pa": 0, "oat": 10, "gr": 1165, "o50": 1800},
+  {"flaps": 20, "w": 3765, "pa": 0, "oat": 20, "gr": 1245, "o50": 1910},
+  {"flaps": 20, "w": 3765, "pa": 0, "oat": 30, "gr": 1325, "o50": 2025},
+  {"flaps": 20, "w": 3765, "pa": 0, "oat": 40, "gr": 1485, "o50": 2290},
+  {"flaps": 20, "w": 3765, "pa": 2000, "oat": -10, "gr": 1165, "o50": 1835},
+  {"flaps": 20, "w": 3765, "pa": 2000, "oat": 0, "gr": 1245, "o50": 1915},
+  {"flaps": 20, "w": 3765, "pa": 2000, "oat": 10, "gr": 1330, "o50": 2035},
+  {"flaps": 20, "w": 3765, "pa": 2000, "oat": 20, "gr": 1420, "o50": 2175},
+  {"flaps": 20, "w": 3765, "pa": 2000, "oat": 30, "gr": 1575, "o50": 2415},
+  {"flaps": 20, "w": 3765, "pa": 2000, "oat": 40, "gr": 1800, "o50": 2795},
+  {"flaps": 20, "w": 3765, "pa": 4000, "oat": -10, "gr": 1330, "o50": 2055},
+  {"flaps": 20, "w": 3765, "pa": 4000, "oat": 0, "gr": 1425, "o50": 2175},
+  {"flaps": 20, "w": 3765, "pa": 4000, "oat": 10, "gr": 1525, "o50": 2315},
+  {"flaps": 20, "w": 3765, "pa": 4000, "oat": 20, "gr": 1640, "o50": 2535},
+  {"flaps": 20, "w": 3765, "pa": 4000, "oat": 30, "gr": 1920, "o50": 2955},
+  {"flaps": 20, "w": 3765, "pa": 4000, "oat": 40, "gr": 2205, "o50": 3455},
+  {"flaps": 20, "w": 3765, "pa": 6000, "oat": -10, "gr": 1530, "o50": 2355},
+  {"flaps": 20, "w": 3765, "pa": 6000, "oat": 0, "gr": 1640, "o50": 2535},
+  {"flaps": 20, "w": 3765, "pa": 6000, "oat": 10, "gr": 1800, "o50": 2765},
+  {"flaps": 20, "w": 3765, "pa": 6000, "oat": 20, "gr": 1980, "o50": 3050},
+  {"flaps": 20, "w": 3765, "pa": 6000, "oat": 30, "gr": 2355, "o50": 3690},
+  {"flaps": 20, "w": 3765, "pa": 6000, "oat": 40, "gr": 2725, "o50": 4370},
+  {"flaps": 20, "w": 3765, "pa": 8000, "oat": -10, "gr": 1780, "o50": 2765},
+  {"flaps": 20, "w": 3765, "pa": 8000, "oat": 0, "gr": 1980, "o50": 3050},
+  {"flaps": 20, "w": 3765, "pa": 8000, "oat": 10, "gr": 2205, "o50": 3385},
+  {"flaps": 20, "w": 3765, "pa": 8000, "oat": 20, "gr": 2480, "o50": 3755},
+  {"flaps": 20, "w": 3765, "pa": 8000, "oat": 30, "gr": 2935, "o50": 4680},
+  {"flaps": 20, "w": 3765, "pa": 8000, "oat": 40, "gr": 3405, "o50": 5625},
+  {"flaps": 20, "w": 3765, "pa": 10000, "oat": -10, "gr": 2145, "o50": 3260},
+  {"flaps": 20, "w": 3765, "pa": 10000, "oat": 0, "gr": 2480, "o50": 3755},
+  {"flaps": 20, "w": 3765, "pa": 10000, "oat": 10, "gr": 2750, "o50": 4310},
+  {"flaps": 20, "w": 3765, "pa": 10000, "oat": 20, "gr": 3155, "o50": 4880},
+  {"flaps": 20, "w": 3765, "pa": 10000, "oat": 30, "gr": 3665, "o50": 6050},
+  {"flaps": 20, "w": 3765, "pa": 12000, "oat": -10, "gr": 2650, "o50": 4105},
+  {"flaps": 20, "w": 3765, "pa": 12000, "oat": 0, "gr": 3015, "o50": 4745},
+  {"flaps": 20, "w": 3765, "pa": 12000, "oat": 10, "gr": 3440, "o50": 5540},
+  {"flaps": 20, "w": 3765, "pa": 12000, "oat": 20, "gr": 4000, "o50": 6635},
+  {"flaps": 20, "w": 3447, "pa": 0, "oat": -10, "gr": 975, "o50": 1365},
+  {"flaps": 20, "w": 3447, "pa": 0, "oat": 0, "gr": 930, "o50": 1450},
+  {"flaps": 20, "w": 3447, "pa": 0, "oat": 10, "gr": 995, "o50": 1540},
+  {"flaps": 20, "w": 3447, "pa": 0, "oat": 20, "gr": 1060, "o50": 1640},
+  {"flaps": 20, "w": 3447, "pa": 0, "oat": 30, "gr": 1125, "o50": 1785},
+  {"flaps": 20, "w": 3447, "pa": 0, "oat": 40, "gr": 1340, "o50": 1990},
+  {"flaps": 20, "w": 3447, "pa": 2000, "oat": -10, "gr": 1135, "o50": 1565},
+  {"flaps": 20, "w": 3447, "pa": 2000, "oat": 0, "gr": 1065, "o50": 1665},
+  {"flaps": 20, "w": 3447, "pa": 2000, "oat": 10, "gr": 1135, "o50": 1780},
+  {"flaps": 20, "w": 3447, "pa": 2000, "oat": 20, "gr": 1215, "o50": 1875},
+  {"flaps": 20, "w": 3447, "pa": 2000, "oat": 30, "gr": 1370, "o50": 2105},
+  {"flaps": 20, "w": 3447, "pa": 2000, "oat": 40, "gr": 1620, "o50": 2430},
+  {"flaps": 20, "w": 3447, "pa": 4000, "oat": -10, "gr": 1305, "o50": 1785},
+  {"flaps": 20, "w": 3447, "pa": 4000, "oat": 0, "gr": 1200, "o50": 1895},
+  {"flaps": 20, "w": 3447, "pa": 4000, "oat": 10, "gr": 1305, "o50": 2075},
+  {"flaps": 20, "w": 3447, "pa": 4000, "oat": 20, "gr": 1440, "o50": 2255},
+  {"flaps": 20, "w": 3447, "pa": 4000, "oat": 30, "gr": 1640, "o50": 2575},
+  {"flaps": 20, "w": 3447, "pa": 4000, "oat": 40, "gr": 1950, "o50": 2980},
+  {"flaps": 20, "w": 3447, "pa": 6000, "oat": -10, "gr": 1505, "o50": 2040},
+  {"flaps": 20, "w": 3447, "pa": 6000, "oat": 0, "gr": 1400, "o50": 2195},
+  {"flaps": 20, "w": 3447, "pa": 6000, "oat": 10, "gr": 1600, "o50": 2445},
+  {"flaps": 20, "w": 3447, "pa": 6000, "oat": 20, "gr": 1840, "o50": 2735},
+  {"flaps": 20, "w": 3447, "pa": 6000, "oat": 30, "gr": 2030, "o50": 3175},
+  {"flaps": 20, "w": 3447, "pa": 6000, "oat": 40, "gr": 2300, "o50": 3625},
+  {"flaps": 20, "w": 3447, "pa": 8000, "oat": -10, "gr": 1740, "o50": 2345},
+  {"flaps": 20, "w": 3447, "pa": 8000, "oat": 0, "gr": 1685, "o50": 2635},
+  {"flaps": 20, "w": 3447, "pa": 8000, "oat": 10, "gr": 1895, "o50": 3035},
+  {"flaps": 20, "w": 3447, "pa": 8000, "oat": 20, "gr": 2165, "o50": 3450},
+  {"flaps": 20, "w": 3447, "pa": 8000, "oat": 30, "gr": 2545, "o50": 3990},
+  {"flaps": 20, "w": 3447, "pa": 8000, "oat": 40, "gr": 2850, "o50": 4675},
+  {"flaps": 20, "w": 3447, "pa": 10000, "oat": -10, "gr": 1825, "o50": 2850},
+  {"flaps": 20, "w": 3447, "pa": 10000, "oat": 0, "gr": 2045, "o50": 3200},
+  {"flaps": 20, "w": 3447, "pa": 10000, "oat": 10, "gr": 2310, "o50": 3815},
+  {"flaps": 20, "w": 3447, "pa": 10000, "oat": 20, "gr": 2660, "o50": 4405},
+  {"flaps": 20, "w": 3447, "pa": 10000, "oat": 30, "gr": 3170, "o50": 5085},
+  {"flaps": 20, "w": 3447, "pa": 12000, "oat": -10, "gr": 2250, "o50": 3490},
+  {"flaps": 20, "w": 3447, "pa": 12000, "oat": 0, "gr": 2550, "o50": 4025},
+  {"flaps": 20, "w": 3447, "pa": 12000, "oat": 10, "gr": 2860, "o50": 4845},
+  {"flaps": 20, "w": 3447, "pa": 12000, "oat": 20, "gr": 3320, "o50": 5530},
+  {"flaps": 20, "w": 3311, "pa": 0, "oat": -10, "gr": 745, "o50": 1105},
+  {"flaps": 20, "w": 3311, "pa": 0, "oat": 0, "gr": 795, "o50": 1160},
+  {"flaps": 20, "w": 3311, "pa": 0, "oat": 10, "gr": 845, "o50": 1305},
+  {"flaps": 20, "w": 3311, "pa": 0, "oat": 20, "gr": 900, "o50": 1385},
+  {"flaps": 20, "w": 3311, "pa": 0, "oat": 30, "gr": 955, "o50": 1465},
+  {"flaps": 20, "w": 3311, "pa": 0, "oat": 40, "gr": 1070, "o50": 1645},
+  {"flaps": 20, "w": 3311, "pa": 2000, "oat": -10, "gr": 845, "o50": 1265},
+  {"flaps": 20, "w": 3311, "pa": 2000, "oat": 0, "gr": 900, "o50": 1385},
+  {"flaps": 20, "w": 3311, "pa": 2000, "oat": 10, "gr": 965, "o50": 1505},
+  {"flaps": 20, "w": 3311, "pa": 2000, "oat": 20, "gr": 1025, "o50": 1565},
+  {"flaps": 20, "w": 3311, "pa": 2000, "oat": 30, "gr": 1135, "o50": 1735},
+  {"flaps": 20, "w": 3311, "pa": 2000, "oat": 40, "gr": 1270, "o50": 1985},
+  {"flaps": 20, "w": 3311, "pa": 4000, "oat": -10, "gr": 960, "o50": 1470},
+  {"flaps": 20, "w": 3311, "pa": 4000, "oat": 0, "gr": 1030, "o50": 1590},
+  {"flaps": 20, "w": 3311, "pa": 4000, "oat": 10, "gr": 1105, "o50": 1760},
+  {"flaps": 20, "w": 3311, "pa": 4000, "oat": 20, "gr": 1215, "o50": 1845},
+  {"flaps": 20, "w": 3311, "pa": 4000, "oat": 30, "gr": 1375, "o50": 2105},
+  {"flaps": 20, "w": 3311, "pa": 4000, "oat": 40, "gr": 1565, "o50": 2420},
+  {"flaps": 20, "w": 3311, "pa": 6000, "oat": -10, "gr": 1105, "o50": 1710},
+  {"flaps": 20, "w": 3311, "pa": 6000, "oat": 0, "gr": 1200, "o50": 1830},
+  {"flaps": 20, "w": 3311, "pa": 6000, "oat": 10, "gr": 1305, "o50": 2050},
+  {"flaps": 20, "w": 3311, "pa": 6000, "oat": 20, "gr": 1425, "o50": 2245},
+  {"flaps": 20, "w": 3311, "pa": 6000, "oat": 30, "gr": 1675, "o50": 2555},
+  {"flaps": 20, "w": 3311, "pa": 6000, "oat": 40, "gr": 1920, "o50": 2980},
+  {"flaps": 20, "w": 3311, "pa": 8000, "oat": -10, "gr": 1305, "o50": 1910},
+  {"flaps": 20, "w": 3311, "pa": 8000, "oat": 0, "gr": 1425, "o50": 2145},
+  {"flaps": 20, "w": 3311, "pa": 8000, "oat": 10, "gr": 1545, "o50": 2415},
+  {"flaps": 20, "w": 3311, "pa": 8000, "oat": 20, "gr": 1800, "o50": 2755},
+  {"flaps": 20, "w": 3311, "pa": 8000, "oat": 30, "gr": 2105, "o50": 3190},
+  {"flaps": 20, "w": 3311, "pa": 8000, "oat": 40, "gr": 2370, "o50": 3745},
+  {"flaps": 20, "w": 3311, "pa": 10000, "oat": -10, "gr": 1545, "o50": 2315},
+  {"flaps": 20, "w": 3311, "pa": 10000, "oat": 0, "gr": 1675, "o50": 2705},
+  {"flaps": 20, "w": 3311, "pa": 10000, "oat": 10, "gr": 1890, "o50": 2855},
+  {"flaps": 20, "w": 3311, "pa": 10000, "oat": 20, "gr": 2220, "o50": 3475},
+  {"flaps": 20, "w": 3311, "pa": 10000, "oat": 30, "gr": 2555, "o50": 4030},
+  {"flaps": 20, "w": 3311, "pa": 10000, "oat": 40, "gr": 2940, "o50": 4600},
+  {"flaps": 20, "w": 3311, "pa": 12000, "oat": -10, "gr": 1890, "o50": 2855},
+  {"flaps": 20, "w": 3311, "pa": 12000, "oat": 0, "gr": 2135, "o50": 3265},
+  {"flaps": 20, "w": 3311, "pa": 12000, "oat": 10, "gr": 2415, "o50": 3565},
+  {"flaps": 20, "w": 3311, "pa": 12000, "oat": 20, "gr": 2770, "o50": 4390},
+  {"flaps": 20, "w": 3311, "pa": 12000, "oat": 30, "gr": 3190, "o50": 5010},
+  {"flaps": 20, "w": 3311, "pa": 12000, "oat": 40, "gr": 3750, "o50": 5900},
+  {"flaps": 0, "w": 3538, "pa": 0, "oat": -10, "gr": 1230, "o50": 2000},
+  {"flaps": 0, "w": 3538, "pa": 0, "oat": 0, "gr": 1320, "o50": 2085},
+  {"flaps": 0, "w": 3538, "pa": 0, "oat": 10, "gr": 1420, "o50": 2235},
+  {"flaps": 0, "w": 3538, "pa": 0, "oat": 20, "gr": 1510, "o50": 2355},
+  {"flaps": 0, "w": 3538, "pa": 0, "oat": 30, "gr": 1610, "o50": 2540},
+  {"flaps": 0, "w": 3538, "pa": 0, "oat": 40, "gr": 1730, "o50": 2730},
+  {"flaps": 0, "w": 3538, "pa": 2000, "oat": -10, "gr": 1385, "o50": 2155},
+  {"flaps": 0, "w": 3538, "pa": 2000, "oat": 0, "gr": 1490, "o50": 2305},
+  {"flaps": 0, "w": 3538, "pa": 2000, "oat": 10, "gr": 1595, "o50": 2415},
+  {"flaps": 0, "w": 3538, "pa": 2000, "oat": 20, "gr": 1715, "o50": 2600},
+  {"flaps": 0, "w": 3538, "pa": 2000, "oat": 30, "gr": 1830, "o50": 2805},
+  {"flaps": 0, "w": 3538, "pa": 2000, "oat": 40, "gr": 1970, "o50": 3015},
+  {"flaps": 0, "w": 3538, "pa": 4000, "oat": -10, "gr": 1580, "o50": 2415},
+  {"flaps": 0, "w": 3538, "pa": 4000, "oat": 0, "gr": 1695, "o50": 2535},
+  {"flaps": 0, "w": 3538, "pa": 4000, "oat": 10, "gr": 1815, "o50": 2700},
+  {"flaps": 0, "w": 3538, "pa": 4000, "oat": 20, "gr": 1940, "o50": 2890},
+  {"flaps": 0, "w": 3538, "pa": 4000, "oat": 30, "gr": 2085, "o50": 3130},
+  {"flaps": 0, "w": 3538, "pa": 4000, "oat": 40, "gr": 2250, "o50": 3380},
+  {"flaps": 0, "w": 3538, "pa": 6000, "oat": -10, "gr": 1800, "o50": 2745},
+  {"flaps": 0, "w": 3538, "pa": 6000, "oat": 0, "gr": 1940, "o50": 2940},
+  {"flaps": 0, "w": 3538, "pa": 6000, "oat": 10, "gr": 2075, "o50": 3145},
+  {"flaps": 0, "w": 3538, "pa": 6000, "oat": 20, "gr": 2245, "o50": 3400},
+  {"flaps": 0, "w": 3538, "pa": 6000, "oat": 30, "gr": 2415, "o50": 3665},
+  {"flaps": 0, "w": 3538, "pa": 6000, "oat": 40, "gr": 2610, "o50": 3965},
+  {"flaps": 0, "w": 3538, "pa": 8000, "oat": -10, "gr": 2070, "o50": 3270},
+  {"flaps": 0, "w": 3538, "pa": 8000, "oat": 0, "gr": 2230, "o50": 3400},
+  {"flaps": 0, "w": 3538, "pa": 8000, "oat": 10, "gr": 2400, "o50": 3665},
+  {"flaps": 0, "w": 3538, "pa": 8000, "oat": 20, "gr": 2600, "o50": 3935},
+  {"flaps": 0, "w": 3538, "pa": 8000, "oat": 30, "gr": 2805, "o50": 4270},
+  {"flaps": 0, "w": 3538, "pa": 8000, "oat": 40, "gr": 3050, "o50": 4635},
+  {"flaps": 0, "w": 3538, "pa": 10000, "oat": -10, "gr": 2415, "o50": 3835},
+  {"flaps": 0, "w": 3538, "pa": 10000, "oat": 0, "gr": 2605, "o50": 4095},
+  {"flaps": 0, "w": 3538, "pa": 10000, "oat": 10, "gr": 2810, "o50": 4355},
+  {"flaps": 0, "w": 3538, "pa": 10000, "oat": 20, "gr": 3045, "o50": 4715},
+  {"flaps": 0, "w": 3538, "pa": 10000, "oat": 30, "gr": 3290, "o50": 5105},
+  {"flaps": 0, "w": 3538, "pa": 10000, "oat": 40, "gr": 3570, "o50": 5510},
+  {"flaps": 0, "w": 3538, "pa": 12000, "oat": -10, "gr": 2865, "o50": 4535},
+  {"flaps": 0, "w": 3538, "pa": 12000, "oat": 0, "gr": 3100, "o50": 4875},
+  {"flaps": 0, "w": 3538, "pa": 12000, "oat": 10, "gr": 3355, "o50": 5270},
+  {"flaps": 0, "w": 3538, "pa": 12000, "oat": 20, "gr": 3650, "o50": 5720},
+  {"flaps": 0, "w": 3538, "pa": 12000, "oat": 30, "gr": 3950, "o50": 6200},
+  {"flaps": 0, "w": 3538, "pa": 12000, "oat": 40, "gr": 4305, "o50": 6720},
+  {"flaps": 0, "w": 3311, "pa": 0, "oat": -10, "gr": 1075, "o50": 1710},
+  {"flaps": 0, "w": 3311, "pa": 0, "oat": 0, "gr": 1150, "o50": 1830},
+  {"flaps": 0, "w": 3311, "pa": 0, "oat": 10, "gr": 1230, "o50": 1940},
+  {"flaps": 0, "w": 3311, "pa": 0, "oat": 20, "gr": 1310, "o50": 2075},
+  {"flaps": 0, "w": 3311, "pa": 0, "oat": 30, "gr": 1405, "o50": 2210},
+  {"flaps": 0, "w": 3311, "pa": 0, "oat": 40, "gr": 1510, "o50": 2370},
+  {"flaps": 0, "w": 3311, "pa": 2000, "oat": -10, "gr": 1205, "o50": 1880},
+  {"flaps": 0, "w": 3311, "pa": 2000, "oat": 0, "gr": 1295, "o50": 2015},
+  {"flaps": 0, "w": 3311, "pa": 2000, "oat": 10, "gr": 1385, "o50": 2155},
+  {"flaps": 0, "w": 3311, "pa": 2000, "oat": 20, "gr": 1490, "o50": 2305},
+  {"flaps": 0, "w": 3311, "pa": 2000, "oat": 30, "gr": 1595, "o50": 2470},
+  {"flaps": 0, "w": 3311, "pa": 2000, "oat": 40, "gr": 1700, "o50": 2650},
+  {"flaps": 0, "w": 3311, "pa": 4000, "oat": -10, "gr": 1365, "o50": 2100},
+  {"flaps": 0, "w": 3311, "pa": 4000, "oat": 0, "gr": 1465, "o50": 2265},
+  {"flaps": 0, "w": 3311, "pa": 4000, "oat": 10, "gr": 1575, "o50": 2415},
+  {"flaps": 0, "w": 3311, "pa": 4000, "oat": 20, "gr": 1690, "o50": 2600},
+  {"flaps": 0, "w": 3311, "pa": 4000, "oat": 30, "gr": 1815, "o50": 2790},
+  {"flaps": 0, "w": 3311, "pa": 4000, "oat": 40, "gr": 1940, "o50": 3010},
+  {"flaps": 0, "w": 3311, "pa": 6000, "oat": -10, "gr": 1560, "o50": 2410},
+  {"flaps": 0, "w": 3311, "pa": 6000, "oat": 0, "gr": 1675, "o50": 2585},
+  {"flaps": 0, "w": 3311, "pa": 6000, "oat": 10, "gr": 1800, "o50": 2780},
+  {"flaps": 0, "w": 3311, "pa": 6000, "oat": 20, "gr": 1940, "o50": 3005},
+  {"flaps": 0, "w": 3311, "pa": 6000, "oat": 30, "gr": 2075, "o50": 3235},
+  {"flaps": 0, "w": 3311, "pa": 6000, "oat": 40, "gr": 2230, "o50": 3500},
+  {"flaps": 0, "w": 3311, "pa": 8000, "oat": -10, "gr": 1790, "o50": 2810},
+  {"flaps": 0, "w": 3311, "pa": 8000, "oat": 0, "gr": 1930, "o50": 3015},
+  {"flaps": 0, "w": 3311, "pa": 8000, "oat": 10, "gr": 2075, "o50": 3250},
+  {"flaps": 0, "w": 3311, "pa": 8000, "oat": 20, "gr": 2240, "o50": 3505},
+  {"flaps": 0, "w": 3311, "pa": 8000, "oat": 30, "gr": 2415, "o50": 3795},
+  {"flaps": 0, "w": 3311, "pa": 8000, "oat": 40, "gr": 2590, "o50": 4105},
+  {"flaps": 0, "w": 3311, "pa": 10000, "oat": -10, "gr": 2070, "o50": 3325},
+  {"flaps": 0, "w": 3311, "pa": 10000, "oat": 0, "gr": 2240, "o50": 3575},
+  {"flaps": 0, "w": 3311, "pa": 10000, "oat": 10, "gr": 2415, "o50": 3860},
+  {"flaps": 0, "w": 3311, "pa": 10000, "oat": 20, "gr": 2615, "o50": 4175},
+  {"flaps": 0, "w": 3311, "pa": 10000, "oat": 30, "gr": 2825, "o50": 4530},
+  {"flaps": 0, "w": 3311, "pa": 10000, "oat": 40, "gr": 3045, "o50": 4905},
+  {"flaps": 0, "w": 3311, "pa": 12000, "oat": -10, "gr": 2445, "o50": 3945},
+  {"flaps": 0, "w": 3311, "pa": 12000, "oat": 0, "gr": 2650, "o50": 4270},
+  {"flaps": 0, "w": 3311, "pa": 12000, "oat": 10, "gr": 2865, "o50": 4630},
+  {"flaps": 0, "w": 3311, "pa": 12000, "oat": 20, "gr": 3105, "o50": 5030},
+  {"flaps": 0, "w": 3311, "pa": 12000, "oat": 30, "gr": 3365, "o50": 5475},
+  {"flaps": 0, "w": 3311, "pa": 12000, "oat": 40, "gr": 3650, "o50": 5970}
+]
+;
+
+const kodiak100Table = [
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 0,
+    "oat": 0,
+    "gr": 852,
+    "o50": 1339
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 1000,
+    "oat": 0,
+    "gr": 899,
+    "o50": 1412
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 2000,
+    "oat": 0,
+    "gr": 950,
+    "o50": 1473
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 3000,
+    "oat": 0,
+    "gr": 1003,
+    "o50": 1538
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 4000,
+    "oat": 0,
+    "gr": 1061,
+    "o50": 1607
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 5000,
+    "oat": 0,
+    "gr": 1148,
+    "o50": 1722
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 6000,
+    "oat": 0,
+    "gr": 1260,
+    "o50": 1872
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 7000,
+    "oat": 0,
+    "gr": 1379,
+    "o50": 2032
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 8000,
+    "oat": 0,
+    "gr": 1503,
+    "o50": 2206
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 9000,
+    "oat": 0,
+    "gr": 1663,
+    "o50": 2404
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 10000,
+    "oat": 0,
+    "gr": 1826,
+    "o50": 2615
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 11000,
+    "oat": 0,
+    "gr": 2010,
+    "o50": 2852
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 12000,
+    "oat": 0,
+    "gr": 2215,
+    "o50": 3113
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 0,
+    "oat": 10,
+    "gr": 900,
+    "o50": 1429
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 1000,
+    "oat": 10,
+    "gr": 956,
+    "o50": 1491
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 2000,
+    "oat": 10,
+    "gr": 1010,
+    "o50": 1556
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 3000,
+    "oat": 10,
+    "gr": 1085,
+    "o50": 1655
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 4000,
+    "oat": 10,
+    "gr": 1187,
+    "o50": 1795
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 5000,
+    "oat": 10,
+    "gr": 1300,
+    "o50": 1948
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 6000,
+    "oat": 10,
+    "gr": 1423,
+    "o50": 2113
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 7000,
+    "oat": 10,
+    "gr": 1559,
+    "o50": 2292
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 8000,
+    "oat": 10,
+    "gr": 1703,
+    "o50": 2496
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 9000,
+    "oat": 10,
+    "gr": 1886,
+    "o50": 2723
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 10000,
+    "oat": 10,
+    "gr": 2072,
+    "o50": 2964
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 11000,
+    "oat": 10,
+    "gr": 2290,
+    "o50": 3246
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 12000,
+    "oat": 10,
+    "gr": 2527,
+    "o50": 3548
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 0,
+    "oat": 20,
+    "gr": 961,
+    "o50": 1506
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 1000,
+    "oat": 20,
+    "gr": 1040,
+    "o50": 1615
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 2000,
+    "oat": 20,
+    "gr": 1135,
+    "o50": 1747
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 3000,
+    "oat": 20,
+    "gr": 1241,
+    "o50": 1893
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 4000,
+    "oat": 20,
+    "gr": 1358,
+    "o50": 2052
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 5000,
+    "oat": 20,
+    "gr": 1485,
+    "o50": 2223
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 6000,
+    "oat": 20,
+    "gr": 1625,
+    "o50": 2410
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 7000,
+    "oat": 20,
+    "gr": 1782,
+    "o50": 2619
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 8000,
+    "oat": 20,
+    "gr": 1960,
+    "o50": 2856
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 9000,
+    "oat": 20,
+    "gr": 2158,
+    "o50": 3115
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 10000,
+    "oat": 20,
+    "gr": 2375,
+    "o50": 3397
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 11000,
+    "oat": 20,
+    "gr": 2619,
+    "o50": 3712
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 12000,
+    "oat": 20,
+    "gr": 2893,
+    "o50": 4063
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 0,
+    "oat": 30,
+    "gr": 1097,
+    "o50": 1720
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 1000,
+    "oat": 30,
+    "gr": 1197,
+    "o50": 1860
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 2000,
+    "oat": 30,
+    "gr": 1308,
+    "o50": 2015
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 3000,
+    "oat": 30,
+    "gr": 1433,
+    "o50": 2187
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 4000,
+    "oat": 30,
+    "gr": 1568,
+    "o50": 2372
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 5000,
+    "oat": 30,
+    "gr": 1714,
+    "o50": 2569
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 6000,
+    "oat": 30,
+    "gr": 1879,
+    "o50": 2790
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 7000,
+    "oat": 30,
+    "gr": 2065,
+    "o50": 3040
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 8000,
+    "oat": 30,
+    "gr": 2273,
+    "o50": 3315
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 9000,
+    "oat": 30,
+    "gr": 2500,
+    "o50": 3614
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 10000,
+    "oat": 30,
+    "gr": 2757,
+    "o50": 3949
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 11000,
+    "oat": 30,
+    "gr": 3056,
+    "o50": 4337
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 12000,
+    "oat": 30,
+    "gr": 3377,
+    "o50": 4750
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 0,
+    "oat": 40,
+    "gr": 1275,
+    "o50": 2002
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 1000,
+    "oat": 40,
+    "gr": 1396,
+    "o50": 2177
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 2000,
+    "oat": 40,
+    "gr": 1526,
+    "o50": 2355
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 3000,
+    "oat": 40,
+    "gr": 1673,
+    "o50": 2559
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 4000,
+    "oat": 40,
+    "gr": 1833,
+    "o50": 2779
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 5000,
+    "oat": 40,
+    "gr": 2007,
+    "o50": 3015
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 6000,
+    "oat": 40,
+    "gr": 2210,
+    "o50": 3292
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 7000,
+    "oat": 40,
+    "gr": 2440,
+    "o50": 3603
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 8000,
+    "oat": 40,
+    "gr": 2694,
+    "o50": 3937
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 9000,
+    "oat": 40,
+    "gr": 2943,
+    "o50": 4266
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 0,
+    "oat": 50,
+    "gr": 1508,
+    "o50": 2376
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 1000,
+    "oat": 50,
+    "gr": 1656,
+    "o50": 2588
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 2000,
+    "oat": 50,
+    "gr": 1809,
+    "o50": 2802
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 3000,
+    "oat": 50,
+    "gr": 1985,
+    "o50": 3047
+  },
+  {
+    "flaps": 20,
+    "w": 3291,
+    "pa": 4000,
+    "oat": 50,
+    "gr": 2179,
+    "o50": 3317
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 0,
+    "oat": 0,
+    "gr": 520,
+    "o50": 843
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 1000,
+    "oat": 0,
+    "gr": 549,
+    "o50": 880
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 2000,
+    "oat": 0,
+    "gr": 580,
+    "o50": 919
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 3000,
+    "oat": 0,
+    "gr": 612,
+    "o50": 959
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 4000,
+    "oat": 0,
+    "gr": 647,
+    "o50": 1001
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 5000,
+    "oat": 0,
+    "gr": 701,
+    "o50": 1073
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 6000,
+    "oat": 0,
+    "gr": 769,
+    "o50": 1167
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 7000,
+    "oat": 0,
+    "gr": 842,
+    "o50": 1266
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 8000,
+    "oat": 0,
+    "gr": 923,
+    "o50": 1376
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 9000,
+    "oat": 0,
+    "gr": 1015,
+    "o50": 1496
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 10000,
+    "oat": 0,
+    "gr": 1115,
+    "o50": 1629
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 11000,
+    "oat": 0,
+    "gr": 1227,
+    "o50": 1777
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 12000,
+    "oat": 0,
+    "gr": 1352,
+    "o50": 1940
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 0,
+    "oat": 10,
+    "gr": 553,
+    "o50": 891
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 1000,
+    "oat": 10,
+    "gr": 583,
+    "o50": 929
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 2000,
+    "oat": 10,
+    "gr": 620,
+    "o50": 970
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 3000,
+    "oat": 10,
+    "gr": 662,
+    "o50": 1031
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 4000,
+    "oat": 10,
+    "gr": 725,
+    "o50": 1118
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 5000,
+    "oat": 10,
+    "gr": 793,
+    "o50": 1214
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 6000,
+    "oat": 10,
+    "gr": 869,
+    "o50": 1316
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 7000,
+    "oat": 10,
+    "gr": 951,
+    "o50": 1428
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 8000,
+    "oat": 10,
+    "gr": 1045,
+    "o50": 1555
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 9000,
+    "oat": 10,
+    "gr": 1151,
+    "o50": 1696
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 10000,
+    "oat": 10,
+    "gr": 1265,
+    "o50": 1847
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 11000,
+    "oat": 10,
+    "gr": 1398,
+    "o50": 2022
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 12000,
+    "oat": 10,
+    "gr": 1542,
+    "o50": 2210
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 0,
+    "oat": 20,
+    "gr": 586,
+    "o50": 938
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 1000,
+    "oat": 20,
+    "gr": 635,
+    "o50": 1006
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 2000,
+    "oat": 20,
+    "gr": 693,
+    "o50": 1089
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 3000,
+    "oat": 20,
+    "gr": 757,
+    "o50": 1179
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 4000,
+    "oat": 20,
+    "gr": 829,
+    "o50": 1279
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 5000,
+    "oat": 20,
+    "gr": 906,
+    "o50": 1385
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 6000,
+    "oat": 20,
+    "gr": 991,
+    "o50": 1502
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 7000,
+    "oat": 20,
+    "gr": 1087,
+    "o50": 1632
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 8000,
+    "oat": 20,
+    "gr": 1196,
+    "o50": 1779
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 9000,
+    "oat": 20,
+    "gr": 1317,
+    "o50": 1941
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 10000,
+    "oat": 20,
+    "gr": 1449,
+    "o50": 2116
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 11000,
+    "oat": 20,
+    "gr": 1598,
+    "o50": 2312
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 12000,
+    "oat": 20,
+    "gr": 1766,
+    "o50": 2531
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 0,
+    "oat": 30,
+    "gr": 670,
+    "o50": 1072
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 1000,
+    "oat": 30,
+    "gr": 730,
+    "o50": 1159
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 2000,
+    "oat": 30,
+    "gr": 799,
+    "o50": 1256
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 3000,
+    "oat": 30,
+    "gr": 874,
+    "o50": 1363
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 4000,
+    "oat": 30,
+    "gr": 957,
+    "o50": 1478
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 5000,
+    "oat": 30,
+    "gr": 1046,
+    "o50": 1601
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 6000,
+    "oat": 30,
+    "gr": 1147,
+    "o50": 1739
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 7000,
+    "oat": 30,
+    "gr": 1260,
+    "o50": 1894
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 8000,
+    "oat": 30,
+    "gr": 1387,
+    "o50": 2066
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 9000,
+    "oat": 30,
+    "gr": 1526,
+    "o50": 2251
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 10000,
+    "oat": 30,
+    "gr": 1683,
+    "o50": 2450
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 11000,
+    "oat": 30,
+    "gr": 1865,
+    "o50": 2702
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 12000,
+    "oat": 30,
+    "gr": 2061,
+    "o50": 2959
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 0,
+    "oat": 40,
+    "gr": 778,
+    "o50": 1248
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 1000,
+    "oat": 40,
+    "gr": 852,
+    "o50": 1354
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 2000,
+    "oat": 40,
+    "gr": 931,
+    "o50": 1468
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 3000,
+    "oat": 40,
+    "gr": 1011,
+    "o50": 1595
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 4000,
+    "oat": 40,
+    "gr": 1119,
+    "o50": 1732
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 5000,
+    "oat": 40,
+    "gr": 1225,
+    "o50": 1879
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 6000,
+    "oat": 40,
+    "gr": 1349,
+    "o50": 2051
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 7000,
+    "oat": 40,
+    "gr": 1489,
+    "o50": 2245
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 8000,
+    "oat": 40,
+    "gr": 1638,
+    "o50": 2447
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 9000,
+    "oat": 40,
+    "gr": 1796,
+    "o50": 2658
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 0,
+    "oat": 50,
+    "gr": 920,
+    "o50": 1481
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 1000,
+    "oat": 50,
+    "gr": 1011,
+    "o50": 1613
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 2000,
+    "oat": 50,
+    "gr": 1117,
+    "o50": 1747
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 3000,
+    "oat": 50,
+    "gr": 1211,
+    "o50": 1899
+  },
+  {
+    "flaps": 20,
+    "w": 2722,
+    "pa": 4000,
+    "oat": 50,
+    "gr": 1330,
+    "o50": 2067
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 0,
+    "oat": 0,
+    "gr": 324,
+    "o50": 536
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 1000,
+    "oat": 0,
+    "gr": 342,
+    "o50": 560
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 2000,
+    "oat": 0,
+    "gr": 361,
+    "o50": 584
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 3000,
+    "oat": 0,
+    "gr": 381,
+    "o50": 609
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 4000,
+    "oat": 0,
+    "gr": 403,
+    "o50": 636
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 5000,
+    "oat": 0,
+    "gr": 436,
+    "o50": 682
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 6000,
+    "oat": 0,
+    "gr": 478,
+    "o50": 741
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 7000,
+    "oat": 0,
+    "gr": 524,
+    "o50": 804
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 8000,
+    "oat": 0,
+    "gr": 575,
+    "o50": 874
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 9000,
+    "oat": 0,
+    "gr": 632,
+    "o50": 952
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 10000,
+    "oat": 0,
+    "gr": 694,
+    "o50": 1035
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 11000,
+    "oat": 0,
+    "gr": 764,
+    "o50": 1129
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 12000,
+    "oat": 0,
+    "gr": 842,
+    "o50": 1232
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 0,
+    "oat": 10,
+    "gr": 344,
+    "o50": 566
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 1000,
+    "oat": 10,
+    "gr": 363,
+    "o50": 591
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 2000,
+    "oat": 10,
+    "gr": 384,
+    "o50": 616
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 3000,
+    "oat": 10,
+    "gr": 412,
+    "o50": 655
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 4000,
+    "oat": 10,
+    "gr": 451,
+    "o50": 711
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 5000,
+    "oat": 10,
+    "gr": 494,
+    "o50": 773
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 6000,
+    "oat": 10,
+    "gr": 541,
+    "o50": 836
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 7000,
+    "oat": 10,
+    "gr": 592,
+    "o50": 908
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 8000,
+    "oat": 10,
+    "gr": 651,
+    "o50": 988
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 9000,
+    "oat": 10,
+    "gr": 716,
+    "o50": 1078
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 10000,
+    "oat": 10,
+    "gr": 787,
+    "o50": 1173
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 11000,
+    "oat": 10,
+    "gr": 870,
+    "o50": 1285
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 12000,
+    "oat": 10,
+    "gr": 960,
+    "o50": 1404
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 0,
+    "oat": 20,
+    "gr": 365,
+    "o50": 597
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 1000,
+    "oat": 20,
+    "gr": 395,
+    "o50": 640
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 2000,
+    "oat": 20,
+    "gr": 431,
+    "o50": 692
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 3000,
+    "oat": 20,
+    "gr": 471,
+    "o50": 750
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 4000,
+    "oat": 20,
+    "gr": 516,
+    "o50": 813
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 5000,
+    "oat": 20,
+    "gr": 564,
+    "o50": 880
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 6000,
+    "oat": 20,
+    "gr": 617,
+    "o50": 954
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 7000,
+    "oat": 20,
+    "gr": 677,
+    "o50": 1037
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 8000,
+    "oat": 20,
+    "gr": 745,
+    "o50": 1130
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 9000,
+    "oat": 20,
+    "gr": 820,
+    "o50": 1233
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 10000,
+    "oat": 20,
+    "gr": 902,
+    "o50": 1345
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 11000,
+    "oat": 20,
+    "gr": 995,
+    "o50": 1469
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 12000,
+    "oat": 20,
+    "gr": 1099,
+    "o50": 1608
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 0,
+    "oat": 30,
+    "gr": 417,
+    "o50": 681
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 1000,
+    "oat": 30,
+    "gr": 455,
+    "o50": 737
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 2000,
+    "oat": 30,
+    "gr": 497,
+    "o50": 798
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 3000,
+    "oat": 30,
+    "gr": 544,
+    "o50": 866
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 4000,
+    "oat": 30,
+    "gr": 596,
+    "o50": 939
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 5000,
+    "oat": 30,
+    "gr": 651,
+    "o50": 1017
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 6000,
+    "oat": 30,
+    "gr": 714,
+    "o50": 1105
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 7000,
+    "oat": 30,
+    "gr": 785,
+    "o50": 1204
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 8000,
+    "oat": 30,
+    "gr": 863,
+    "o50": 1312
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 9000,
+    "oat": 30,
+    "gr": 950,
+    "o50": 1430
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 10000,
+    "oat": 30,
+    "gr": 1047,
+    "o50": 1563
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 11000,
+    "oat": 30,
+    "gr": 1161,
+    "o50": 1717
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 12000,
+    "oat": 30,
+    "gr": 1283,
+    "o50": 1890
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 0,
+    "oat": 40,
+    "gr": 480,
+    "o50": 793
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 1000,
+    "oat": 40,
+    "gr": 530,
+    "o50": 861
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 2000,
+    "oat": 40,
+    "gr": 580,
+    "o50": 933
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 3000,
+    "oat": 40,
+    "gr": 636,
+    "o50": 1014
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 4000,
+    "oat": 40,
+    "gr": 696,
+    "o50": 1101
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 5000,
+    "oat": 40,
+    "gr": 763,
+    "o50": 1194
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 6000,
+    "oat": 40,
+    "gr": 840,
+    "o50": 1304
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 7000,
+    "oat": 40,
+    "gr": 920,
+    "o50": 1427
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 8000,
+    "oat": 40,
+    "gr": 1020,
+    "o50": 1555
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 9000,
+    "oat": 40,
+    "gr": 1118,
+    "o50": 1689
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 0,
+    "oat": 50,
+    "gr": 573,
+    "o50": 942
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 1000,
+    "oat": 50,
+    "gr": 629,
+    "o50": 1026
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 2000,
+    "oat": 50,
+    "gr": 687,
+    "o50": 1110
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 3000,
+    "oat": 50,
+    "gr": 754,
+    "o50": 1207
+  },
+  {
+    "flaps": 20,
+    "w": 2268,
+    "pa": 4000,
+    "oat": 50,
+    "gr": 828,
+    "o50": 1314
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 0,
+    "oat": 0,
+    "gr": 181,
+    "o50": 309
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 1000,
+    "oat": 0,
+    "gr": 191,
+    "o50": 322
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 0,
+    "gr": 202,
+    "o50": 336
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 3000,
+    "oat": 0,
+    "gr": 213,
+    "o50": 350
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 0,
+    "gr": 226,
+    "o50": 366
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 5000,
+    "oat": 0,
+    "gr": 244,
+    "o50": 392
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 6000,
+    "oat": 0,
+    "gr": 268,
+    "o50": 426
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 7000,
+    "oat": 0,
+    "gr": 293,
+    "o50": 462
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 8000,
+    "oat": 0,
+    "gr": 322,
+    "o50": 502
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 9000,
+    "oat": 0,
+    "gr": 354,
+    "o50": 547
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 10000,
+    "oat": 0,
+    "gr": 388,
+    "o50": 595
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 11000,
+    "oat": 0,
+    "gr": 427,
+    "o50": 649
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 12000,
+    "oat": 0,
+    "gr": 471,
+    "o50": 708
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 0,
+    "oat": 10,
+    "gr": 193,
+    "o50": 323
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 1000,
+    "oat": 10,
+    "gr": 203,
+    "o50": 340
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 10,
+    "gr": 215,
+    "o50": 354
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 3000,
+    "oat": 10,
+    "gr": 231,
+    "o50": 377
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 10,
+    "gr": 253,
+    "o50": 408
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 5000,
+    "oat": 10,
+    "gr": 276,
+    "o50": 443
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 6000,
+    "oat": 10,
+    "gr": 303,
+    "o50": 481
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 7000,
+    "oat": 10,
+    "gr": 332,
+    "o50": 522
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 8000,
+    "oat": 10,
+    "gr": 364,
+    "o50": 568
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 9000,
+    "oat": 10,
+    "gr": 401,
+    "o50": 619
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 10000,
+    "oat": 10,
+    "gr": 441,
+    "o50": 674
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 11000,
+    "oat": 10,
+    "gr": 487,
+    "o50": 738
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 12000,
+    "oat": 10,
+    "gr": 537,
+    "o50": 807
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 0,
+    "oat": 20,
+    "gr": 204,
+    "o50": 333
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 1000,
+    "oat": 20,
+    "gr": 221,
+    "o50": 368
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 20,
+    "gr": 241,
+    "o50": 398
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 3000,
+    "oat": 20,
+    "gr": 264,
+    "o50": 431
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 20,
+    "gr": 289,
+    "o50": 467
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 5000,
+    "oat": 20,
+    "gr": 316,
+    "o50": 506
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 6000,
+    "oat": 20,
+    "gr": 345,
+    "o50": 548
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 7000,
+    "oat": 20,
+    "gr": 379,
+    "o50": 596
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 8000,
+    "oat": 20,
+    "gr": 417,
+    "o50": 650
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 9000,
+    "oat": 20,
+    "gr": 459,
+    "o50": 709
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 10000,
+    "oat": 20,
+    "gr": 505,
+    "o50": 773
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 11000,
+    "oat": 20,
+    "gr": 557,
+    "o50": 844
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 12000,
+    "oat": 20,
+    "gr": 615,
+    "o50": 924
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 0,
+    "oat": 30,
+    "gr": 233,
+    "o50": 392
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 1000,
+    "oat": 30,
+    "gr": 255,
+    "o50": 423
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 30,
+    "gr": 278,
+    "o50": 459
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 3000,
+    "oat": 30,
+    "gr": 305,
+    "o50": 498
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 30,
+    "gr": 333,
+    "o50": 540
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 5000,
+    "oat": 30,
+    "gr": 365,
+    "o50": 585
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 6000,
+    "oat": 30,
+    "gr": 400,
+    "o50": 635
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 7000,
+    "oat": 30,
+    "gr": 439,
+    "o50": 692
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 8000,
+    "oat": 30,
+    "gr": 483,
+    "o50": 754
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 9000,
+    "oat": 30,
+    "gr": 532,
+    "o50": 822
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 10000,
+    "oat": 30,
+    "gr": 586,
+    "o50": 898
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 11000,
+    "oat": 30,
+    "gr": 650,
+    "o50": 986
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 12000,
+    "oat": 30,
+    "gr": 718,
+    "o50": 1080
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 0,
+    "oat": 40,
+    "gr": 271,
+    "o50": 456
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 1000,
+    "oat": 40,
+    "gr": 297,
+    "o50": 495
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 40,
+    "gr": 325,
+    "o50": 536
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 3000,
+    "oat": 40,
+    "gr": 356,
+    "o50": 583
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 40,
+    "gr": 390,
+    "o50": 633
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 5000,
+    "oat": 40,
+    "gr": 427,
+    "o50": 686
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 6000,
+    "oat": 40,
+    "gr": 470,
+    "o50": 749
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 7000,
+    "oat": 40,
+    "gr": 519,
+    "o50": 820
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 8000,
+    "oat": 40,
+    "gr": 571,
+    "o50": 894
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 0,
+    "oat": 50,
+    "gr": 321,
+    "o50": 541
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 1000,
+    "oat": 50,
+    "gr": 352,
+    "o50": 590
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 50,
+    "gr": 385,
+    "o50": 638
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 3000,
+    "oat": 50,
+    "gr": 422,
+    "o50": 694
+  },
+  {
+    "flaps": 20,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 50,
+    "gr": 463,
+    "o50": 756
+  }
+];
+
+const c172_180Table = [
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 0,
+    "oat": 0,
+    "gr": 860,
+    "o50": 1520
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 1000,
+    "oat": 0,
+    "gr": 940,
+    "o50": 1665
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 2000,
+    "oat": 0,
+    "gr": 1030,
+    "o50": 1830
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 3000,
+    "oat": 0,
+    "gr": 1130,
+    "o50": 2015
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 4000,
+    "oat": 0,
+    "gr": 1245,
+    "o50": 2230
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 5000,
+    "oat": 0,
+    "gr": 1370,
+    "o50": 2480
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 6000,
+    "oat": 0,
+    "gr": 1510,
+    "o50": 2770
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 7000,
+    "oat": 0,
+    "gr": 1670,
+    "o50": 3120
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 8000,
+    "oat": 0,
+    "gr": 1850,
+    "o50": 3535
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 0,
+    "oat": 10,
+    "gr": 925,
+    "o50": 1630
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 1000,
+    "oat": 10,
+    "gr": 1015,
+    "o50": 1790
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 2000,
+    "oat": 10,
+    "gr": 1110,
+    "o50": 1970
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 3000,
+    "oat": 10,
+    "gr": 1220,
+    "o50": 2175
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 4000,
+    "oat": 10,
+    "gr": 1345,
+    "o50": 2415
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 5000,
+    "oat": 10,
+    "gr": 1480,
+    "o50": 2690
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 6000,
+    "oat": 10,
+    "gr": 1635,
+    "o50": 3015
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 7000,
+    "oat": 10,
+    "gr": 1805,
+    "o50": 3410
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 8000,
+    "oat": 10,
+    "gr": 2000,
+    "o50": 3890
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 0,
+    "oat": 20,
+    "gr": 995,
+    "o50": 1750
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 1000,
+    "oat": 20,
+    "gr": 1090,
+    "o50": 1925
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 2000,
+    "oat": 20,
+    "gr": 1195,
+    "o50": 2125
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 3000,
+    "oat": 20,
+    "gr": 1315,
+    "o50": 2350
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 4000,
+    "oat": 20,
+    "gr": 1450,
+    "o50": 2615
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 5000,
+    "oat": 20,
+    "gr": 1595,
+    "o50": 2920
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 6000,
+    "oat": 20,
+    "gr": 1765,
+    "o50": 3290
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 7000,
+    "oat": 20,
+    "gr": 1950,
+    "o50": 3735
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 8000,
+    "oat": 20,
+    "gr": 2165,
+    "o50": 4295
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 0,
+    "oat": 30,
+    "gr": 1070,
+    "o50": 1880
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 1000,
+    "oat": 30,
+    "gr": 1175,
+    "o50": 2070
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 2000,
+    "oat": 30,
+    "gr": 1290,
+    "o50": 2285
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 3000,
+    "oat": 30,
+    "gr": 1415,
+    "o50": 2535
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 4000,
+    "oat": 30,
+    "gr": 1560,
+    "o50": 2830
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 5000,
+    "oat": 30,
+    "gr": 1720,
+    "o50": 3170
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 6000,
+    "oat": 30,
+    "gr": 1900,
+    "o50": 3585
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 7000,
+    "oat": 30,
+    "gr": 2105,
+    "o50": 4100
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 8000,
+    "oat": 30,
+    "gr": 2340,
+    "o50": 4760
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 0,
+    "oat": 40,
+    "gr": 1150,
+    "o50": 2015
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 1000,
+    "oat": 40,
+    "gr": 1260,
+    "o50": 2225
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 2000,
+    "oat": 40,
+    "gr": 1385,
+    "o50": 2460
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 3000,
+    "oat": 40,
+    "gr": 1520,
+    "o50": 2740
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 4000,
+    "oat": 40,
+    "gr": 1675,
+    "o50": 3060
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 5000,
+    "oat": 40,
+    "gr": 1850,
+    "o50": 3450
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 6000,
+    "oat": 40,
+    "gr": 2050,
+    "o50": 3925
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 7000,
+    "oat": 40,
+    "gr": 2270,
+    "o50": 4520
+  },
+  {
+    "flaps": 10,
+    "w": 1157,
+    "pa": 8000,
+    "oat": 40,
+    "gr": 2525,
+    "o50": 5315
+  }
+];
+
+const ga8Table = [
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 0,
+    "oat": -10,
+    "gr": 394,
+    "o50": 612
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 0,
+    "oat": 0,
+    "gr": 443,
+    "o50": 697
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 0,
+    "oat": 10,
+    "gr": 492,
+    "o50": 785
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 0,
+    "oat": 20,
+    "gr": 558,
+    "o50": 902
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 0,
+    "oat": 30,
+    "gr": 640,
+    "o50": 1048
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 0,
+    "oat": 40,
+    "gr": 722,
+    "o50": 1197
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 2000,
+    "oat": -10,
+    "gr": 476,
+    "o50": 759
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 2000,
+    "oat": 0,
+    "gr": 541,
+    "o50": 875
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 2000,
+    "oat": 10,
+    "gr": 607,
+    "o50": 996
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 2000,
+    "oat": 20,
+    "gr": 689,
+    "o50": 1146
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 2000,
+    "oat": 30,
+    "gr": 787,
+    "o50": 1326
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 2000,
+    "oat": 40,
+    "gr": 886,
+    "o50": 1513
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 4000,
+    "oat": -10,
+    "gr": 591,
+    "o50": 970
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 4000,
+    "oat": 0,
+    "gr": 673,
+    "o50": 1120
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 4000,
+    "oat": 10,
+    "gr": 755,
+    "o50": 1275
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 4000,
+    "oat": 20,
+    "gr": 853,
+    "o50": 1462
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 4000,
+    "oat": 30,
+    "gr": 968,
+    "o50": 1682
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 4000,
+    "oat": 40,
+    "gr": 1099,
+    "o50": 1937
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 6000,
+    "oat": -10,
+    "gr": 722,
+    "o50": 1220
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 6000,
+    "oat": 0,
+    "gr": 820,
+    "o50": 1408
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 6000,
+    "oat": 10,
+    "gr": 935,
+    "o50": 1629
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 6000,
+    "oat": 20,
+    "gr": 1050,
+    "o50": 1857
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 6000,
+    "oat": 30,
+    "gr": 1198,
+    "o50": 2151
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 6000,
+    "oat": 40,
+    "gr": 1362,
+    "o50": 2481
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 8000,
+    "oat": -10,
+    "gr": 902,
+    "o50": 1574
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 8000,
+    "oat": 0,
+    "gr": 1017,
+    "o50": 1803
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 8000,
+    "oat": 10,
+    "gr": 1148,
+    "o50": 2068
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 8000,
+    "oat": 20,
+    "gr": 1312,
+    "o50": 2400
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 8000,
+    "oat": 30,
+    "gr": 1493,
+    "o50": 2774
+  },
+  {
+    "flaps": 14,
+    "w": 1200,
+    "pa": 8000,
+    "oat": 40,
+    "gr": 1706,
+    "o50": 3218
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 0,
+    "oat": -10,
+    "gr": 689,
+    "o50": 1070
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 0,
+    "oat": 0,
+    "gr": 853,
+    "o50": 1343
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 0,
+    "oat": 10,
+    "gr": 919,
+    "o50": 1466
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 0,
+    "oat": 20,
+    "gr": 1017,
+    "o50": 1644
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 0,
+    "oat": 30,
+    "gr": 1099,
+    "o50": 1799
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 0,
+    "oat": 40,
+    "gr": 1214,
+    "o50": 2013
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 2000,
+    "oat": -10,
+    "gr": 919,
+    "o50": 1466
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 0,
+    "gr": 1033,
+    "o50": 1671
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 10,
+    "gr": 1115,
+    "o50": 1829
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 20,
+    "gr": 1247,
+    "o50": 2073
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 30,
+    "gr": 1345,
+    "o50": 2267
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 2000,
+    "oat": 40,
+    "gr": 1444,
+    "o50": 2466
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 4000,
+    "oat": -10,
+    "gr": 1099,
+    "o50": 1803
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 0,
+    "gr": 1247,
+    "o50": 2076
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 10,
+    "gr": 1444,
+    "o50": 2439
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 20,
+    "gr": 1558,
+    "o50": 2670
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 30,
+    "gr": 1673,
+    "o50": 2907
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 4000,
+    "oat": 40,
+    "gr": 1870,
+    "o50": 3295
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 6000,
+    "oat": -10,
+    "gr": 1427,
+    "o50": 2412
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 6000,
+    "oat": 0,
+    "gr": 1575,
+    "o50": 2703
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 6000,
+    "oat": 10,
+    "gr": 1739,
+    "o50": 3031
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 6000,
+    "oat": 20,
+    "gr": 1952,
+    "o50": 3453
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 6000,
+    "oat": 30,
+    "gr": 2133,
+    "o50": 3829
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 6000,
+    "oat": 40,
+    "gr": 2329,
+    "o50": 4242
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 8000,
+    "oat": -10,
+    "gr": 1772,
+    "o50": 3092
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 8000,
+    "oat": 0,
+    "gr": 2034,
+    "o50": 3606
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 8000,
+    "oat": 10,
+    "gr": 2165,
+    "o50": 3900
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 8000,
+    "oat": 20,
+    "gr": 2461,
+    "o50": 4503
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 8000,
+    "oat": 30,
+    "gr": 2871,
+    "o50": 5334
+  },
+  {
+    "flaps": 14,
+    "w": 1814,
+    "pa": 8000,
+    "oat": 40,
+    "gr": 3035,
+    "o50": 5725
+  }
+]
+;
+
+const c185Table = [
+  {"flaps": 20, "w": 1520, "pa": 0, "oat": 15, "gr": 490, "o50": 870},
+  {"flaps": 20, "w": 1520, "pa": 2500, "oat": 10, "gr": 595, "o50": 1015},
+  {"flaps": 20, "w": 1520, "pa": 5000, "oat": 5, "gr": 715, "o50": 1200},
+  {"flaps": 20, "w": 1520, "pa": 7500, "oat": 0, "gr": 860, "o50": 1485},
+  {"flaps": 20, "w": 1270, "pa": 0, "oat": 15, "gr": 330, "o50": 655},
+  {"flaps": 20, "w": 1270, "pa": 2500, "oat": 10, "gr": 390, "o50": 735},
+  {"flaps": 20, "w": 1270, "pa": 5000, "oat": 5, "gr": 465, "o50": 840},
+  {"flaps": 20, "w": 1270, "pa": 7500, "oat": 0, "gr": 665, "o50": 975},
+  {"flaps": 20, "w": 1043, "pa": 0, "oat": 15, "gr": 210, "o50": 500},
+  {"flaps": 20, "w": 1043, "pa": 2500, "oat": 10, "gr": 255, "o50": 545},
+  {"flaps": 20, "w": 1043, "pa": 5000, "oat": 5, "gr": 300, "o50": 615},
+  {"flaps": 20, "w": 1043, "pa": 7500, "oat": 0, "gr": 360, "o50": 695}
+];
+
+/* src/state/store.js */
+const listeners = new Set();
+let state = {};
+
+function getState() {
+  return { ...state };
+}
+
+function setState(partial) {
+  state = { ...state, ...partial };
+  listeners.forEach(fn => fn(state));
+}
+
+function subscribe(fn) {
+  listeners.add(fn);
+  return () => listeners.delete(fn);
+}
+
+function initState(defaults) {
+  state = { ...defaults };
+}
+
+/* src/engine/helpers.js */
+function uniqueSorted(arr) {
+  return [...new Set(arr)].sort((a, b) => a - b);
+}
+
+function clampIdx(arr, x) {
+  if (!arr.length) return [0, 0];
+  if (arr.length === 1) return [0, 0];
+  let i = arr.findIndex(v => v >= x);
+  if (i === -1) return [arr.length - 2, arr.length - 1];
+  if (i === 0) return [0, 0];
+  return [i - 1, i];
+}
+
+function findPoint(table, W, P, T) {
+  return table.find(p => p.w === W && p.pa === P && p.oat === T);
+}
+
+function lerp(a, b, t) {
+  return a + (b - a) * (isFinite(t) ? t : 0);
+}
+
+function ftToM(ft) {
+  return Math.round(ft * 0.3048);
+}
+
+/* src/engine/interpolation.js */
+function triInterpolate(table, w, pa, oat) {
+  if (!table.length) return null;
+  const Ws = uniqueSorted(table.map(p => p.w));
+  const PAs = uniqueSorted(table.map(p => p.pa));
+  const OATs = uniqueSorted(table.map(p => p.oat));
+  if (Ws.length < 1 || PAs.length < 1 || OATs.length < 1) return null;
+
+  const [iw0, iw1] = clampIdx(Ws, w);
+  const [ip0, ip1] = clampIdx(PAs, pa);
+  const [it0, it1] = clampIdx(OATs, oat);
+  const W0 = Ws[iw0], W1 = Ws[iw1];
+  const P0 = PAs[ip0], P1 = PAs[ip1];
+  const T0 = OATs[it0], T1 = OATs[it1];
+
+  const c000 = findPoint(table, W0, P0, T0);
+  const c100 = findPoint(table, W1, P0, T0);
+  const c010 = findPoint(table, W0, P1, T0);
+  const c110 = findPoint(table, W1, P1, T0);
+  const c001 = findPoint(table, W0, P0, T1);
+  const c101 = findPoint(table, W1, P0, T1);
+  const c011 = findPoint(table, W0, P1, T1);
+  const c111 = findPoint(table, W1, P1, T1);
+
+  if (![c000, c100, c010, c110, c001, c101, c011, c111].every(Boolean)) {
+    return null;
+  }
+
+  const fx = W1 === W0 ? 0 : (w - W0) / (W1 - W0);
+  const fy = P1 === P0 ? 0 : (pa - P0) / (P1 - P0);
+  const fz = T1 === T0 ? 0 : (oat - T0) / (T1 - T0);
+
+  function interpKey(key) {
+    const v000 = c000[key], v100 = c100[key], v010 = c010[key], v110 = c110[key];
+    const v001 = c001[key], v101 = c101[key], v011 = c011[key], v111 = c111[key];
+    const x00 = lerp(v000, v100, fx);
+    const x10 = lerp(v010, v110, fx);
+    const x01 = lerp(v001, v101, fx);
+    const x11 = lerp(v011, v111, fx);
+    const y0 = lerp(x00, x10, fy);
+    const y1 = lerp(x01, x11, fy);
+    return lerp(y0, y1, fz);
+  }
+
+  return { gr: interpKey('gr'), o50: interpKey('o50'), source: 'bilinear' };
+}
+
+function idwInterpolate(table, w, pa, oat, { k = 8, power = 2 } = {}) {
+  if (!table.length) return null;
+
+  const Ws = table.map(p => p.w), PAs = table.map(p => p.pa), OATs = table.map(p => p.oat);
+  const wSpan = Math.max(...Ws) - Math.min(...Ws) || 1;
+  const paSpan = Math.max(...PAs) - Math.min(...PAs) || 1;
+  const oatSpan = Math.max(...OATs) - Math.min(...OATs) || 1;
+
+  const points = table.map(p => {
+    const dw = (p.w - w) / wSpan;
+    const dpa = (p.pa - pa) / paSpan;
+    const doat = (p.oat - oat) / oatSpan;
+    const d = Math.hypot(dw, dpa, doat);
+    return { p, d };
+  }).sort((a, b) => a.d - b.d);
+
+  if (!points.length) return null;
+  if (points[0].d === 0) {
+    return { gr: points[0].p.gr, o50: points[0].p.o50, source: 'exact' };
+  }
+
+  const used = points.slice(0, Math.min(k, points.length));
+  let wSum = 0, grSum = 0, o50Sum = 0;
+  for (const n of used) {
+    const wt = 1 / Math.pow(n.d, power);
+    wSum += wt;
+    grSum += n.p.gr * wt;
+    o50Sum += n.p.o50 * wt;
+  }
+  if (!wSum) return null;
+  return { gr: grSum / wSum, o50: o50Sum / wSum, source: `idw-k${used.length}` };
+}
+
+/* src/engine/flaps.js */
+function flapOf(point) {
+  return ('flaps' in point) ? point.flaps : 20;
+}
+
+function availableFlaps(table) {
+  return uniqueSorted(table.map(flapOf));
+}
+
+function tableForExactFlap(table, flaps) {
+  return table.filter(p => flapOf(p) === flaps);
+}
+
+function interpolateAcrossFlaps(table, requestedFlaps, w, pa, oat) {
+  const flaps = availableFlaps(table);
+  if (!flaps.length) return null;
+
+  const perFlap = [];
+  for (const f of flaps) {
+    const t = tableForExactFlap(table, f);
+    const base = triInterpolate(t, w, pa, oat) || idwInterpolate(t, w, pa, oat);
+    if (base) {
+      perFlap.push({ flap: f, gr: base.gr, o50: base.o50, source: base.source });
+    }
+  }
+  if (!perFlap.length) return null;
+
+  const exact = perFlap.find(x => x.flap === requestedFlaps);
+  if (exact) {
+    return { gr: exact.gr, o50: exact.o50, source: `${exact.source} (flaps ${requestedFlaps} deg)`, flapMode: 'exact' };
+  }
+
+  const sorted = perFlap.slice().sort((a, b) => a.flap - b.flap);
+  if (sorted.length === 1) {
+    const s = sorted[0];
+    return {
+      gr: s.gr,
+      o50: s.o50,
+      source: `${s.source} (requested ${requestedFlaps} deg, inferred from only loaded flap ${s.flap} deg)`,
+      flapMode: 'single-loaded',
+      loadedFlap: s.flap
+    };
+  }
+
+  let lo = sorted[0], hi = sorted[sorted.length - 1];
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i].flap >= requestedFlaps) {
+      lo = sorted[i - 1];
+      hi = sorted[i];
+      break;
+    }
+  }
+  const denom = (hi.flap - lo.flap) || 1;
+  const t = (requestedFlaps - lo.flap) / denom;
+  return {
+    gr: lerp(lo.gr, hi.gr, t),
+    o50: lerp(lo.o50, hi.o50, t),
+    source: `flap-linear (${lo.flap}-${hi.flap} deg, requested ${requestedFlaps} deg)`,
+    flapMode: 'interpolated'
+  };
+}
+
+function applyFlapModel(base, requestedFlaps, model) {
+  if (base.flapMode !== 'single-loaded' || !isFinite(base.loadedFlap)) return base;
+  const steps = Math.abs((requestedFlaps - base.loadedFlap) / 10);
+  const factor = 1 + (model.flapStepPct * steps);
+  return {
+    ...base,
+    gr: base.gr * factor,
+    o50: base.o50 * factor,
+    source: `${base.source}; flap-model (+${Math.round((factor - 1) * 100)}%)`
+  };
+}
+
+/* src/engine/weight.js */
+function applyWeightModel(base, requestedWeightKg, table, model) {
+  const weights = uniqueSorted(table.map(p => p.w));
+  if (!weights.length) return { ...base, source: `${base.source}; weight n/a` };
+  if (weights.length > 1) {
+    return base;
+  }
+  const ref = weights[0] || model.refWeightKg;
+  const wr = (requestedWeightKg > 0 ? requestedWeightKg : ref) / ref;
+  return {
+    ...base,
+    gr: base.gr * Math.pow(wr, model.grWeightExp),
+    o50: base.o50 * Math.pow(wr, model.o50WeightExp),
+    source: `${base.source}; weight-model (ref ${ref} kg)`
+  };
+}
+
+/* src/engine/wind.js */
+function windComponent(windDir, windSpd, rwyHeading) {
+  if (!windSpd || !isFinite(windSpd)) return { head: 0, cross: 0 };
+  const angle = ((windDir - rwyHeading) * Math.PI) / 180;
+  const head = Math.round(Math.cos(angle) * windSpd);
+  const cross = Math.round(Math.sin(angle) * windSpd);
+  return { head, cross };
+}
+
+/* src/engine/pressure.js */
+function computePressureAltitude({ fieldElevFt, oatC, altimInHg, qnhHpa }) {
+  const elev = isFinite(fieldElevFt) ? fieldElevFt : 0;
+  const qnhValid = isFinite(qnhHpa) && qnhHpa > 800 && qnhHpa < 1100;
+  const altimValid = isFinite(altimInHg) && altimInHg > 25 && altimInHg < 35;
+  if (qnhValid) {
+    const qnhInHg = qnhHpa * 0.0295299830714;
+    const pa = elev + (29.92 - qnhInHg) * 1000;
+    return { pa, method: 'elev+QNH(hPa)' };
+  }
+  if (altimValid) {
+    const pa = elev + (29.92 - altimInHg) * 1000;
+    return { pa, method: 'elev+altimeter' };
+  }
+  const isaAtElev = 15 - (2 * (elev / 1000));
+  const paEst = elev + 120 * (oatC - isaAtElev);
+  return { pa: paEst, method: 'est from OAT+elev' };
+}
+
+/* src/engine/corrections.js */
+function applyCorrections(dist, { aircraft = 'caravan', headKts = 0, slopePct = 0, surface = 'paved', paFt = 0 }) {
+  let factor = 1;
+
+  if (aircraft === 'kodiak100') {
+    if (headKts > 0) {
+      factor *= (1 - 0.10 * (headKts / 12));
+    } else if (headKts < 0) {
+      const tw = Math.min(Math.abs(headKts), 10);
+      factor *= (1 + 0.10 * (tw / 2));
+    }
+    if (slopePct !== 0) {
+      const s = Math.min(Math.abs(slopePct), 3);
+      const up = slopePct > 0;
+      const high = paFt >= 10000;
+      const mid = paFt >= 5000 && paFt < 10000;
+      const perPct = up
+        ? (high ? 0.43 : (mid ? 0.30 : 0.22))
+        : (high ? 0.14 : (mid ? 0.10 : 0.07));
+      factor *= up ? (1 + perPct * s) : (1 - perPct * s);
+    }
+    if (surface === 'grass') {
+      factor *= 1.20;
+    }
+  } else if (aircraft === 'ga8') {
+    if (headKts > 0) {
+      factor *= (1 - 0.10 * (headKts / 9));
+    } else if (headKts < 0) {
+      const tw = Math.min(Math.abs(headKts), 10);
+      factor *= (1 + 0.10 * (tw / 2));
+    }
+    if (slopePct !== 0) {
+      factor *= (1 + 0.10 * (slopePct / 1));
+    }
+    if (surface === 'grass') {
+      factor *= 1.07;
+    }
+  } else if (aircraft === 'c172_180') {
+    if (headKts > 0) {
+      factor *= (1 - 0.10 * (headKts / 9));
+    } else if (headKts < 0) {
+      const tw = Math.min(Math.abs(headKts), 10);
+      factor *= (1 + 0.10 * (tw / 2));
+    }
+  } else {
+    if (headKts > 0) {
+      factor *= (1 - 0.10 * (headKts / 9));
+    } else if (headKts < 0) {
+      const tw = Math.min(Math.abs(headKts), 10);
+      factor *= (1 + 0.10 * (tw / 2));
+    }
+    if (slopePct !== 0) {
+      factor *= (1 + 0.10 * (slopePct / 1));
+    }
+    if (surface === 'grass') {
+      factor *= 1.15;
+    }
+  }
+  return dist * factor;
+}
+
+/* src/engine/ga8-equation.js */
+// GA8 Airvan ground roll and o50 equations
+// Derived by regression on AFM Section 5 nomogram data (14° flap)
+//
+// GR(ft) = (W / W_ref)^2 × exp(h(PA, OAT))
+// o50(ft) = GR × (1 + 0.6057/σ)   where σ is density ratio
+//
+// Weight exponent of 2.0 matches piston aircraft physics (GR ∝ W²).
+// h(PA,OAT) polynomial fitted to uncalibrated W=1200 + W=1814 data (R² = 0.9999).
+// o50 ratio calibrated to AFM chart example: 625m/370m = 1.689 at σ=0.879.
+
+const W_REF = 1814; // reference weight (kg), GA8 max gross
+
+// Polynomial coefficients for h(PA, OAT) in log-space
+// Inputs are normalized: pn = PA/10000, tn = OAT/40
+const H = [
+  6.911442770279331,     // intercept
+  1.008233120088826,     // pn
+  0.4783407256099565,    // tn
+  0.041670339615218654,  // pn²
+  0.015139188957839026,  // tn²
+  0.008853542973726617,  // pn × tn
+  0.03227338871250904,   // pn² × tn
+  -0.005344925618352806  // pn × tn²
+];
+
+function densityRatio(paFt, oatC) {
+  const delta = Math.pow(1 - 6.8756e-6 * paFt, 5.2559);
+  const theta = (oatC + 273.15) / 288.15;
+  return delta / theta;
+}
+
+/**
+ * GA8 ground roll from equation model.
+ * @param {number} wKg  - takeoff weight in kg (1200–1814)
+ * @param {number} paFt - pressure altitude in feet
+ * @param {number} oatC - outside air temperature in °C
+ * @returns {number} ground roll in feet
+ */
+function ga8GroundRoll(wKg, paFt, oatC) {
+  const pn = paFt / 10000;
+  const tn = oatC / 40;
+  const h = H[0]
+    + H[1] * pn
+    + H[2] * tn
+    + H[3] * pn * pn
+    + H[4] * tn * tn
+    + H[5] * pn * tn
+    + H[6] * pn * pn * tn
+    + H[7] * pn * tn * tn;
+
+  return Math.pow(wKg / W_REF, 2) * Math.exp(h);
+}
+
+/**
+ * o50/gr ratio calibrated to AFM chart example.
+ * ratio = 1 + 0.6057/σ
+ *
+ * At sea level standard (σ=1.0): ratio ≈ 1.61
+ * At chart example (PA=4000, 10°C, σ=0.879): ratio = 1.689 (exact match)
+ * At 8000 ft / 40°C (σ≈0.68): ratio ≈ 1.89
+ *
+ * @param {number} paFt - pressure altitude in feet
+ * @param {number} oatC - outside air temperature in °C
+ * @returns {number} o50/gr ratio
+ */
+function ga8O50Ratio(paFt, oatC) {
+  const sigma = densityRatio(paFt, oatC);
+  if (sigma <= 0.20) return 1 + 0.6057 / 0.20; // cap at extreme DA
+  return 1 + 0.6057 / sigma;
+}
+
+/**
+ * GA8 50-ft obstacle clearance distance from equation model.
+ * @param {number} wKg  - takeoff weight in kg
+ * @param {number} paFt - pressure altitude in feet
+ * @param {number} oatC - outside air temperature in °C
+ * @returns {number} o50 distance in feet
+ */
+function ga8Over50(wKg, paFt, oatC) {
+  return ga8GroundRoll(wKg, paFt, oatC) * ga8O50Ratio(paFt, oatC);
+}
+
+/* src/engine/compute.js */
+function computeTakeoff(inputs, dataset) {
+  const { table, model, name } = dataset;
+  const {
+    w, paManual, oat, flaps, rwy, rwyLen, windDir, windSpd,
+    slope, surface, margin, autoPA, elev, altim, qnh, aircraftKey
+  } = inputs;
+
+  // 1. Pressure altitude
+  let pa = paManual;
+  let paMethod = 'manual';
+  if (autoPA) {
+    const paCalc = computePressureAltitude({ fieldElevFt: elev, oatC: oat, altimInHg: altim, qnhHpa: qnh });
+    pa = paCalc.pa;
+    paMethod = paCalc.method;
+  }
+
+  // 2. Wind
+  const wind = windComponent(windDir, windSpd, rwy);
+
+  // 3. Runway length
+  const rwyLenValid = isFinite(rwyLen) && rwyLen > 0;
+
+  // 4. Base distance — equation or interpolation
+  let grC, o50C, source;
+  const correctionsKey = dataset.corrections || aircraftKey;
+
+  if (dataset.equation === 'ga8') {
+    // GA8: direct equation model (no table interpolation)
+    const grBase = ga8GroundRoll(w, pa, oat);
+    const o50Base = ga8Over50(w, pa, oat);
+    source = `${name}: equation model (14° flap)`;
+
+    grC = applyCorrections(grBase, { aircraft: correctionsKey, headKts: wind.head, slopePct: slope, surface, paFt: pa });
+    o50C = applyCorrections(o50Base, { aircraft: correctionsKey, headKts: wind.head, slopePct: slope, surface, paFt: pa });
+  } else {
+    // All other aircraft: table interpolation pipeline
+    const flapsLoaded = availableFlaps(table);
+    const baseFlap = interpolateAcrossFlaps(table, flaps, w, pa, oat);
+    if (!baseFlap) {
+      return {
+        error: true,
+        errorMsg: `no-data (flaps ${flaps} deg; loaded: ${flapsLoaded.join(', ') || 'none'})`,
+        wind,
+        pa: Math.round(pa),
+        paMethod,
+        rwyLenFt: rwyLenValid ? Math.round(rwyLen) : null,
+        rwyLenM: rwyLenValid ? ftToM(rwyLen) : null
+      };
+    }
+
+    const baseW = applyWeightModel(baseFlap, w, table, model);
+    const base = applyFlapModel(baseW, flaps, model);
+    source = `${name}: ${base.source}`;
+
+    grC = applyCorrections(base.gr, { aircraft: correctionsKey, headKts: wind.head, slopePct: slope, surface, paFt: pa });
+    o50C = applyCorrections(base.o50, { aircraft: correctionsKey, headKts: wind.head, slopePct: slope, surface, paFt: pa });
+  }
+
+  // C172 grass special case
+  if (correctionsKey === 'c172_180' && surface === 'grass') {
+    const grassAdd = 0.15 * grC;
+    grC += grassAdd;
+    o50C += grassAdd;
+  }
+
+  // 6. Final values
+  const marginFactor = 1 + (margin / 100);
+  return {
+    error: false,
+    gr: Math.round(grC),
+    o50: Math.round(o50C),
+    grM: ftToM(grC),
+    o50M: ftToM(o50C),
+    grMargin: Math.round(grC * marginFactor),
+    o50Margin: Math.round(o50C * marginFactor),
+    grMarginM: ftToM(grC * marginFactor),
+    o50MarginM: ftToM(o50C * marginFactor),
+    source,
+    wind,
+    pa: Math.round(pa),
+    paMethod,
+    rwyLenFt: rwyLenValid ? Math.round(rwyLen) : null,
+    rwyLenM: rwyLenValid ? ftToM(rwyLen) : null
+  };
+}
+
+/* src/data/airports.js */
+const AIRPORT_DB = {
+  NZQN: { lat: -45.0211, lon: 168.7390, elev: 1171 },
+  NZMF: { lat: -44.6733, lon: 167.9233, elev: 10 },
+  NZGY: { lat: -44.8717, lon: 168.3980, elev: 1260 },
+  NZRC: { lat: -46.8997, lon: 168.1010, elev: 62 },
+  NZGT: { lat: -43.9067, lon: 170.1280, elev: 1824 },
+  NZWF: { lat: -44.7230, lon: 169.2484, elev: 1142 },
+  NZMC: { lat: -43.7650, lon: 170.1330, elev: 2153 },
+  KMFV: { lat: 37.6469, lon: -75.7611, elev: 48 }
+};
+
+const RWY_PRESETS = {
+  NZQN05: { icao: 'NZQN', heading: 50, elev: 1171, lengthFt: 6204 },
+  NZQN23: { icao: 'NZQN', heading: 230, elev: 1171, lengthFt: 6204 },
+  NZQN14: { icao: 'NZQN', heading: 140, elev: 1171, lengthFt: 2920 },
+  NZQN32: { icao: 'NZQN', heading: 320, elev: 1171, lengthFt: 2920 },
+  NZMF11: { icao: 'NZMF', heading: 110, elev: 10, lengthFt: 2598 },
+  NZMF29: { icao: 'NZMF', heading: 290, elev: 10, lengthFt: 2598 },
+  NZGY14: { icao: 'NZGY', heading: 140, elev: 1260, lengthFt: 2215 },
+  NZGY32: { icao: 'NZGY', heading: 320, elev: 1260, lengthFt: 2215 },
+  NZRC04: { icao: 'NZRC', heading: 40, elev: 62, lengthFt: 2625 },
+  NZRC22: { icao: 'NZRC', heading: 220, elev: 62, lengthFt: 2625 },
+  NZGT15: { icao: 'NZGT', heading: 150, elev: 1824, lengthFt: 3166 },
+  NZGT33: { icao: 'NZGT', heading: 330, elev: 1824, lengthFt: 3166 },
+  NZWF11: { icao: 'NZWF', heading: 110, elev: 1142, lengthFt: 3937 },
+  NZWF29: { icao: 'NZWF', heading: 290, elev: 1142, lengthFt: 3937 },
+  NZMC13: { icao: 'NZMC', heading: 130, elev: 2153, lengthFt: 5157 },
+  NZMC31: { icao: 'NZMC', heading: 310, elev: 2153, lengthFt: 5157 },
+  KMFV03: { icao: 'KMFV', heading: 34, elev: 48, lengthFt: 5000 },
+  KMFV21: { icao: 'KMFV', heading: 214, elev: 48, lengthFt: 5000 }
+};
+
+/* src/services/custom-aircraft.js */
+const DB_NAME = 'takeoff-calc';
+const DB_VERSION = 1;
+const STORE_NAME = 'custom-aircraft';
+
+let cache = {};
+
+const BUILTIN_KEYS = ['caravan', 'kodiak100', 'c172_180', 'ga8', 'c185'];
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: 'key' });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function initCustomAircraftDB() {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const all = await new Promise((resolve, reject) => {
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+    cache = {};
+    for (const item of all) {
+      cache[item.key] = itemToDataset(item);
+    }
+    db.close();
+  } catch {
+    cache = {};
+  }
+}
+
+function itemToDataset(item) {
+  return {
+    name: item.name,
+    table: item.table,
+    label: `Loaded dataset: ${item.name} (custom import)`,
+    baselineFlaps: item.baselineFlaps || 'Custom',
+    defaults: item.defaults,
+    model: item.model,
+    corrections: item.corrections || 'generic',
+    builtin: false
+  };
+}
+
+function getCustomAircraft() {
+  return { ...cache };
+}
+
+function validateAircraftData(data) {
+  const errors = [];
+
+  if (!data || typeof data !== 'object') {
+    return { valid: false, errors: ['Input must be a JSON object'] };
+  }
+
+  if (typeof data.key !== 'string' || !data.key.trim()) errors.push('Missing "key" (unique identifier)');
+  if (typeof data.name !== 'string' || !data.name.trim()) errors.push('Missing "name" (display name)');
+
+  if (BUILTIN_KEYS.includes(data.key)) {
+    errors.push(`Key "${data.key}" conflicts with a built-in aircraft`);
+  }
+
+  if (!Array.isArray(data.table) || data.table.length === 0) {
+    errors.push('"table" must be a non-empty array');
+  } else {
+    const requiredFields = ['flaps', 'w', 'pa', 'oat', 'gr', 'o50'];
+    for (let i = 0; i < Math.min(data.table.length, 5); i++) {
+      const row = data.table[i];
+      for (const f of requiredFields) {
+        if (typeof row[f] !== 'number' || !isFinite(row[f])) {
+          errors.push(`table[${i}].${f} must be a finite number`);
+          break;
+        }
+      }
+    }
+    if (data.table.length > 5) {
+      const lastRow = data.table[data.table.length - 1];
+      const requiredFields2 = ['flaps', 'w', 'pa', 'oat', 'gr', 'o50'];
+      for (const f of requiredFields2) {
+        if (typeof lastRow[f] !== 'number' || !isFinite(lastRow[f])) {
+          errors.push(`table[${data.table.length - 1}].${f} must be a finite number`);
+          break;
+        }
+      }
+    }
+  }
+
+  if (!data.defaults || typeof data.defaults !== 'object') {
+    errors.push('Missing "defaults" object');
+  } else {
+    for (const f of ['w', 'flaps', 'minW', 'maxW']) {
+      if (typeof data.defaults[f] !== 'number') errors.push(`defaults.${f} must be a number`);
+    }
+  }
+
+  if (!data.model || typeof data.model !== 'object') {
+    errors.push('Missing "model" object');
+  } else {
+    for (const f of ['refWeightKg', 'grWeightExp', 'o50WeightExp', 'flapStepPct']) {
+      if (typeof data.model[f] !== 'number') errors.push(`model.${f} must be a number`);
+    }
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
+async function importAircraft(jsonString) {
+  const data = JSON.parse(jsonString);
+  const validation = validateAircraftData(data);
+  if (!validation.valid) {
+    throw new Error(`Validation failed:\n${validation.errors.join('\n')}`);
+  }
+
+  const db = await openDB();
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const store = tx.objectStore(STORE_NAME);
+  await new Promise((resolve, reject) => {
+    const req = store.put(data);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  });
+  cache[data.key] = itemToDataset(data);
+  db.close();
+  return data.key;
+}
+
+async function deleteCustomAircraft(key) {
+  if (BUILTIN_KEYS.includes(key)) throw new Error('Cannot delete built-in aircraft');
+  const db = await openDB();
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const store = tx.objectStore(STORE_NAME);
+  await new Promise((resolve, reject) => {
+    const req = store.delete(key);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  });
+  delete cache[key];
+  db.close();
+}
+
+async function exportAircraft(key) {
+  const db = await openDB();
+  const tx = db.transaction(STORE_NAME, 'readonly');
+  const store = tx.objectStore(STORE_NAME);
+  const data = await new Promise((resolve, reject) => {
+    const req = store.get(key);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+  db.close();
+  if (!data) throw new Error(`Aircraft "${key}" not found`);
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${key}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* src/services/weather.js */
+async function loadLiveWeather(icaoCode) {
+  const ap = AIRPORT_DB[icaoCode];
+  if (!ap) {
+    throw new Error(`No coordinates known for ICAO ${icaoCode || '(blank)'}`);
+  }
+
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${ap.lat}&longitude=${ap.lon}&current=temperature_2m,pressure_msl,wind_speed_10m,wind_direction_10m&wind_speed_unit=kn&timezone=auto`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const data = await res.json();
+  const c = data?.current;
+  if (!c) throw new Error('No current weather payload');
+
+  return {
+    oat: isFinite(c.temperature_2m) ? Math.round(c.temperature_2m) : null,
+    windSpd: isFinite(c.wind_speed_10m) ? Math.round(c.wind_speed_10m) : null,
+    windDir: isFinite(c.wind_direction_10m) ? Math.round(c.wind_direction_10m) : null,
+    qnh: isFinite(c.pressure_msl) ? Math.round(c.pressure_msl) : null,
+    elevation: ap.elev
+  };
+}
+
+/* src/data/datasets.js */
+const BUILTIN_DATASETS = {
+  caravan: {
+    name: 'Cessna Grand Caravan EX',
+    table: caravanTable,
+    label: 'Loaded dataset: Caravan AFM Fig 5-10/5-11 (multi-weight)',
+    baselineFlaps: 'Flaps TO/APR',
+    defaults: { w: 3995, flaps: 20, minW: 3311, maxW: 3995 },
+    model: { refWeightKg: 3995, grWeightExp: 2.0, o50WeightExp: 2.3, flapStepPct: 0.06 },
+    builtin: true
+  },
+  kodiak100: {
+    name: 'Daher/Quest Kodiak 100',
+    table: kodiak100Table,
+    label: 'Loaded dataset: Kodiak 100 POH Table 5-7 (from provided charts)',
+    baselineFlaps: 'Flaps 20\u00b0',
+    defaults: { w: 3291, flaps: 20, minW: 1814, maxW: 3291 },
+    model: { refWeightKg: 3291, grWeightExp: 2.0, o50WeightExp: 2.2, flapStepPct: 0.05 },
+    builtin: true
+  },
+  c172_180: {
+    name: 'Cessna 172 (180 hp)',
+    table: c172_180Table,
+    label: 'Loaded dataset: C172 180 hp short-field chart (max weight 2550 lb)',
+    baselineFlaps: 'Short field chart (flaps 10 deg)',
+    defaults: { w: 1157, flaps: 10, minW: 1157, maxW: 1157 },
+    model: { refWeightKg: 1157, grWeightExp: 2.0, o50WeightExp: 2.2, flapStepPct: 0.05 },
+    builtin: true
+  },
+  ga8: {
+    name: 'GippsAero GA8 Airvan',
+    table: ga8Table,
+    label: 'Loaded dataset: GA8 AFM Section 5 nomogram (14\u00b0 flap, re-digitized from high-res chart)',
+    baselineFlaps: 'Flaps 14\u00b0',
+    defaults: { w: 1814, flaps: 14, minW: 1200, maxW: 1814 },
+    model: { refWeightKg: 1814, grWeightExp: 1.5, o50WeightExp: 1.5, flapStepPct: 0.05 },
+    builtin: true
+  },
+  c185: {
+    name: 'Cessna 185 Skywagon',
+    table: c185Table,
+    label: 'Loaded dataset: C185 takeoff chart from max project (0-wind baseline)',
+    baselineFlaps: 'Chart baseline flap setting',
+    defaults: { w: 1520, flaps: 20, minW: 1043, maxW: 1520 },
+    model: { refWeightKg: 1520, grWeightExp: 2.0, o50WeightExp: 2.2, flapStepPct: 0.05 },
+    builtin: true
+  }
+};
+
+function getAllDatasets() {
+  const custom = getCustomAircraft();
+  return { ...BUILTIN_DATASETS, ...custom };
+}
+
+function getDataset(key) {
+  return getAllDatasets()[key] || BUILTIN_DATASETS.caravan;
+}
+
+/* src/ui/dom.js */
+const byId = (id) => document.getElementById(id);
+
+const inputIds = [
+  'aircraft', 'w', 'pa', 'autoPA', 'oat', 'flaps', 'rwy', 'rwyLen',
+  'windDir', 'windSpd', 'slope', 'surface', 'margin', 'presetRwy',
+  'airport', 'elev', 'altim', 'qnh'
+];
+
+function getInputElements() {
+  return inputIds.map($).filter(Boolean);
+}
+
+function getOutputElements() {
+  return {
+    gr: byId('gr'), o50: byId('o50'), grm: byId('grm'), o50m: byId('o50m'),
+    grM: byId('grM'), o50M: byId('o50M'), grmM: byId('grmM'), o50mM: byId('o50mM'),
+    head: byId('headComp'), cross: byId('crossComp'), headLabel: byId('headLabel'),
+    src: byId('src'), dump: byId('dataDump'), paUsed: byId('paUsed'),
+    paMethod: byId('paMethod'), wxStatus: byId('wxStatus'),
+    rwyLenFt: byId('rwyLenFt'), rwyLenM: byId('rwyLenM')
+  };
+}
+
+const sliderPairs = [
+  ['w', 'wSlider'],
+  ['pa', 'paSlider'],
+  ['oat', 'oatSlider'],
+  ['flaps', 'flapsSlider'],
+  ['rwy', 'rwySlider'],
+  ['windDir', 'windDirSlider'],
+  ['windSpd', 'windSpdSlider'],
+  ['slope', 'slopeSlider'],
+  ['margin', 'marginSlider']
+];
+
+function syncSingleSlider(inputId, sliderId) {
+  const input = byId(inputId);
+  const slider = byId(sliderId);
+  if (!input || !slider) return;
+
+  slider.min = input.min || slider.min || 0;
+  slider.max = input.max || slider.max || 100;
+  slider.step = input.step || slider.step || 1;
+
+  const n = Number(input.value);
+  if (isFinite(n)) slider.value = n;
+}
+
+function syncAllSliders() {
+  sliderPairs.forEach(([inputId, sliderId]) => syncSingleSlider(inputId, sliderId));
+}
+
+function bindSettingSliders() {
+  sliderPairs.forEach(([inputId, sliderId]) => {
+    const input = byId(inputId);
+    const slider = byId(sliderId);
+    if (!input || !slider) return;
+
+    slider.addEventListener('input', () => {
+      input.value = slider.value;
+      readFormToState();
+    });
+
+    input.addEventListener('input', () => {
+      const n = Number(input.value);
+      if (isFinite(n)) slider.value = n;
+    });
+  });
+
+  syncAllSliders();
+}
+
+/* src/ui/render.js */
+function renderResults(result) {
+  const out = getOutputElements();
+
+  out.paUsed.textContent = result.pa;
+  out.paMethod.textContent = result.paMethod;
+  out.head.textContent = Math.abs(result.wind.head);
+  out.cross.textContent = Math.abs(result.wind.cross);
+  out.headLabel.textContent = result.wind.head >= 0 ? 'headwind' : 'tailwind';
+
+  if (result.rwyLenFt != null) {
+    out.rwyLenFt.textContent = result.rwyLenFt;
+    out.rwyLenM.textContent = result.rwyLenM;
+  } else {
+    out.rwyLenFt.textContent = '\u2014';
+    out.rwyLenM.textContent = '\u2014';
+  }
+
+  if (result.error) {
+    out.gr.textContent = out.o50.textContent = out.grm.textContent = out.o50m.textContent = '\u2014';
+    out.grM.textContent = out.o50M.textContent = out.grmM.textContent = out.o50mM.textContent = '\u2014';
+    out.src.textContent = result.errorMsg;
+  } else {
+    out.gr.textContent = result.gr;
+    out.o50.textContent = result.o50;
+    out.grm.textContent = result.grMargin;
+    out.o50m.textContent = result.o50Margin;
+    out.grM.textContent = result.grM;
+    out.o50M.textContent = result.o50M;
+    out.grmM.textContent = result.grMarginM;
+    out.o50mM.textContent = result.o50MarginM;
+    out.src.textContent = result.source;
+  }
+}
+
+/* src/ui/aircraft-switcher.js */
+function populateAircraftDropdown() {
+  const sel = byId('aircraft');
+  sel.innerHTML = '';
+  for (const [key, ds] of Object.entries(getAllDatasets())) {
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = ds.builtin ? ds.name : `${ds.name} (custom)`;
+    sel.appendChild(opt);
+  }
+}
+
+function applyDatasetUI(key) {
+  const d = getDataset(key);
+  byId('title').textContent = `${d.name} Takeoff Calculator`;
+  byId('datasetPill').textContent = d.label;
+  byId('baselineFlaps').textContent = d.baselineFlaps;
+  byId('w').min = d.defaults.minW;
+  byId('w').max = d.defaults.maxW;
+
+  const flapOptions = availableFlaps(d.table);
+  if (flapOptions.length) {
+    byId('flaps').min = flapOptions[0];
+    byId('flaps').max = flapOptions[flapOptions.length - 1];
+    byId('flaps').step = 1;
+  }
+
+  syncAllSliders();
+  byId('dataDump').textContent = JSON.stringify(d.table, null, 2);
+}
+
+function resetInputs(key) {
+  const d = getDataset(key || byId('aircraft').value);
+  byId('w').value = d.defaults.w;
+  byId('pa').value = 0;
+  byId('autoPA').value = 'on';
+  byId('oat').value = 15;
+  byId('flaps').value = d.defaults.flaps;
+  byId('rwy').value = 60;
+  byId('rwyLen').value = '';
+  byId('windDir').value = 60;
+  byId('windSpd').value = 0;
+  byId('slope').value = 0;
+  byId('surface').value = 'paved';
+  byId('margin').value = 25;
+  byId('presetRwy').value = '';
+  byId('airport').value = 'NZQN';
+  byId('elev').value = 1171;
+  byId('altim').value = '';
+  byId('qnh').value = '';
+  byId('wxStatus').textContent = '';
+  applyDatasetUI(key || byId('aircraft').value);
+  syncPAInputState();
+  syncAllSliders();
+  readFormToState();
+}
+
+function syncPAInputState() {
+  const isAuto = byId('autoPA').value === 'on';
+  byId('pa').disabled = isAuto;
+  if (byId('paSlider')) byId('paSlider').disabled = isAuto;
+}
+
+function readFormToState() {
+  const rwyLenRaw = byId('rwyLen').value.trim();
+  const altimRaw = byId('altim').value.trim();
+  const qnhRaw = byId('qnh').value.trim();
+
+  setState({
+    aircraftKey: byId('aircraft').value,
+    w: +byId('w').value,
+    paManual: +byId('pa').value,
+    oat: +byId('oat').value,
+    flaps: +byId('flaps').value,
+    rwy: +byId('rwy').value,
+    rwyLen: rwyLenRaw === '' ? NaN : +rwyLenRaw,
+    windDir: +byId('windDir').value,
+    windSpd: +byId('windSpd').value,
+    slope: +byId('slope').value,
+    surface: byId('surface').value,
+    margin: +byId('margin').value || 0,
+    autoPA: byId('autoPA').value === 'on',
+    elev: +byId('elev').value,
+    altim: altimRaw === '' ? NaN : +altimRaw,
+    qnh: qnhRaw === '' ? NaN : +qnhRaw
+  });
+}
+
+/* src/ui/custom-aircraft-modal.js */
+let modalEl = null;
+
+function createModal() {
+  if (modalEl) return modalEl;
+
+  modalEl = document.createElement('div');
+  modalEl.id = 'customAircraftModal';
+  modalEl.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/60 hidden';
+  modalEl.innerHTML = `
+    <div class="bg-panel border border-border rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-4">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold text-ink">Manage Custom Aircraft</h2>
+        <button id="modalClose" class="text-muted hover:text-ink text-2xl leading-none">&times;</button>
+      </div>
+
+      <div id="customList" class="mb-4"></div>
+
+      <hr class="border-border mb-4">
+
+      <h3 class="text-sm font-bold text-ink mb-2">Import New Aircraft</h3>
+      <p class="text-xs text-muted mb-2">Paste JSON or select a .json file. Required fields: key, name, table[], defaults{}, model{}.</p>
+
+      <textarea id="importJson" rows="6" class="w-full bg-input-bg text-ink border border-input-border rounded-lg p-2 font-mono text-xs mb-2" placeholder='{"key": "pa28", "name": "Piper PA-28", "table": [...], ...}'></textarea>
+
+      <div class="flex gap-2 items-center mb-2">
+        <input type="file" id="importFile" accept=".json" class="text-xs text-muted">
+        <button id="btnValidate" class="bg-input-border text-ink border-0 rounded-lg px-3 py-1.5 text-sm font-bold cursor-pointer">Validate</button>
+        <button id="btnImport" class="bg-acc text-[#001c38] border-0 rounded-lg px-3 py-1.5 text-sm font-bold cursor-pointer">Import</button>
+      </div>
+
+      <div id="importStatus" class="text-xs mt-1"></div>
+    </div>
+  `;
+  document.body.appendChild(modalEl);
+
+  modalEl.querySelector('#modalClose').addEventListener('click', closeModal);
+  modalEl.addEventListener('click', (e) => {
+    if (e.target === modalEl) closeModal();
+  });
+
+  modalEl.querySelector('#importFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      modalEl.querySelector('#importJson').value = reader.result;
+    };
+    reader.readAsText(file);
+  });
+
+  modalEl.querySelector('#btnValidate').addEventListener('click', () => {
+    const status = modalEl.querySelector('#importStatus');
+    try {
+      const data = JSON.parse(modalEl.querySelector('#importJson').value);
+      const result = validateAircraftData(data);
+      if (result.valid) {
+        status.textContent = `Valid! "${data.name}" with ${data.table.length} data points.`;
+        status.className = 'text-xs mt-1 text-green-400';
+      } else {
+        status.textContent = result.errors.join('; ');
+        status.className = 'text-xs mt-1 text-danger';
+      }
+    } catch (err) {
+      status.textContent = `Invalid JSON: ${err.message}`;
+      status.className = 'text-xs mt-1 text-danger';
+    }
+  });
+
+  modalEl.querySelector('#btnImport').addEventListener('click', async () => {
+    const status = modalEl.querySelector('#importStatus');
+    try {
+      const key = await importAircraft(modalEl.querySelector('#importJson').value);
+      status.textContent = `Imported "${key}" successfully!`;
+      status.className = 'text-xs mt-1 text-green-400';
+      modalEl.querySelector('#importJson').value = '';
+      populateAircraftDropdown();
+      renderCustomList();
+    } catch (err) {
+      status.textContent = err.message;
+      status.className = 'text-xs mt-1 text-danger';
+    }
+  });
+
+  return modalEl;
+}
+
+function renderCustomList() {
+  const list = modalEl.querySelector('#customList');
+  const custom = getCustomAircraft();
+  const keys = Object.keys(custom);
+
+  if (!keys.length) {
+    list.innerHTML = '<p class="text-xs text-muted">No custom aircraft imported yet.</p>';
+    return;
+  }
+
+  list.innerHTML = keys.map(key => `
+    <div class="flex items-center justify-between bg-input-bg rounded-lg p-2 mb-1">
+      <span class="text-sm text-ink">${custom[key].name} <span class="text-xs text-muted">(${key})</span></span>
+      <div class="flex gap-1">
+        <button data-export="${key}" class="text-xs text-acc cursor-pointer px-2 py-1 hover:underline">Export</button>
+        <button data-delete="${key}" class="text-xs text-danger cursor-pointer px-2 py-1 hover:underline">Delete</button>
+      </div>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('[data-export]').forEach(btn => {
+    btn.addEventListener('click', () => exportAircraft(btn.dataset.export));
+  });
+
+  list.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      await deleteCustomAircraft(btn.dataset.delete);
+      populateAircraftDropdown();
+      renderCustomList();
+    });
+  });
+}
+
+function openModal() {
+  createModal();
+  renderCustomList();
+  modalEl.classList.remove('hidden');
+}
+
+function closeModal() {
+  if (modalEl) modalEl.classList.add('hidden');
+}
+
+/* src/ui/events.js */
+function selectedAirportCode() {
+  const presetVal = byId('presetRwy').value;
+  const fromPreset = presetVal && RWY_PRESETS[presetVal] ? RWY_PRESETS[presetVal].icao : '';
+  const typed = (byId('airport').value || '').trim().toUpperCase();
+  return fromPreset || typed;
+}
+
+async function handleLoadWeather() {
+  const icao = selectedAirportCode();
+  const btn = byId('btnLoadWx');
+  const wxStatus = byId('wxStatus');
+  btn.disabled = true;
+  wxStatus.textContent = `Loading weather for ${icao}...`;
+  try {
+    const wx = await loadLiveWeather(icao);
+    if (wx.oat != null) byId('oat').value = wx.oat;
+    if (wx.windSpd != null) byId('windSpd').value = wx.windSpd;
+    if (wx.windDir != null) byId('windDir').value = wx.windDir;
+    if (wx.qnh != null) byId('qnh').value = wx.qnh;
+    if (!byId('presetRwy').value && wx.elevation != null) byId('elev').value = wx.elevation;
+    wxStatus.textContent = `Weather loaded for ${icao}.`;
+    syncAllSliders();
+    readFormToState();
+  } catch (err) {
+    wxStatus.textContent = `Weather load failed: ${err.message}`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function bindEvents() {
+  byId('presetRwy').addEventListener('change', (e) => {
+    const val = e.target.value;
+    if (!val) return;
+    const p = RWY_PRESETS[val];
+    if (p) {
+      byId('rwy').value = p.heading;
+      byId('elev').value = p.elev;
+      byId('airport').value = p.icao;
+      byId('rwyLen').value = isFinite(p.lengthFt) ? p.lengthFt : '';
+    }
+    syncAllSliders();
+    readFormToState();
+  });
+
+  byId('autoPA').addEventListener('change', () => {
+    syncPAInputState();
+    readFormToState();
+  });
+
+  byId('aircraft').addEventListener('change', () => {
+    const key = byId('aircraft').value;
+    resetInputs(key);
+  });
+
+  byId('btnReset').addEventListener('click', () => {
+    resetInputs();
+  });
+
+  byId('btnCopyJSON').addEventListener('click', () => {
+    const d = getDataset(byId('aircraft').value);
+    navigator.clipboard.writeText(JSON.stringify(d.table, null, 2)).then(() => {
+      byId('src').textContent = 'Copied AFM JSON to clipboard';
+      setTimeout(() => readFormToState(), 1200);
+    });
+  });
+
+  byId('btnLoadWx').addEventListener('click', handleLoadWeather);
+
+  const btnManage = byId('btnManageAircraft');
+  if (btnManage) {
+    btnManage.addEventListener('click', openModal);
+  }
+
+  getInputElements().forEach(el => el.addEventListener('input', readFormToState));
+}
+
+/* src/main.js */
+async function boot() {
+  await initCustomAircraftDB();
+
+  populateAircraftDropdown();
+
+  subscribe((state) => {
+    const dataset = getDataset(state.aircraftKey);
+    const result = computeTakeoff(state, dataset);
+    renderResults(result);
+  });
+
+  bindEvents();
+  bindSettingSliders();
+
+  applyDatasetUI('caravan');
+  syncPAInputState();
+  resetInputs('caravan');
+}
+
+boot();
+</script>
+</body>
+</html>
+
+
+
+
+
