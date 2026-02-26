@@ -4474,13 +4474,26 @@ function applyDatasetUI(key) {
   byId('title').textContent = `${d.name} Takeoff Calculator`;
   byId('datasetPill').textContent = d.label;
   byId('baselineFlaps').textContent = d.baselineFlaps;
-  byId('w').min = d.defaults.minW;
-  byId('w').max = d.defaults.maxW;
+  if (d.defaults.minW < d.defaults.maxW) {
+    byId('w').min = d.defaults.minW;
+    byId('w').max = d.defaults.maxW;
+  } else {
+    // Single-weight datasets still support modeled scaling around the chart reference.
+    byId('w').min = Math.max(1, Math.round(d.defaults.w * 0.75));
+    byId('w').max = d.defaults.w;
+  }
 
   const flapOptions = availableFlaps(d.table);
   if (flapOptions.length) {
-    byId('flaps').min = flapOptions[0];
-    byId('flaps').max = flapOptions[flapOptions.length - 1];
+    if (flapOptions.length > 1) {
+      byId('flaps').min = flapOptions[0];
+      byId('flaps').max = flapOptions[flapOptions.length - 1];
+    } else {
+      // Single-flap datasets use flap-model scaling away from the loaded baseline flap.
+      const baseline = flapOptions[0];
+      byId('flaps').min = Math.max(0, baseline - 20);
+      byId('flaps').max = Math.min(40, baseline + 20);
+    }
     byId('flaps').step = 1;
   }
 
