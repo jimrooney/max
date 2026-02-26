@@ -4359,7 +4359,7 @@ const inputIds = [
 ];
 
 function getInputElements() {
-  return inputIds.map($).filter(Boolean);
+  return inputIds.map(byId).filter(Boolean);
 }
 
 function getOutputElements() {
