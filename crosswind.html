@@ -1,23 +1,243 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" href="test.css" />
-    <link rel="stylesheet" href="CSS.css" />
-    <script src="JimQuery.js"></script>
-    <script src="navbar.js"></script>
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wind Calculator PWA</title>
-  </head>
-  <body>
-    <h1>Wind Calculator</h1>
-    <p>Runway Direction: <input type="number" id="runwayDirection" /></p>
-    <p>Wind Speed (knots): <input type="number" id="windSpeed" /></p>
-    <p>Wind Direction: <input type="number" id="windDirection" /></p>
-    <button id="calculateButton">Calculate</button>
-    <div id="result"></div>
-
-    <script src="crosswindScript.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="JimQuery.js"></script>
+  <script src="navbar.js"></script>
+  <title>Crosswind Calculator</title>
+  <style>
+:root {
+  --color-bg: #0b0c10;
+  --color-panel: #111318;
+  --color-ink: #eaecef;
+  --color-muted: #9aa4b2;
+  --color-acc: #4da3ff;
+  --color-border: #1c2330;
+  --color-input-bg: #0f1218;
+  --color-input-border: #2a3242;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--color-bg); color: var(--color-ink); font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; }
+input, select, button { font: inherit; }
+input, select { color: var(--color-ink); border: 1px solid var(--color-input-border); background: var(--color-input-bg); }
+input:focus, select:focus { outline: none; border-color: var(--color-acc); box-shadow: 0 0 0 2px rgba(77, 163, 255, 0.2); }
+.container { max-width: 1000px; margin: 0 auto; padding: 1.5rem 1rem; }
+.grid { display: grid; gap: 0.75rem; grid-template-columns: 1fr; }
+.settings-grid { margin-top: 1rem; }
+@media (min-width: 768px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.label-card { display: flex; flex-direction: column; gap: 0.375rem; background: var(--color-panel); border: 1px solid var(--color-border); border-radius: 0.75rem; padding: 0.625rem; }
+.slider-stack { display: flex; flex-direction: column; gap: 0.5rem; }
+.setting-slider { width: 100%; accent-color: var(--color-acc); cursor: pointer; }
+.input { border-radius: 0.5rem; padding: 0.5rem; font-size: 0.875rem; }
+.card { background: var(--color-panel); border: 1px solid var(--color-border); border-radius: 1rem; padding: 0.875rem; margin-top: 1rem; }
+.result-row { display: flex; gap: 0.75rem; align-items: center; justify-content: center; flex-wrap: wrap; }
+.muted { color: var(--color-muted); font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.value { font-size: 1.5rem; font-weight: 700; }
+.wind-ring-card { width: 100%; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+.wind-ring-visual-wrap { display: flex; align-items: center; justify-content: center; gap: 1.25rem; width: 100%; }
+.wind-ring-frame {
+  width: min(88vw, 880px);
+  max-width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  background:
+    radial-gradient(circle at center, rgba(77, 163, 255, 0.10) 0%, rgba(77, 163, 255, 0.03) 42%, rgba(11, 12, 16, 0.95) 74%),
+    linear-gradient(180deg, rgba(28, 35, 48, 0.65), rgba(15, 18, 24, 0.9));
+}
+.wind-ring-svg { width: 100%; height: auto; display: block; touch-action: none; }
+.wind-ring-svg #ringGroup { opacity: 0.85; }
+.wind-ring-svg #centerMark { opacity: 0.9; }
+.wind-ring-svg #runwayGroup,
+.wind-ring-svg #windDirChevronRotate { cursor: grab; }
+.wind-ring-svg.dragging #runwayGroup,
+.wind-ring-svg.dragging #windDirChevronRotate { cursor: grabbing; }
+.wind-v-slider {
+  --wind-v-height: min(65vh, 465px);
+  width: 66px;
+  height: var(--wind-v-height);
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+  user-select: none;
+  touch-action: none;
+}
+.wind-v-labels {
+  width: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--color-acc);
+  font-weight: 700;
+  font-size: 1.3rem;
+  line-height: 1;
+  text-shadow: 0 0 0 var(--color-acc);
+}
+.wind-v-rail-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+}
+.wind-v-rail {
+  position: absolute;
+  inset: 0;
+  border: 3px solid #8da2c6;
+  border-radius: 0.25rem;
+  background: #f4f7fb;
+  overflow: hidden;
+}
+.wind-v-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0%;
+  background: linear-gradient(180deg, #ffd84d, #ffaf2f);
+}
+.wind-v-ticks {
+  position: absolute;
+  inset: 0;
+}
+.wind-v-ticks span {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  height: 2px;
+  background: #8da2c6;
+}
+.wind-v-thumb {
+  position: absolute;
+  left: calc(100% + 6px);
+  width: 54px;
+  height: 33px;
+  background: #ffaf2f;
+  border: 2px solid #3b4f72;
+  clip-path: polygon(0 50%, 34% 12%, 100% 12%, 100% 88%, 34% 88%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #13284e;
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1;
+  transform: translateY(50%);
+  pointer-events: auto;
+  cursor: grab;
+}
+.wind-v-slider.dragging .wind-v-thumb { cursor: grabbing; }
+@media (max-width: 900px) {
+  .wind-ring-visual-wrap { flex-direction: column; }
+  .wind-v-slider { --wind-v-height: 225px; }
+}
+.wind-ring-label {
+  fill: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Crosswind Calculator</h1>
+    <div class="card">
+      <div class="result-row">
+        <div>
+          <div class="muted">Head/Tailwind Component</div>
+          <div class="value"><span id="headComp">0</span> kt <span id="headLabel" class="muted">headwind</span></div>
+        </div>
+        <div>
+          <div class="muted">Crosswind Component</div>
+          <div class="value"><span id="crossComp">0</span> kt</div>
+        </div>
+        <div class="wind-ring-card">
+          <div class="muted">Wind Visual</div>
+          <div class="wind-ring-visual-wrap">
+            <div class="wind-ring-frame">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" id="windRingWidget" class="wind-ring-svg" role="img" aria-label="Runway and wind visualization">
+                <g id="runwayGroup">
+                  <rect transform="matrix(1,0,0,-1,151.88623,148.711258)" style="stroke:#6d7786;stroke-width:0.050000mm;fill:#263241" x="-74.606987" y="-11.935211" width="149.213974" height="23.870422"></rect>
+                </g>
+                <g id="ringGroup">
+                  <circle transform="matrix(1,0,0,-1,150.5,149.5)" style="stroke:#0000ff;stroke-width:0.050000mm;fill:none" r="109.5" cx="0" cy="0"></circle>
+                  <circle transform="matrix(1,0,0,-1,150.5,149.5)" style="stroke:#0000ff;stroke-width:0.050000mm;fill:none" r="98.5" cx="0" cy="0"></circle>
+                </g>
+                <g id="windDirChevronRotate">
+                  <g id="windDirChevronScale">
+                    <g id="windDirChevron">
+                      <path transform="matrix(0.197752,0,0,-0.197752,6.725204,282.32518)" style="stroke:#3fd4ff;stroke-width:0.252843mm;fill:#3fd4ff" d="M862.425659,999.089783C882.184753,991.880493,898.493469,985.839844,898.667175,985.666138C898.981628,985.351685,886.603149,950.705811,883.765808,943.958923C882.411255,940.737915,880.975952,939.815735,867.888306,933.75708C859.974731,930.093628,846.299988,923.73407,837.5,919.624695C825.348022,913.950012,821.22821,912.435303,820.369995,913.326538C819.748474,913.971924,815.625183,922.375,811.207092,932C806.789001,941.625,800.634155,954.878723,797.529602,961.452759C793.418579,970.15802,792.054077,974.079224,792.507324,975.885254C792.997864,977.839661,804.452026,1009.381165,807.510681,1017.200256C808.111633,1018.736511,809.059082,1018.577332,817.337891,1015.549011C822.377075,1013.70575,842.666565,1006.299072,862.425659,999.089783z"></path>
+                    </g>
+                  </g>
+                </g>
+                <g id="headwindChevronRotate">
+                  <g id="headwindChevronScale">
+                    <g id="headwindChevron">
+                      <path transform="matrix(0.197752,0,0,-0.197752,6.725204,282.32518)" style="stroke:#ffd84d;stroke-width:0.252843mm;fill:#ffd84d" d="M353.244965,913.099182C364.527893,907.653748,373.982605,902.816223,374.255432,902.349182C374.528259,901.882141,369.631256,891,363.37326,878.166687C347.399963,845.410339,332.717896,815.575989,332.3284,815.082764C332.147186,814.853333,322.336761,819.353333,310.527466,825.082764L289.056061,835.5L286.395599,843.5C284.932343,847.900024,280.212769,861.474854,275.907623,873.66626C271.602509,885.857727,267.799927,896.948975,267.457458,898.313538C266.715668,901.268982,266.04538,900.98468,302.339447,913.111694C315.627747,917.551758,327.174988,921.579346,328,922.06189C328.825012,922.544373,330.226868,922.952881,331.115265,922.969604C332.003662,922.986328,341.962036,918.544617,353.244965,913.099182z"></path>
+                    </g>
+                  </g>
+                </g>
+                <g id="crosswindChevronRotate">
+                  <g id="crosswindChevronScale">
+                    <g id="crosswindChevron">
+                      <path transform="matrix(0.197752,0,0,-0.197752,6.725204,282.32518)" style="stroke:#ffd84d;stroke-width:0.252843mm;fill:#ffd84d" d="M444.323639,830.164734L466.147247,822.349243L470.688354,812.424622C473.185974,806.966064,479.45285,793.399231,484.614746,782.276001C489.776642,771.152832,493.98877,761.477844,493.975037,760.776001C493.961304,760.074219,489.348816,757.400696,483.725037,754.834839C478.101257,752.268982,464.400421,745.90155,453.278717,740.684998L433.057465,731.200378L411.778717,738.850159C400.075439,743.057556,389.988373,746.832642,389.363037,747.239136C388.57019,747.754578,390.177673,753.353821,394.674225,765.739136C398.220734,775.507629,405.416382,795.424988,410.664551,810C420.795166,838.134155,420.743896,838.005371,421.809021,837.990112C422.189056,837.98468,432.320618,834.463257,444.323639,830.164734z"></path>
+                    </g>
+                  </g>
+                </g>
+                <g id="aircraftGroup" transform="translate(153.46 150.6) scale(0.5) translate(-153.46 -150.6)">
+                  <path transform="matrix(0.938646,-0.344882,-0.344882,-0.938646,59.943199,344.2276)" style="stroke:#f4f7fb;stroke-width:0.050000mm;fill:#f4f7fb" d="M135.036682,151.501633L148.390869,112.055519L153.901794,109.9272L151.99382,145.026215L175.92334,138.653107L178.877609,127.026169L182.26944,126.125008L182,139L191.511642,149.653107L187.223129,151.365219L178.606689,144.849777L155,155L179.687378,180.378342L173.627518,182.797363L138.511154,161.242447L123.203224,165.569427L119.799423,164.957748L117.043266,163.525162L117.731392,161.202118L120.363998,158.018814L135.036682,151.501633z"></path>
+                </g>
+                <circle id="centerMark" transform="matrix(1,0,0,-1,150,150)" style="stroke:#ffffff;stroke-width:0.050000mm;fill:#ffffff" r="0.32605" cx="0" cy="0"></circle>
+                <text id="windDirLabel" class="wind-ring-label" x="150" y="36" fill="#ffffff" stroke="#0b0c10" stroke-width="0.8" paint-order="stroke" font-size="14" font-family="Segoe UI, Arial, sans-serif">0 kt</text>
+                <text id="headwindLabel" class="wind-ring-label" x="150" y="108" fill="#ffffff" stroke="#0b0c10" stroke-width="0.8" paint-order="stroke" font-size="14" font-family="Segoe UI, Arial, sans-serif">0 kt</text>
+                <text id="crosswindLabel" class="wind-ring-label" x="192" y="150" fill="#ffffff" stroke="#0b0c10" stroke-width="0.8" paint-order="stroke" font-size="14" font-family="Segoe UI, Arial, sans-serif">0 kt</text>
+              </svg>
+            </div>
+            <div id="windSpdV" class="wind-v-slider" role="slider" aria-label="Wind speed" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0">
+              <div id="windSpdVLabels" class="wind-v-labels"></div>
+              <div class="wind-v-rail-wrap">
+                <div id="windSpdVRail" class="wind-v-rail">
+                  <div id="windSpdVFill" class="wind-v-fill"></div>
+                  <div id="windSpdVTicks" class="wind-v-ticks"></div>
+                </div>
+                <div id="windSpdVThumb" class="wind-v-thumb">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid settings-grid">
+      <label class="label-card">
+        <span>Runway Heading (&deg;M)</span>
+        <div class="slider-stack">
+          <input id="rwy" type="number" value="60" step="10" class="input" />
+          <input id="rwySlider" type="range" min="0" max="360" step="10" class="setting-slider" />
+        </div>
+      </label>
+      <label class="label-card">
+        <span>Wind From (&deg;M)</span>
+        <div class="slider-stack">
+          <input id="windDir" type="number" value="60" step="10" class="input" />
+          <input id="windDirSlider" type="range" min="0" max="360" step="10" class="setting-slider" />
+        </div>
+      </label>
+      <label class="label-card">
+        <span>Wind Speed (kt)</span>
+        <div class="slider-stack">
+          <input id="windSpd" type="number" value="0" step="1" class="input" />
+          <input id="windSpdSlider" type="range" min="0" max="40" step="1" class="setting-slider" />
+        </div>
+      </label>
+    </div>
+  </div>
+  <script src="crosswindScript.js"></script>
+</body>
 </html>
