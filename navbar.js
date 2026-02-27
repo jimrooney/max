@@ -79,13 +79,9 @@ var root = {
 //   <a href="balance.html">Balance</a>
 //   </div>` + document.body.innerHTML
 
-// JimQuery version:
 $().ready(() => {
   $("<body>").prepend(
     `
-    <div class="version-div">
-        Version 1.4.2 [Nexus1]
-    </div>
     <div class="topnav">
       <a class="active" href="index.html">Home</a>
       <a href="performance.html">Performance</a>

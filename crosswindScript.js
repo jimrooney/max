@@ -205,29 +205,11 @@ bindInputAndSlider("windSpd", "windSpdSlider");
 function getSvgPointerPoint(evt) {
   const svg = byId("windRingWidget");
   if (!svg) return null;
-  const client = getEventClientPoint(evt);
-  if (!client) return null;
   const ctm = svg.getScreenCTM();
   if (!ctm) return null;
-  const x = (client.clientX - ctm.e) / ctm.a;
-  const y = (client.clientY - ctm.f) / ctm.d;
+  const x = (evt.clientX - ctm.e) / ctm.a;
+  const y = (evt.clientY - ctm.f) / ctm.d;
   return { x, y };
-}
-
-function getEventClientPoint(evt) {
-  if (!evt) return null;
-  if (isFinite(evt.clientX) && isFinite(evt.clientY)) return { clientX: evt.clientX, clientY: evt.clientY };
-  const t = evt.touches?.[0] || evt.changedTouches?.[0];
-  if (t && isFinite(t.clientX) && isFinite(t.clientY)) return { clientX: t.clientX, clientY: t.clientY };
-  return null;
-}
-
-function getTouchById(list, id) {
-  if (!list || id == null) return null;
-  for (let i = 0; i < list.length; i += 1) {
-    if (list[i].identifier === id) return list[i];
-  }
-  return null;
 }
 
 function pointToBearingDeg(point) {
@@ -244,9 +226,8 @@ function setupWindRingDragging() {
 
   let dragMode = null;
   let activePointerId = null;
-  let activeTouchId = null;
 
-  const updateFromEvent = (evt) => {
+  const onPointerMove = (evt) => {
     if (!dragMode) return;
     const point = getSvgPointerPoint(evt);
     if (!point) return;
@@ -256,13 +237,12 @@ function setupWindRingDragging() {
     } else if (dragMode === "wind") {
       setInputPairValue("windDir", "windDirSlider", bearing, getPairOptions("windDir"));
     }
-    evt.preventDefault?.();
+    evt.preventDefault();
   };
 
   const stopDrag = () => {
     if (!dragMode) return;
     dragMode = null;
-    activeTouchId = null;
     svg.classList.remove("dragging");
     const pointerId = activePointerId;
     activePointerId = null;
@@ -273,57 +253,22 @@ function setupWindRingDragging() {
 
   const startDrag = (mode, evt) => {
     dragMode = mode;
-    activePointerId = evt.pointerId ?? null;
+    activePointerId = evt.pointerId;
     svg.classList.add("dragging");
-    if (evt.pointerId != null) svg.setPointerCapture?.(evt.pointerId);
-    updateFromEvent(evt);
-    evt.preventDefault?.();
-  };
-
-  if ("PointerEvent" in window) {
-    runwayGroup.addEventListener("pointerdown", (evt) => startDrag("runway", evt));
-    windChevron.addEventListener("pointerdown", (evt) => startDrag("wind", evt));
-    svg.addEventListener("pointermove", (evt) => {
-      if (activePointerId !== evt.pointerId) return;
-      updateFromEvent(evt);
-    });
-    svg.addEventListener("pointerup", stopDrag);
-    svg.addEventListener("pointercancel", stopDrag);
-    svg.addEventListener("pointerleave", stopDrag);
-    return;
-  }
-
-  const startMouseDrag = (mode, evt) => startDrag(mode, evt);
-  runwayGroup.addEventListener("mousedown", (evt) => startMouseDrag("runway", evt));
-  windChevron.addEventListener("mousedown", (evt) => startMouseDrag("wind", evt));
-  document.addEventListener("mousemove", (evt) => {
-    if (!dragMode) return;
-    updateFromEvent(evt);
-  });
-  document.addEventListener("mouseup", stopDrag);
-
-  const startTouchDrag = (mode, evt) => {
-    const t = evt.changedTouches?.[0];
-    if (!t) return;
-    activeTouchId = t.identifier;
-    startDrag(mode, t);
+    svg.setPointerCapture?.(evt.pointerId);
+    onPointerMove(evt);
     evt.preventDefault();
   };
-  runwayGroup.addEventListener("touchstart", (evt) => startTouchDrag("runway", evt), { passive: false });
-  windChevron.addEventListener("touchstart", (evt) => startTouchDrag("wind", evt), { passive: false });
-  document.addEventListener("touchmove", (evt) => {
-    if (!dragMode || activeTouchId == null) return;
-    const touch = getTouchById(evt.touches, activeTouchId) || getTouchById(evt.changedTouches, activeTouchId);
-    if (!touch) return;
-    updateFromEvent(touch);
-    evt.preventDefault();
-  }, { passive: false });
-  document.addEventListener("touchend", (evt) => {
-    const touch = getTouchById(evt.changedTouches, activeTouchId);
-    if (!touch) return;
-    stopDrag();
+
+  runwayGroup.addEventListener("pointerdown", (evt) => startDrag("runway", evt));
+  windChevron.addEventListener("pointerdown", (evt) => startDrag("wind", evt));
+  svg.addEventListener("pointermove", (evt) => {
+    if (activePointerId !== evt.pointerId) return;
+    onPointerMove(evt);
   });
-  document.addEventListener("touchcancel", stopDrag);
+  svg.addEventListener("pointerup", stopDrag);
+  svg.addEventListener("pointercancel", stopDrag);
+  svg.addEventListener("pointerleave", stopDrag);
 }
 
 function clamp(value, min, max) {
@@ -381,81 +326,44 @@ function setupVerticalWindSliderDragging() {
   if (!slider || !rail) return;
 
   let activePointerId = null;
-  let activeTouchId = null;
 
   const setFromPointer = (evt) => {
-    const client = getEventClientPoint(evt);
-    if (!client) return;
     const rect = rail.getBoundingClientRect();
     if (!rect.height) return;
-    const ratio = clamp((rect.bottom - client.clientY) / rect.height, 0, 1);
+    const ratio = clamp((rect.bottom - evt.clientY) / rect.height, 0, 1);
     const value = ratio * getWindSpeedMax();
     setInputPairValue("windSpd", "windSpdSlider", value, getPairOptions("windSpd"));
   };
 
   const startDrag = (evt) => {
-    activePointerId = evt.pointerId ?? -1;
+    activePointerId = evt.pointerId;
     slider.classList.add("dragging");
-    if (evt.pointerId != null) slider.setPointerCapture?.(evt.pointerId);
+    slider.setPointerCapture?.(evt.pointerId);
     setFromPointer(evt);
     evt.preventDefault();
   };
 
   const endDrag = (evt) => {
-    if (evt?.pointerId != null && activePointerId !== evt.pointerId) return;
+    if (activePointerId !== evt.pointerId) return;
     try {
-      if (evt?.pointerId != null) slider.releasePointerCapture?.(evt.pointerId);
+      slider.releasePointerCapture?.(evt.pointerId);
     } catch (_) {}
     activePointerId = null;
-    activeTouchId = null;
     slider.classList.remove("dragging");
   };
 
-  if ("PointerEvent" in window) {
-    slider.addEventListener("pointerdown", startDrag);
-    slider.addEventListener("pointermove", (evt) => {
-      if (activePointerId !== evt.pointerId) return;
-      setFromPointer(evt);
-      evt.preventDefault();
-    });
-    slider.addEventListener("pointerup", endDrag);
-    slider.addEventListener("pointercancel", endDrag);
-    slider.addEventListener("pointerleave", () => {
-      if (activePointerId == null) slider.classList.remove("dragging");
-    });
-    thumb?.addEventListener("pointerdown", (evt) => evt.preventDefault());
-    return;
-  }
-
-  slider.addEventListener("mousedown", startDrag);
-  document.addEventListener("mousemove", (evt) => {
-    if (activePointerId == null && activeTouchId == null) return;
+  slider.addEventListener("pointerdown", startDrag);
+  slider.addEventListener("pointermove", (evt) => {
+    if (activePointerId !== evt.pointerId) return;
     setFromPointer(evt);
-  });
-  document.addEventListener("mouseup", endDrag);
-
-  slider.addEventListener("touchstart", (evt) => {
-    const t = evt.changedTouches?.[0];
-    if (!t) return;
-    activeTouchId = t.identifier;
-    slider.classList.add("dragging");
-    setFromPointer(t);
     evt.preventDefault();
-  }, { passive: false });
-  document.addEventListener("touchmove", (evt) => {
-    if (activeTouchId == null) return;
-    const touch = getTouchById(evt.touches, activeTouchId) || getTouchById(evt.changedTouches, activeTouchId);
-    if (!touch) return;
-    setFromPointer(touch);
-    evt.preventDefault();
-  }, { passive: false });
-  document.addEventListener("touchend", (evt) => {
-    const touch = getTouchById(evt.changedTouches, activeTouchId);
-    if (!touch) return;
-    endDrag();
   });
-  document.addEventListener("touchcancel", endDrag);
-  thumb?.addEventListener("touchstart", (evt) => evt.preventDefault(), { passive: false });
+  slider.addEventListener("pointerup", endDrag);
+  slider.addEventListener("pointercancel", endDrag);
+  slider.addEventListener("pointerleave", () => {
+    if (activePointerId == null) slider.classList.remove("dragging");
+  });
+  thumb?.addEventListener("pointerdown", (evt) => evt.preventDefault());
 }
 
 buildVerticalWindSliderMarks();
