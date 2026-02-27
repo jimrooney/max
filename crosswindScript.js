@@ -141,6 +141,7 @@ function updateWindRing(head, cross) {
   const windSpeed = Math.max(0, Number(byId("windSpd")?.value) || 0);
   const headAbs = Math.abs(head);
   const crossAbs = Math.abs(cross);
+  const minChevronScale = ringScale(10, WIND_RING.maxWindKt, 0);
 
   setWindRingRotate("runwayGroup", runwayHeading - WIND_RING.runwayHeading, 1);
   setWindRingRotate("aircraftGroup", runwayHeading - WIND_RING.runwayHeading + 180, 1, 0.5);
@@ -152,7 +153,7 @@ function updateWindRing(head, cross) {
     "windDirChevronRotate",
     windDirection,
     WIND_RING.windRadius,
-    ringScale(windSpeed, WIND_RING.maxWindKt, 0.25),
+    ringScale(windSpeed, WIND_RING.maxWindKt, minChevronScale),
     WIND_RING.windTip,
     WIND_RING.windTipBearing,
     windSpeed > 0 ? 1 : 0.2
@@ -166,7 +167,7 @@ function updateWindRing(head, cross) {
     "headwindChevronRotate",
     headBearing,
     WIND_RING.headRadius,
-    ringScale(headAbs, Math.max(windSpeed, 1), 0.2),
+    ringScale(headAbs, WIND_RING.maxWindKt, minChevronScale),
     WIND_RING.headTip,
     WIND_RING.headTipBearing + 180,
     headAbs > 0 ? 1 : 0.2
@@ -175,7 +176,7 @@ function updateWindRing(head, cross) {
     "crosswindChevronRotate",
     crossBearing,
     WIND_RING.crossRadius,
-    ringScale(crossAbs, Math.max(windSpeed, 1), 0.2),
+    ringScale(crossAbs, WIND_RING.maxWindKt, minChevronScale),
     WIND_RING.crossTip,
     WIND_RING.crossTipBearing,
     crossAbs > 0 ? 1 : 0.2
@@ -222,6 +223,8 @@ function setupWindRingDragging() {
   const svg = byId("windRingWidget");
   const runwayGroup = byId("runwayGroup");
   const windChevron = byId("windDirChevronRotate");
+  const windDragHit = byId("windDirDragHit");
+  const windDirLabel = byId("windDirLabel");
   if (!svg || !runwayGroup || !windChevron) return;
 
   let dragMode = null;
@@ -262,6 +265,8 @@ function setupWindRingDragging() {
 
   runwayGroup.addEventListener("pointerdown", (evt) => startDrag("runway", evt));
   windChevron.addEventListener("pointerdown", (evt) => startDrag("wind", evt));
+  windDragHit?.addEventListener("pointerdown", (evt) => startDrag("wind", evt));
+  windDirLabel?.addEventListener("pointerdown", (evt) => startDrag("wind", evt));
   svg.addEventListener("pointermove", (evt) => {
     if (activePointerId !== evt.pointerId) return;
     onPointerMove(evt);

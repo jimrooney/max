@@ -35,9 +35,16 @@ input:focus, select:focus { outline: none; border-color: var(--color-acc); box-s
 .muted { color: var(--color-muted); font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; }
 .value { font-size: 1.5rem; font-weight: 700; }
 .wind-ring-card { width: 100%; min-width: 0; display: flex; flex-direction: column; align-items: center; }
-.wind-ring-visual-wrap { display: flex; align-items: center; justify-content: center; gap: 1.25rem; width: 100%; }
+.wind-ring-visual-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: nowrap;
+}
 .wind-ring-frame {
-  width: min(88vw, 880px);
+  width: min(74vw, 880px);
   max-width: 100%;
   aspect-ratio: 1;
   display: flex;
@@ -55,8 +62,11 @@ input:focus, select:focus { outline: none; border-color: var(--color-acc); box-s
 .wind-ring-svg #centerMark { opacity: 0.9; }
 .wind-ring-svg #runwayGroup,
 .wind-ring-svg #windDirChevronRotate { cursor: grab; }
+.wind-ring-svg #windDirDragHit { pointer-events: all; }
+.wind-ring-svg #windDirLabel { pointer-events: all; cursor: grab; }
 .wind-ring-svg.dragging #runwayGroup,
 .wind-ring-svg.dragging #windDirChevronRotate { cursor: grabbing; }
+.wind-ring-svg.dragging #windDirLabel { cursor: grabbing; }
 .wind-v-slider {
   --wind-v-height: min(65vh, 465px);
   width: 66px;
@@ -132,8 +142,28 @@ input:focus, select:focus { outline: none; border-color: var(--color-acc); box-s
 }
 .wind-v-slider.dragging .wind-v-thumb { cursor: grabbing; }
 @media (max-width: 900px) {
-  .wind-ring-visual-wrap { flex-direction: column; }
-  .wind-v-slider { --wind-v-height: 225px; }
+  .wind-ring-visual-wrap { gap: 0.5rem; }
+  .wind-ring-frame { width: min(66vw, 520px); }
+  .wind-v-slider {
+    --wind-v-height: 225px;
+    width: 46px;
+    gap: 0.35rem;
+  }
+  .wind-v-labels {
+    width: 14px;
+    font-size: 0.95rem;
+  }
+  .wind-v-rail { border-width: 2px; }
+  .wind-v-ticks span {
+    left: 2px;
+    right: 2px;
+  }
+  .wind-v-thumb {
+    left: calc(100% + 4px);
+    width: 40px;
+    height: 26px;
+    font-size: 1.2rem;
+  }
 }
 .wind-ring-label {
   fill: #ffffff;
@@ -176,6 +206,7 @@ input:focus, select:focus { outline: none; border-color: var(--color-acc); box-s
                       <path transform="matrix(0.197752,0,0,-0.197752,6.725204,282.32518)" style="stroke:#3fd4ff;stroke-width:0.252843mm;fill:#3fd4ff" d="M862.425659,999.089783C882.184753,991.880493,898.493469,985.839844,898.667175,985.666138C898.981628,985.351685,886.603149,950.705811,883.765808,943.958923C882.411255,940.737915,880.975952,939.815735,867.888306,933.75708C859.974731,930.093628,846.299988,923.73407,837.5,919.624695C825.348022,913.950012,821.22821,912.435303,820.369995,913.326538C819.748474,913.971924,815.625183,922.375,811.207092,932C806.789001,941.625,800.634155,954.878723,797.529602,961.452759C793.418579,970.15802,792.054077,974.079224,792.507324,975.885254C792.997864,977.839661,804.452026,1009.381165,807.510681,1017.200256C808.111633,1018.736511,809.059082,1018.577332,817.337891,1015.549011C822.377075,1013.70575,842.666565,1006.299072,862.425659,999.089783z"></path>
                     </g>
                   </g>
+                  <circle id="windDirDragHit" cx="184.4" cy="87.37" r="48" fill="transparent" />
                 </g>
                 <g id="headwindChevronRotate">
                   <g id="headwindChevronScale">
