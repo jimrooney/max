@@ -14,3 +14,6 @@
 - Added cardinal direction labels (`N`, `E`, `S`, `W`) to the wind ring in both `crosswind.html` and `takeoff.html`.
 - Added a dynamic runway heading label that tracks the runway's top end while keeping text level.
 - Updated ring styling to a dark blue-grey band-only ring (center left unfilled).
+
+### Home Page Routing
+- Updated `index.html` to temporarily redirect to `crosswind.html` with a `noscript` fallback link.
