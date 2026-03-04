@@ -173,6 +173,25 @@ input:focus, select:focus { outline: none; border-color: var(--color-acc); box-s
   dominant-baseline: middle;
   pointer-events: none;
 }
+.wind-ring-cardinal {
+  fill: #d9e3ef;
+  font-size: 12px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+.runway-heading-label {
+  fill: #f4f7fb;
+  stroke: #0b0c10;
+  stroke-width: 0.8;
+  paint-order: stroke;
+  font-size: 12px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
   </style>
 </head>
 <body>
@@ -197,9 +216,12 @@ input:focus, select:focus { outline: none; border-color: var(--color-acc); box-s
                   <rect transform="matrix(1,0,0,-1,151.88623,148.711258)" style="stroke:#6d7786;stroke-width:0.050000mm;fill:#263241" x="-74.606987" y="-11.935211" width="149.213974" height="23.870422"></rect>
                 </g>
                 <g id="ringGroup">
-                  <circle transform="matrix(1,0,0,-1,150.5,149.5)" style="stroke:#0000ff;stroke-width:0.050000mm;fill:none" r="109.5" cx="0" cy="0"></circle>
-                  <circle transform="matrix(1,0,0,-1,150.5,149.5)" style="stroke:#0000ff;stroke-width:0.050000mm;fill:none" r="98.5" cx="0" cy="0"></circle>
+                  <circle transform="matrix(1,0,0,-1,150.5,149.5)" style="stroke:#4f6174;stroke-width:11;fill:none" r="104" cx="0" cy="0"></circle>
                 </g>
+                <text class="wind-ring-cardinal" x="150" y="22">N</text>
+                <text class="wind-ring-cardinal" x="278" y="150">E</text>
+                <text class="wind-ring-cardinal" x="150" y="278">S</text>
+                <text class="wind-ring-cardinal" x="22" y="150">W</text>
                 <g id="windDirChevronRotate">
                   <g id="windDirChevronScale">
                     <g id="windDirChevron">
@@ -226,6 +248,7 @@ input:focus, select:focus { outline: none; border-color: var(--color-acc); box-s
                   <path transform="matrix(0.938646,-0.344882,-0.344882,-0.938646,59.943199,344.2276)" style="stroke:#f4f7fb;stroke-width:0.050000mm;fill:#f4f7fb" d="M135.036682,151.501633L148.390869,112.055519L153.901794,109.9272L151.99382,145.026215L175.92334,138.653107L178.877609,127.026169L182.26944,126.125008L182,139L191.511642,149.653107L187.223129,151.365219L178.606689,144.849777L155,155L179.687378,180.378342L173.627518,182.797363L138.511154,161.242447L123.203224,165.569427L119.799423,164.957748L117.043266,163.525162L117.731392,161.202118L120.363998,158.018814L135.036682,151.501633z"></path>
                 </g>
                 <circle id="centerMark" transform="matrix(1,0,0,-1,150,150)" style="stroke:#ffffff;stroke-width:0.050000mm;fill:#ffffff" r="0.32605" cx="0" cy="0"></circle>
+                <text id="runwayHeadingLabel" class="runway-heading-label" x="150" y="58">060&#176;</text>
                 <text id="windDirLabel" class="wind-ring-label" x="150" y="36" fill="#ffffff" stroke="#0b0c10" stroke-width="0.8" paint-order="stroke" font-size="14" font-family="Segoe UI, Arial, sans-serif">0 kt</text>
                 <text id="headwindLabel" class="wind-ring-label" x="150" y="108" fill="#ffffff" stroke="#0b0c10" stroke-width="0.8" paint-order="stroke" font-size="14" font-family="Segoe UI, Arial, sans-serif">0 kt</text>
                 <text id="crosswindLabel" class="wind-ring-label" x="192" y="150" fill="#ffffff" stroke="#0b0c10" stroke-width="0.8" paint-order="stroke" font-size="14" font-family="Segoe UI, Arial, sans-serif">0 kt</text>

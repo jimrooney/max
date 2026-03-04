@@ -72,6 +72,7 @@ const WIND_RING = Object.freeze({
   windLabelOffset: 14,
   headLabelOffset: 30,
   crossLabelOffset: 16,
+  runwayLabelRadius: 92,
 });
 
 function ringScale(magnitude, basis, minScale = 0.2) {
@@ -112,6 +113,17 @@ function setWindRingLabel(id, value, bearingDeg, radius, offset) {
   el.textContent = `${Math.round(Math.abs(value))} kt`;
 }
 
+function setRunwayHeadingLabel(runwayHeading) {
+  const el = byId("runwayHeadingLabel");
+  if (!el) return;
+  const p = ringPoint(runwayHeading, WIND_RING.runwayLabelRadius);
+  const rounded = Math.round(runwayHeading) % 360;
+  const displayHeading = rounded === 0 ? 360 : rounded;
+  el.setAttribute("x", String(p.x));
+  el.setAttribute("y", String(p.y));
+  el.textContent = `${String(displayHeading).padStart(3, "0")}\u00B0`;
+}
+
 function setWindRingIndicatorPlacement(id, bearingDeg, radius, scale, tip, baseBearing, opacity = 1) {
   const el = byId(id);
   if (!el) return;
@@ -145,6 +157,7 @@ function updateWindRing(head, cross) {
 
   setWindRingRotate("runwayGroup", runwayHeading - WIND_RING.runwayHeading, 1);
   setWindRingRotate("aircraftGroup", runwayHeading - WIND_RING.runwayHeading + 180, 1, 0.5);
+  setRunwayHeadingLabel(runwayHeading);
   setWindRingIdentity("windDirChevronScale");
   setWindRingIdentity("headwindChevronScale");
   setWindRingIdentity("crosswindChevronScale");
